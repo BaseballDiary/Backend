@@ -1,4 +1,4 @@
-package com.backend.baseball.domain;
+package com.backend.baseball.domain.entity;
 
 import com.backend.baseball.domain.enums.Club;
 import com.backend.baseball.domain.enums.PlayerRole;
