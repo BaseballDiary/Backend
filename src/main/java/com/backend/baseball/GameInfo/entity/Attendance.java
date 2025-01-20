@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -22,7 +24,10 @@ public class Attendance {
     @JoinColumn(name = "certificateId", nullable = false)
     private User user; //회원 식별 번호
 
-    @ManyToOne
-    @JoinColumn(name = "dateCertificateId", nullable = false)
-    private DateInfo dateInfo; //날짜 식별 번호
+    @Column(nullable = false)
+    private LocalDate date; //날짜 식별 번호
+
+    @Column(nullable = false)
+    private Boolean isAttendance; //출석 여부
+
 }
