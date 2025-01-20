@@ -24,9 +24,7 @@ public class UserDto {
 
         private Long certificateId; // 회원식별번호
 
-        @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-_]{4,20}$", message = "아이디는 특수문자를 제외한 4~20자리여야 합니다.")
-        @NotBlank(message = "아이디는 필수 입력 값입니다.")
-        private String id; //아이디
+
 
         @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,16}", message = "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
         private String password; // 패스워드
@@ -43,19 +41,17 @@ public class UserDto {
 
         private Club myClub;
 
-        private String description; // 한 줄 소개
+
 
         /*DTO -> Entity*/
         public User toEntity(){
             User user=User.builder()
                     .certificateId(certificateId)
-                    .id(id)
                     .password(password)
                     .email(email)
                     .nickname(nickname)
                     .temperature(temperature)
                     .myClub(myClub)
-                    .description(description)
                     .build();
             return user;
         }
@@ -69,7 +65,7 @@ public class UserDto {
         private final String nickname;
         private final String email;
         private final Club myClub;
-        private final String description;
+
 
         /*Entity -> DTO*/
         public Response(User user){
@@ -78,7 +74,7 @@ public class UserDto {
             this.nickname = user.getNickname();
             this.email = user.getEmail();
             this.myClub = user.getMyClub();
-            this.description = user.getDescription();
+
         }
     }
 }

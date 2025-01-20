@@ -39,15 +39,4 @@ public class CustomValidator {
         }
     }
 
-    @RequiredArgsConstructor
-    @Component
-    public static class IdValidator extends AbstractValidator<UserDto.Request>{
-        private final UserRepository userRepository;
-        @Override
-        protected void doValidate(UserDto.Request dto, Errors errors) {
-            if(userRepository.existsById(dto.toEntity().getId())){
-                errors.rejectValue("id","아이디 중복 오류","이미 사용 중인 아이디입니다.");
-            }
-        }
-    }
 }
