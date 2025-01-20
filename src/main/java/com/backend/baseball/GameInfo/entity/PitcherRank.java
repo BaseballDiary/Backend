@@ -15,30 +15,59 @@ public class PitcherRank {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 투수 개인순위 식별 번호(이건 erd에 없긴 했는데 일단 추가함)
+    private Long pitcherCertificatedId; //투수 식별 번호
 
-    @Column(nullable = false,length=30)
-    private String playerNameK; // 선수 이름
+    @Column(nullable = false)
+    private String playerName; // 선수 이름
 
-    @Column(nullable = false,columnDefinition = "integer default 1")
-    private int rank; // 순위
+    @Column(nullable = false)
+    private Integer rank; // 순위
 
-    @Column(nullable = false,precision=3,scale=2)
+    @Column(nullable = false)
     private float era; // 평균자책
 
-    @Column(nullable = false,columnDefinition = "integer default 0")
-    private int field; // 경기
+    @Column(nullable = false)
+    private Integer gameNum; // 경기수
 
-    @Column(nullable = false,columnDefinition = "integer default 1")
-    private int win; // 승
+    @Column(nullable = false)
+    private Integer win; // 승
 
-    @Column(nullable = false,columnDefinition = "integer default 1")
-    private int tie; // 무
+    @Column(nullable = false)
+    private Integer lose; // 패
 
-    @Column(nullable = false,columnDefinition = "integer default 1")
-    private int lose; // 패
-
-    @Column(nullable = false,length=30)
+    @Column(nullable = false)
     private String inning; // 이닝
 
+    @Column(nullable = false)
+    private Integer save; //세이브
+
+    @Column(nullable = false)
+    private Integer hold; //홀드
+
+    @Column(nullable = false)
+    private Integer pitchCount; //투구수
+
+    @Column(nullable = false)
+    private Integer hitsAllowed; //피안타
+
+    @Column(nullable = false)
+    private Integer homeRunsAllowed; //피홈런
+
+    @Column(nullable = false)
+    private Integer strikeout; //탈삼진
+
+    @Column(nullable = false)
+    private Integer walk; //사시구
+
+    @Column(nullable = false)
+    private Integer runsAllowed; //실점
+
+    @Column(nullable = false)
+    private float earnedRun; //자책
+
+    @Column(nullable = false)
+    private float whip; //WHIP
+
+    @Column(nullable = false)
+    private Integer qs; //QS
 }
