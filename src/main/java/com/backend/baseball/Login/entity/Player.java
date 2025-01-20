@@ -1,7 +1,7 @@
-package com.backend.baseball.domain.entity;
+package com.backend.baseball.Login.entity;
 
-import com.backend.baseball.domain.enums.Club;
-import com.backend.baseball.domain.enums.PlayerRole;
+import com.backend.baseball.Login.enums.Club;
+import com.backend.baseball.Login.enums.PlayerRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

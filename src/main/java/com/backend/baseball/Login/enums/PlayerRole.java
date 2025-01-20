@@ -1,4 +1,4 @@
-package com.backend.baseball.domain.enums;
+package com.backend.baseball.Login.enums;
 
 public enum PlayerRole {
     Pitcher, Batter

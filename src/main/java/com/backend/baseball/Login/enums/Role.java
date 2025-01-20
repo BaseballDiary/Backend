@@ -1,4 +1,4 @@
-package com.backend.baseball.domain.enums;
+package com.backend.baseball.Login.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
