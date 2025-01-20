@@ -1,7 +1,7 @@
 package com.backend.baseball.security.validator;
 
-import com.backend.baseball.domain.dto.UserDto;
-import com.backend.baseball.repository.UserRepository;
+import com.backend.baseball.Login.dto.UserDto;
+import com.backend.baseball.Login.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
