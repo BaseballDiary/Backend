@@ -1,14 +1,14 @@
 package com.backend.baseball.security.auth;
 
-import com.backend.baseball.domain.dto.UserDto;
-import com.backend.baseball.repository.UserRepository;
+import com.backend.baseball.Login.repository.UserRepository;
+import com.backend.baseball.Login.entity.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import com.backend.baseball.domain.entity.User;
+import com.backend.baseball.Login.dto.UserDto;
 
 @RequiredArgsConstructor
 @Service

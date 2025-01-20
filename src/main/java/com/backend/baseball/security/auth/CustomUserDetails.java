@@ -2,7 +2,7 @@ package com.backend.baseball.security.auth;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import com.backend.baseball.domain.entity.User;
+import com.backend.baseball.Login.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class CustomUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collectors=new ArrayList<>();
 
-        collectors.add(()->"ROLE_"+user.getRole().name());
+        //collectors.add(()->"ROLE_"+user.getRole().name());
 
         return collectors;
     }
