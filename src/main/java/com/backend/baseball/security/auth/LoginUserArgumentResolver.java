@@ -1,6 +1,6 @@
 package com.backend.baseball.security.auth;
 
-import com.backend.baseball.domain.dto.UserDto;
+import com.backend.baseball.Login.dto.UserDto;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;

@@ -1,5 +1,6 @@
 package com.backend.baseball.GameInfo.entity;
 
+import com.backend.baseball.Diary.entity.Diary;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,4 +47,6 @@ public class GameInfo {
     @Column(nullable = false, length = 20)
     String time; //경기 시간
 
+    @OneToOne(mappedBy = "gameInfo")
+    private Diary diary;
 }
