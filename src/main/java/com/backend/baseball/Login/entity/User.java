@@ -1,7 +1,6 @@
-package com.backend.baseball.domain.entity;
+package com.backend.baseball.Login.entity;
 
-import com.backend.baseball.domain.enums.Club;
-import com.backend.baseball.domain.enums.Role;
+import com.backend.baseball.Login.enums.Club;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,10 +39,6 @@ public class User {
 
     @Column(columnDefinition = "TEXT") // 회원가입할 때는 없으니까 nullable은 true인 건가
     private String description; // 한 줄 소개
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
 
     /*회원 정보 수정하기(닉네임, 구단, 한줄 소개)*/
     // 개인 정보 변경하는 것도 있어야 하는 거 아닌가..? 내일 건의드려 봐야지

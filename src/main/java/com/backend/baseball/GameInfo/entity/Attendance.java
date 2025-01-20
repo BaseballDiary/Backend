@@ -1,6 +1,6 @@
 package com.backend.baseball.GameInfo.entity;
 
-import com.backend.baseball.domain.entity.User;
+import com.backend.baseball.Login.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
