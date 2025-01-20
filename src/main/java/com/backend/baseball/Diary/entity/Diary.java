@@ -1,6 +1,7 @@
 package com.backend.baseball.Diary.entity;
 
 import com.backend.baseball.Diary.enums.ViewType;
+import com.backend.baseball.GameInfo.entity.GameInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,9 +23,6 @@ public class Diary {
     private Long diaryId; //일기 식별번호
 
     @Column(nullable = false)
-    private LocalDate date;
-
-    @Column(nullable = false)
     private ViewType viewType;
 
     @Column(nullable = false)
@@ -33,22 +31,9 @@ public class Diary {
     @Column(nullable = false)
     private String imgUrl;
 
-    @Column(nullable = false)
-    private String myTeam;
 
-    @Column(nullable = false)
-    private String opponentTeam;
-
-    @Column(nullable = false)
-    private Integer myTeamScore;
-
-    @Column(nullable = false)
-    private Integer opponentTeamScore;
-
-    @Column(nullable = false)
-    private String place;
-
-    @Column(nullable = false)
-    private LocalDateTime time;
+    @OneToOne
+    @JoinColumn(name = "gameId", unique = true)
+    private GameInfo gameInfo;
 
 }
