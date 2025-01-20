@@ -1,6 +1,6 @@
-package com.backend.baseball.repository;
+package com.backend.baseball.Login.repository;
 
-import com.backend.baseball.domain.entity.User;
+import com.backend.baseball.Login.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

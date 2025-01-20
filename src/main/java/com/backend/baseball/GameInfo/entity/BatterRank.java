@@ -1,4 +1,4 @@
-package com.backend.baseball.domain.entity;
+package com.backend.baseball.GameInfo.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,13 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
 @Entity
-public class PitcherRank {
-
+public class BatterRank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 투수 개인순위 식별 번호(이건 erd에 없긴 했는데 일단 추가함)

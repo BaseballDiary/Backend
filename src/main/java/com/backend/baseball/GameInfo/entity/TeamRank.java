@@ -1,4 +1,4 @@
-package com.backend.baseball.domain.entity;
+package com.backend.baseball.GameInfo.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

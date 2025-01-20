@@ -1,7 +1,7 @@
-package com.backend.baseball.domain.dto;
+package com.backend.baseball.Login.dto;
 
-import com.backend.baseball.domain.entity.User;
-import com.backend.baseball.domain.enums.Club;
+import com.backend.baseball.Login.entity.User;
+import com.backend.baseball.Login.enums.Club;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
