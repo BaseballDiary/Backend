@@ -22,7 +22,7 @@ public class BatterRank {
     private String playerName; // 선수 이름
 
     @Column(nullable = false)
-    private Integer rank; // 순위
+    private Integer ranking; // 순위
 
     @Column(nullable = false)
     private Integer gameNum; // 경기수

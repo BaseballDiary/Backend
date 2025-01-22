@@ -18,7 +18,7 @@ public class TeamRank {
     private Long teamRankCertificateId;
 
     @Column(nullable = false,columnDefinition = "integer default 1")
-    private Integer rank; // 순위
+    private Integer ranking; // 순위
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
