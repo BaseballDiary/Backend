@@ -7,20 +7,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
 @Entity
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long certificateId; // 회원식별번호
-
-
-    @Column(nullable = false,length = 30,unique = true)
-    private String id; //아이디
 
     @Column(nullable = false,length = 30)
     private String password; // 패스워드
@@ -40,11 +36,19 @@ public class User {
 
 
 
-    /*회원 정보 수정하기(닉네임, 구단, 한줄 소개)*/
-    // 개인 정보 변경하는 것도 있어야 하는 거 아닌가..? 내일 건의드려 봐야지
-    public void modify(String nickname, Club myClub){
-        this.nickname = nickname;
-        this.myClub = myClub;
+    // 닉네임 변경
+    public void changeNickname(String newNickname) {
+        this.nickname = newNickname;
+    }
+    
+    // 클럽 변경
+    public void changeClub(Club newClub) {
+        this.myClub = newClub;
+    }
+
+    // 비밀번호 변경
+    public void changeUserPassword(String password){
+        this.password = password;
     }
 
 }
