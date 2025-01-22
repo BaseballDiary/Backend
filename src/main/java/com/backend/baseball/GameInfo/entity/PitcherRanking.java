@@ -1,15 +1,13 @@
 package com.backend.baseball.GameInfo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
+@Setter
 @Entity
 public class PitcherRanking {
 
@@ -18,56 +16,62 @@ public class PitcherRanking {
     private Long pitcherCertificatedId; //투수 식별 번호
 
     @Column(nullable = false)
+    private String year; //년도
+
+    @Column(nullable = false)
     private String playerName; // 선수 이름
 
     @Column(nullable = false)
-    private Integer ranking; // 순위
+    private String ranking; // 순위
 
     @Column(nullable = false)
-    private float era; // 평균자책
+    private String club; //구단
 
     @Column(nullable = false)
-    private Integer gameNum; // 경기수
+    private String era; // 평균자책
 
     @Column(nullable = false)
-    private Integer win; // 승
+    private String gameNum; // 경기수
 
     @Column(nullable = false)
-    private Integer lose; // 패
+    private String win; // 승
+
+    @Column(nullable = false)
+    private String lose; // 패
 
     @Column(nullable = false)
     private String inning; // 이닝
 
     @Column(nullable = false)
-    private Integer save; //세이브
+    private String save; //세이브
 
     @Column(nullable = false)
-    private Integer hold; //홀드
+    private String hold; //홀드
 
     @Column(nullable = false)
-    private Integer pitchCount; //투구수
+    private String pitchCount; //투구수
 
     @Column(nullable = false)
-    private Integer hitsAllowed; //피안타
+    private String hitsAllowed; //피안타
 
     @Column(nullable = false)
-    private Integer homeRunsAllowed; //피홈런
+    private String homeRunsAllowed; //피홈런
 
     @Column(nullable = false)
-    private Integer strikeout; //탈삼진
+    private String strikeout; //탈삼진
 
     @Column(nullable = false)
-    private Integer walk; //사시구
+    private String walk; //사시구
 
     @Column(nullable = false)
-    private Integer runsAllowed; //실점
+    private String runsAllowed; //실점
 
     @Column(nullable = false)
-    private float earnedRun; //자책
+    private String earnedRun; //자책
 
     @Column(nullable = false)
-    private float whip; //WHIP
+    private String whip; //WHIP
 
     @Column(nullable = false)
-    private Integer qs; //QS
+    private String qs; //QS
 }

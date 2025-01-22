@@ -8,6 +8,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class CrawlingTeamRanking {
 
     private final TeamRankingRepository teamRankingRepository;
 
+    @Transactional
     public List<TeamRanking> crawling(String year) {
         String URL = "https://sports.news.naver.com/kbaseball/record/index?category=kbo&year=";
         Document doc;
@@ -34,6 +36,9 @@ public class CrawlingTeamRanking {
             Elements rows = table.select("tr");
             for (Element row : rows) {
                 TeamRanking teamRanking = new TeamRanking();
+
+                //년도
+                teamRanking.setYear(year);
                 // 팀 순위
                 String ranking = row.select("th strong").text();
                 teamRanking.setRanking(ranking);

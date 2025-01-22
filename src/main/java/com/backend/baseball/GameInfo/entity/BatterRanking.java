@@ -1,16 +1,14 @@
 package com.backend.baseball.GameInfo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
+@Setter
 @Entity
 public class BatterRanking {
 
@@ -19,56 +17,62 @@ public class BatterRanking {
     private Long batterCertificatedId; //타자 식별 번호
 
     @Column(nullable = false)
+    private String year; //년도
+
+    @Column(nullable = false)
     private String playerName; // 선수 이름
 
     @Column(nullable = false)
-    private Integer ranking; // 순위
+    private String ranking; // 순위
 
     @Column(nullable = false)
-    private Integer gameNum; // 경기수
+    private String club; //구단
 
     @Column(nullable = false)
-    private Integer atBat; //타석
+    private String gameNum; // 경기수
 
     @Column(nullable = false)
-    private Integer plateAppear; //타수
+    private String atBat; //타석
 
     @Column(nullable = false)
-    private Integer single; //안타
+    private String plateAppear; //타수
 
     @Column(nullable = false)
-    private Integer doubleHit; //2타
+    private String single; //안타
 
     @Column(nullable = false)
-    private Integer tripleHit; //3타
+    private String doubleHit; //2타
 
     @Column(nullable = false)
-    private Integer homeRun; //홈런
+    private String tripleHit; //3타
 
     @Column(nullable = false)
-    private Integer rbis; //타점
+    private String homeRun; //홈런
 
     @Column(nullable = false)
-    private Integer run; //득점
+    private String rbis; //타점
 
     @Column(nullable = false)
-    private Integer stolenBase; //도루
+    private String run; //득점
 
     @Column(nullable = false)
-    private Integer walk; //사시구
+    private String stolenBase; //도루
 
     @Column(nullable = false)
-    private Integer strikeout; //삼진
+    private String walk; //사시구
 
     @Column(nullable = false)
-    private float ba; //타율
+    private String strikeout; //삼진
 
     @Column(nullable = false)
-    private float odp; //출루율
+    private String ba; //타율
 
     @Column(nullable = false)
-    private float slg; //장타율
+    private String obp; //출루율
 
     @Column(nullable = false)
-    private Integer ops; //OPS
+    private String slg; //장타율
+
+    @Column(nullable = false)
+    private String ops; //OPS
 }

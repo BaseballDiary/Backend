@@ -34,13 +34,21 @@ public class User {
     @Column(nullable = false)
     private Club myClub;
 
-
-
-    /*회원 정보 수정하기(닉네임, 구단, 한줄 소개)*/
-    // 개인 정보 변경하는 것도 있어야 하는 거 아닌가..? 내일 건의드려 봐야지
-    public void modify(String nickname, Club myClub){
-        this.nickname = nickname;
-        this.myClub = myClub;
+    // 닉네임 변경
+    public void changeNickname(String newNickname) {
+        this.nickname = newNickname;
     }
+
+    // 클럽 변경
+    public void changeClub(Club newClub) {
+        this.myClub = newClub;
+    }
+
+    // 비밀번호 변경
+    public void changeUserPassword(String password){
+        this.password = password;
+    }
+
+
 
 }
