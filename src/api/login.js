@@ -3,7 +3,7 @@ import axios from "axios";
 // 로그인 API 호출 함수
 export const login = async (email, password) => {
   try {
-    const response = await axios.post("/member/login", {
+    const response = await axios.post("http://localhost:8080/member/login", {
       email,
       password,
     });

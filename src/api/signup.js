@@ -3,7 +3,7 @@ import axios from "axios";
 // 이메일 인증 번호 요청 API 호출 함수
 export const requestVerificationCode = async (authEmail) => {
   try {
-    const response = await axios.post("http://localhost:3000/auth", {
+    const response = await axios.post("http://localhost:8080/auth", {
       authEmail,
     });
     return response.data; // 필요한 응답 데이터 반환
@@ -16,7 +16,7 @@ export const requestVerificationCode = async (authEmail) => {
 // 인증번호 확인 API 호출 함수
 export const confirmVerificationCode = async (email, authNumber) => {
   try {
-    const response = await axios.post("http://localhost:3000/auth/confirm", {
+    const response = await axios.post("http://localhost:8080/auth/confirm", {
       email,
       authNumber,
     });
@@ -30,7 +30,7 @@ export const confirmVerificationCode = async (email, authNumber) => {
 // 회원가입 API 호출 함수
 export const signup = async (email, password) => {
   try {
-    const response = await axios.post("http://localhost:3000/member", {
+    const response = await axios.post("http://localhost:8080/member", {
       email,
       password,
     });
