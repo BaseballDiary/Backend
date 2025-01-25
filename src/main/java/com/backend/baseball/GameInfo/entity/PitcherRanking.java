@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 @Entity
-public class PitcherRank {
+public class PitcherRanking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

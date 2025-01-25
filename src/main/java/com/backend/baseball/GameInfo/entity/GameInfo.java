@@ -1,6 +1,7 @@
 package com.backend.baseball.GameInfo.entity;
 
 import com.backend.baseball.Diary.entity.Diary;
+import com.backend.baseball.GameInfo.enums.GameStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

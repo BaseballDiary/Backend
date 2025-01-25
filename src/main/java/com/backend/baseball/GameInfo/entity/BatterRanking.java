@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 @Entity
-public class BatterRank {
+public class BatterRanking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
