@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(joinUser);
     }
 
+
     @Override
     public User changeUserPassword(Long certificateId, UserPasswordChangeDto userPasswordChangeDto) {
         User user=this.getByCertificateId(certificateId);

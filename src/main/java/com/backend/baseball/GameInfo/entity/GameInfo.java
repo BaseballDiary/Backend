@@ -1,11 +1,9 @@
 package com.backend.baseball.GameInfo.entity;
 
 import com.backend.baseball.Diary.entity.Diary;
+import com.backend.baseball.GameInfo.enums.GameStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -13,6 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @Getter
+@Setter
 @Entity
 public class GameInfo {
 
@@ -20,23 +19,20 @@ public class GameInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gameCertificateId;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private GameStatus gameStatus; //경기 상태
+    private String gameStatus; //경기 상태
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private GameStatus team1; //팀1
+    private String team1; //팀1
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private GameStatus team2; //팀2
+    private String team2; //팀2
 
     @Column(nullable = true)
-    private Integer team1Score; //팀1 점수
+    private String team1Score; //팀1 점수
 
     @Column(nullable = true)
-    private Integer team2Score; //팀2 점수
+    private String team2Score; //팀2 점수
 
     @Column(nullable = false)
     private LocalDate gameDate; //경기 날짜

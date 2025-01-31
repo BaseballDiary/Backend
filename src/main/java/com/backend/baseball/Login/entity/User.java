@@ -18,6 +18,7 @@ import java.util.List;
 @Getter
 @Entity
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long certificateId; // 회원식별번호
@@ -47,7 +48,7 @@ public class User {
     public void changeNickname(String newNickname) {
         this.nickname = newNickname;
     }
-    
+
     // 클럽 변경
     public void changeClub(Club newClub) {
         this.myClub = newClub;
@@ -57,5 +58,7 @@ public class User {
     public void changeUserPassword(String password){
         this.password = password;
     }
+
+
 
 }

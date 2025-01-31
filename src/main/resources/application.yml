@@ -20,4 +20,8 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-
+    
+  security:
+    user:
+      name: abcd
+      roles: USER, ADMIN
