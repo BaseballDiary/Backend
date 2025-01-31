@@ -1,11 +1,15 @@
 package com.backend.baseball.Login.entity;
 
+import com.backend.baseball.Diary.entity.Diary;
 import com.backend.baseball.Login.enums.Club;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -33,6 +37,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Club myClub;
+
+    @OneToMany(mappedBy = "user") //관계설정
+    private List<Diary> diaries = new ArrayList<>();
 
 
 
