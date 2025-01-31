@@ -25,7 +25,7 @@ public class RankingService {
 
     public List<TeamRanking> getTeamRanking(String year){
         List<TeamRanking> teamRanking = teamRankingRepository.findByYear(year);
-        if(teamRanking == null){
+        if(teamRanking.isEmpty()){
             teamRanking = crawlingTeamRanking.crawling(year);
         }
         return teamRanking;
@@ -33,7 +33,7 @@ public class RankingService {
 
     public List<PitcherRanking> getPitcherRanking(String year){
         List<PitcherRanking> pitcherRanking = pitcherRankingRepository.findByYear(year);
-        if(pitcherRanking == null){
+        if(pitcherRanking.isEmpty()){
             pitcherRanking = crawlingPitcherRanking.crawling(year);
         }
         return pitcherRanking;
@@ -41,7 +41,7 @@ public class RankingService {
 
     public List<PitcherRecordRanking> getPitcherRecordRanking(String year){
         List<PitcherRecordRanking> pitcherRecordRanking = pitcherRecordRankingRepository.findByYear(year);
-        if(pitcherRecordRanking == null){
+        if(pitcherRecordRanking.isEmpty()){
             pitcherRecordRanking = crawlingPitcherRecordRanking.crawling(year);
         }
         return pitcherRecordRanking;
@@ -49,7 +49,7 @@ public class RankingService {
 
     public List<BatterRanking> getBatterRanking(String year){
         List<BatterRanking> batterRanking = batterRankingRepository.findByYear(year);
-        if(batterRanking == null){
+        if(batterRanking.isEmpty()){
             batterRanking = crawlingBatterRanking.crawling(year);
         }
         return batterRanking;
@@ -57,7 +57,7 @@ public class RankingService {
 
     public List<BatterRecordRanking> getBatterRecordRanking(String year){
         List<BatterRecordRanking> batterRecordRanking = batterRecordRankingRepository.findByYear(year);
-        if(batterRecordRanking == null){
+        if(batterRecordRanking.isEmpty()){
             batterRecordRanking = crawlingBatterRecordRanking.crawling(year);
         }
         return batterRecordRanking;

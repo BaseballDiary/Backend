@@ -49,7 +49,7 @@ public class CrawlingTeamRanking {
 
                 // 경기 수
                 String gamesNum = row.select("td span").get(2).text();
-                teamRanking.setTeamName(gamesNum);
+                teamRanking.setGameNum(gamesNum);
 
                 // 승수
                 String win = row.select("td span").get(3).text();

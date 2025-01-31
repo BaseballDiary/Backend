@@ -4,6 +4,7 @@ import com.backend.baseball.GameInfo.entity.GameInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,5 +22,5 @@ public interface GameInfoControllerDocs {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "내 구단 경기 반환 성공"),
             @ApiResponse(responseCode = "400", description = "내 구단 경기 반환 실패") })
-    ResponseEntity<com.backend.baseball.GameInfo.apiPayload.ApiResponse<List<GameInfo>>> myClubGameInfo(@RequestParam String date);
+    ResponseEntity<com.backend.baseball.GameInfo.apiPayload.ApiResponse<GameInfo>> myClubGameInfo(@RequestParam String date, HttpSession session);
 }

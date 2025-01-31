@@ -19,15 +19,12 @@ public class GameInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gameCertificateId;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private String gameStatus; //경기 상태
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private String team1; //팀1
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private String team2; //팀2
 

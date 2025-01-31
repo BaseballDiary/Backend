@@ -13,7 +13,7 @@ public class BatterRecordRanking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pitcherRecordCertificatedId; //투수 기록별 랭킹 식별 번호
+    private Long batterRecordCertificatedId; //투수 기록별 랭킹 식별 번호
 
     @Column(nullable = false)
     private String year; //년도

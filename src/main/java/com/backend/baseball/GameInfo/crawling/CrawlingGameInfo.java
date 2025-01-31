@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -57,7 +59,6 @@ public class CrawlingGameInfo {
         for(WebElement tableElement : tableElements) {
             String pageSource = tableElement.getAttribute("outerHTML");
             Document doc = Jsoup.parse(pageSource);
-            GameInfo gameInfo = new GameInfo();
 
             //날짜  ex) 8월 1일 => 2024-08-01
             Element column = doc.selectFirst("em.ScheduleLeagueType_title__2Kalm");
@@ -65,15 +66,17 @@ public class CrawlingGameInfo {
             String[] parts = dateText.split(" \\(");  // 공백과 여는 괄호를 기준으로 분리
             dateText = parts[0];
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 d일", Locale.KOREAN);
-            // 문자열 date를 LocalDate로 변환
-            LocalDate localDate = LocalDate.parse(dateText, formatter);
+            TemporalAccessor parsed = formatter.parse(dateText);
+            int month = parsed.get(ChronoField.MONTH_OF_YEAR);
+            int day = parsed.get(ChronoField.DAY_OF_MONTH);
             String year=date.split("-")[0];
-            // year를 사용해 연도를 설정
-            localDate = localDate.withYear(Integer.parseInt(year));
-            gameInfo.setGameDate(localDate);
+            LocalDate localDate = LocalDate.of(Integer.parseInt(year), month, day);
 
             Elements matches = doc.select("li.MatchBox_match_item__3_D0Q");
             for (Element match : matches) {
+                GameInfo gameInfo = new GameInfo();
+                gameInfo.setGameDate(localDate);
+
                 // 경기 시간
                 String timeText = match.select("div.MatchBox_time__nIEfd").text();
                 String[] lines = timeText.split("시간"); // 줄바꿈 기준으로 분리
@@ -95,8 +98,8 @@ public class CrawlingGameInfo {
                 } else { //경기 취소가 아닌 경우
                     notCancel(match, gameInfo);
                 }
+                list.add(gameInfo);
             }
-            list.add(gameInfo);
         }
     }
     public static void cancel(Element match, GameInfo gameInfo) {

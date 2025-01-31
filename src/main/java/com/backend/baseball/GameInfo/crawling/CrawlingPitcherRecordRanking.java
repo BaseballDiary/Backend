@@ -67,10 +67,10 @@ public class CrawlingPitcherRecordRanking {
         String record = recordElement.text();
 
         Elements rows = doc.select("ol li");
-        PitcherRecordRanking pitcherRecordRanking = new PitcherRecordRanking();
 
         // 테이블 데이터 파싱
         for(Element row : rows) {
+            PitcherRecordRanking pitcherRecordRanking = new PitcherRecordRanking();
 
             //년도
             pitcherRecordRanking.setYear(year);

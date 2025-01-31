@@ -4,10 +4,14 @@ import com.backend.baseball.GameInfo.crawling.CrawlingGameInfo;
 import com.backend.baseball.GameInfo.entity.GameInfo;
 import com.backend.baseball.GameInfo.entity.TeamRanking;
 import com.backend.baseball.GameInfo.repository.GameInfoRepository;
+import com.backend.baseball.Login.User.repository.UserRepository;
+import com.backend.baseball.Login.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,20 +19,28 @@ public class GameInfoService {
 
     private final GameInfoRepository gameInfoRepository;
     private final CrawlingGameInfo crawlingGameInfo;
+    private final UserRepository userRepository;
 
-    public List<GameInfo> getTodayGameInfo(String date){
-        List<GameInfo> todayGameInfo = gameInfoRepository.findByYear(date);
-        if(todayGameInfo == null){
-            todayGameInfo = crawlingGameInfo.crawling(date);
+    public List<GameInfo> getTodayGameInfo(String dateString){
+        LocalDate date = LocalDate.parse(dateString);
+        List<GameInfo> todayGameInfo = gameInfoRepository.findByGameDate(date);
+        if(todayGameInfo.isEmpty()){
+            todayGameInfo = crawlingGameInfo.crawling(dateString);
         }
         return todayGameInfo;
     }
 
-    public List<GameInfo> getMyClubGameInfo(String date){
-        List<GameInfo> todayGameInfo = gameInfoRepository.findByYear(date);
-        if(todayGameInfo == null){
-            todayGameInfo = crawlingGameInfo.crawling(date);
+    public GameInfo getMyClubGameInfo(String name, String dateString){
+        User user = userRepository.findByNickname(name);
+        if(user == null){
+            return null;
         }
-        return todayGameInfo;
+        String club = user.getMyClub().name();
+        LocalDate date = LocalDate.parse(dateString);
+        GameInfo myClubGameInfo = gameInfoRepository.findGamesByClubAndDate(club, date);
+        if(myClubGameInfo == null){
+            return GameInfo.builder().gameStatus("경기 없음").build();
+        }
+        return myClubGameInfo;
     }
 }

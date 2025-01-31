@@ -68,10 +68,11 @@ public class CrawlingBatterRecordRanking {
         String record = recordElement.text();
 
         Elements rows = doc.select("ol li");
-        BatterRecordRanking batterRecordRanking = new BatterRecordRanking();
 
         // 테이블 데이터 파싱
         for (Element row : rows) {
+            BatterRecordRanking batterRecordRanking = new BatterRecordRanking();
+
             //년도
             batterRecordRanking.setYear(year);
 
