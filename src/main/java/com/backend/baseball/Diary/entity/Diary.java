@@ -2,6 +2,7 @@ package com.backend.baseball.Diary.entity;
 
 import com.backend.baseball.Diary.enums.ViewType;
 import com.backend.baseball.GameInfo.entity.GameInfo;
+import com.backend.baseball.Login.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,9 +32,21 @@ public class Diary {
     @Column(nullable = false)
     private String imgUrl;
 
+    @Builder
+    public Diary(ViewType viewType, String contents, String imgUrl){
+        this.viewType = viewType;
+        this.contents = contents;
+        this.imgUrl = imgUrl;
+    }
 
     @OneToOne
     @JoinColumn(name = "gameId", unique = true)
     private GameInfo gameInfo;
+
+    @ManyToOne
+    @JoinColumn(name = "certificateId")
+    private User user;
+
+
 
 }
