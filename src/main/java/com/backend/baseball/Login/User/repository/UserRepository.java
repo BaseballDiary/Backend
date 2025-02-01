@@ -9,4 +9,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByCertificateId(Long certificateId);
     Optional<User> findByEmail(String email);
     User save(User user);
+
+    User findByNickname(String nickname);
 }
