@@ -1,39 +1,37 @@
 package com.backend.baseball.Login.User.emailauth;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
-
-import java.time.Duration;
-
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Repository
 public class MailCertification {
-    private final String PREFIX ="email:"; // key값이 중복되지 않도록 상수 선언
-    private final int LIMIT_TIME=3*60;
 
-    private final StringRedisTemplate stringRedisTemplate;
+    private final String PREFIX = "email:";
+    private final int LIMIT_TIME = 3 * 60; // 인증번호 만료 시간 (3분)
 
-    //Redis에 저장
-    public void createMailCertification(String email,String certificationNumber){
-        stringRedisTemplate.opsForValue()
-                .set(PREFIX+email,certificationNumber, Duration.ofSeconds(LIMIT_TIME));
+    // ✅ Redis 대신 메모리 기반 저장소 사용
+    private final Map<String, String> certificationStore = new HashMap<>();
+
+    // 이메일 인증번호 저장
+    public void createMailCertification(String email, String certificationNumber) {
+        certificationStore.put(PREFIX + email, certificationNumber);
     }
 
-    // 이메일에 해당하는 인증번호 불러오기
-    public String getMailCertification(String email){
-        return stringRedisTemplate.opsForValue().get(PREFIX+email);
+    // 이메일에 해당하는 인증번호 가져오기
+    public String getMailCertification(String email) {
+        return certificationStore.get(PREFIX + email);
     }
 
-    // 인증 완료 시, 인증번호 Redis에서 삭제
-    public void deleteMailCertification(String email){
-        stringRedisTemplate.delete(PREFIX+email);
+    // 인증번호 삭제
+    public void deleteMailCertification(String email) {
+        certificationStore.remove(PREFIX + email);
     }
 
-    // Redis에 해당 이메일로 저장된 인증번호가 존재하는지 확인
-    public boolean hasKey(String email){
-        return stringRedisTemplate.hasKey(PREFIX+email);
+    // 이메일로 저장된 인증번호 존재 여부 확인
+    public boolean hasKey(String email) {
+        return certificationStore.containsKey(PREFIX + email);
     }
-
 }

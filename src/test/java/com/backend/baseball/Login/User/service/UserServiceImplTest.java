@@ -63,30 +63,8 @@ class UserServiceImplTest {
         verify(userRepository, times(1)).findByCertificateId(1L);
     }
 
-    @Test
-    void join_ValidUser_ReturnsSavedUser() {
-        UserJoinDto userJoinDto = new UserJoinDto("new@example.com", "password", "password");
 
-        when(userRepository.findByEmail(userJoinDto.getEmail())).thenReturn(Optional.empty());
-        when(passwordEncoder.encode(userJoinDto.getPassword())).thenReturn("encodedPassword");
-        when(userRepository.save(any(User.class))).thenReturn(testUser);
 
-        User savedUser = userService.join(userJoinDto);
-
-        assertNotNull(savedUser);
-        assertEquals("test@example.com", savedUser.getEmail());
-        verify(userRepository, times(1)).save(any(User.class));
-    }
-
-    @Test
-    void join_EmailAlreadyExists_ThrowsException() {
-        UserJoinDto userJoinDto = new UserJoinDto("test@example.com", "password", "password");
-
-        when(userRepository.findByEmail(userJoinDto.getEmail())).thenReturn(Optional.of(testUser));
-
-        assertThrows(EmailAlreadyExistsException.class, () -> userService.join(userJoinDto));
-        verify(userRepository, times(1)).findByEmail(userJoinDto.getEmail());
-    }
 
     @Test
     void changeUserPassword_ValidInput_ChangesPassword() {

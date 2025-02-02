@@ -60,7 +60,7 @@ public class Diary {
     private GameInfo gameInfo;
 
     @ManyToOne
-    @JoinColumn(name = "certificateId")
+    @JoinColumn(name = "certificateId", nullable = false)
     private User user;
 
     public void update(LocalDate date, ViewType viewType, String content, List<String> imgUrl, GameInfo gameInfo) {
