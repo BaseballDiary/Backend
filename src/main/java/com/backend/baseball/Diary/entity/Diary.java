@@ -9,8 +9,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,19 +27,31 @@ public class Diary {
     @Column(nullable = false)
     private Long diaryId; //일기 식별번호
 
+    @Column
+    private LocalDate date;
+
     @Column(nullable = false)
     private ViewType viewType;
 
     @Column(nullable = false)
-    private String contents;
+    private String content;
 
-    @Column(nullable = false)
-    private String imgUrl;
+    @ElementCollection
+    @CollectionTable(name = "diary_images", joinColumns = @JoinColumn(name = "diary_id"))
+    @Column(name = "image_url")
+    private List<String> imgUrl;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.date == null) {
+            this.date = LocalDate.now();
+        }
+    }
 
     @Builder
-    public Diary(ViewType viewType, String contents, String imgUrl){
+    public Diary(ViewType viewType, String content, List<String> imgUrl){
         this.viewType = viewType;
-        this.contents = contents;
+        this.content = content;
         this.imgUrl = imgUrl;
     }
 
@@ -47,6 +63,12 @@ public class Diary {
     @JoinColumn(name = "certificateId")
     private User user;
 
-
+    public void update(LocalDate date, ViewType viewType, String content, List<String> imgUrl, GameInfo gameInfo) {
+        this.date = date;
+        this.viewType = viewType;
+        this.content = content;
+        this.imgUrl = imgUrl;
+        this.gameInfo = gameInfo; // ✅ gameId 변경
+    }
 
 }
