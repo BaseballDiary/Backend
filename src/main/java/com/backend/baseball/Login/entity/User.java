@@ -1,7 +1,6 @@
 package com.backend.baseball.Login.entity;
 
 import com.backend.baseball.Diary.entity.Diary;
-import com.backend.baseball.Login.enums.Club;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -36,8 +35,10 @@ public class User {
     @Column(nullable = false,columnDefinition = "integer default 0")
     private int temperature; // 야구 온도
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT '두산'") // ✅ 기본값 '두산' 설정
+
+    
     @NotNull
+    @Column(nullable = false)
     private String myClub;
 
     @OneToMany(mappedBy = "user") //관계설정
