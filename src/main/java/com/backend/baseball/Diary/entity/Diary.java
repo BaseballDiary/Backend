@@ -44,7 +44,7 @@ public class Diary {
     private GameInfo gameInfo;
 
     @ManyToOne
-    @JoinColumn(name = "certificateId")
+    @JoinColumn(name = "certificateId", nullable = false)
     private User user;
 
 
