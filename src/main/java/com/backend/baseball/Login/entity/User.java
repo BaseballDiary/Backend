@@ -1,11 +1,16 @@
 package com.backend.baseball.Login.entity;
 
+import com.backend.baseball.Diary.entity.Diary;
 import com.backend.baseball.Login.enums.Club;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -14,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long certificateId; // 회원식별번호
@@ -31,8 +37,12 @@ public class User {
     private int temperature; // 야구 온도
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT '두산'") // ✅ 기본값 '두산' 설정
+    @NotNull
     private Club myClub;
+
+    @OneToMany(mappedBy = "user") //관계설정
+    private List<Diary> diaries = new ArrayList<>();
 
 
 
@@ -40,7 +50,7 @@ public class User {
     public void changeNickname(String newNickname) {
         this.nickname = newNickname;
     }
-    
+
     // 클럽 변경
     public void changeClub(Club newClub) {
         this.myClub = newClub;
@@ -50,5 +60,7 @@ public class User {
     public void changeUserPassword(String password){
         this.password = password;
     }
+
+
 
 }
