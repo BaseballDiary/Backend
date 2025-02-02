@@ -35,12 +35,18 @@ public class GameInfoService {
         if(user == null){
             return null;
         }
+
         String club = user.getMyClub();
+
         LocalDate date = LocalDate.parse(dateString);
-        GameInfo myClubGameInfo = gameInfoRepository.findGamesByClubAndDate(club, date);
-        if(myClubGameInfo == null){
-            return GameInfo.builder().gameStatus("경기 없음").build();
-        }
-        return myClubGameInfo;
+
+        return gameInfoRepository.findGamesByClubAndDate(club, date)
+                .orElse(GameInfo.builder().gameStatus("경기 없음").build());
+        //세연 수정
+        //GameInfo myClubGameInfo = gameInfoRepository.findGamesByClubAndDate(club, date);
+        //if(myClubGameInfo == null){
+        //   return GameInfo.builder().gameStatus("경기 없음").build();
+        //}
+        //return myClubGameInfo;
     }
 }
