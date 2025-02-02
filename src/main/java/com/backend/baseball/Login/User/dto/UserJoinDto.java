@@ -31,8 +31,9 @@ public class UserJoinDto {
     private String passwordConfirm;
 
 
+
     @Builder
-    public UserJoinDto(String email, String password, String passwordConfirm) {
+    public UserJoinDto(String email, String password, String passwordConfirm, String myClub) {
         this.email = email;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
