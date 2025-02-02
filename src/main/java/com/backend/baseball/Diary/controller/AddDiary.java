@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController //HTTP Response Body에 객체 데이터를 JSON 형식으로 반환하는 컨트롤러
-public class AddDiary {
+public class AddDiary implements AddDiaryDocs{
 
     private final DiaryService diaryService;
 

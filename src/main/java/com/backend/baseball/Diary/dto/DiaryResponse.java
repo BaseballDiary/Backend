@@ -40,6 +40,7 @@ public class DiaryResponse {
         public LocalDate getLocalDate() {
             return LocalDate.parse(this.date);
         }
+
         @Getter
         @AllArgsConstructor
         public static class Score {
