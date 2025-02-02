@@ -30,24 +30,18 @@ public class UserJoinDto {
     @NotBlank(message = "비밀번호 확인을 입력해야 합니다.")
     private String passwordConfirm;
 
-    @Schema(description = "구단 선택", example = "SSG")
-    @NotNull
-    private Club myClub;
-
 
     @Builder
-    public UserJoinDto(String email, String password, String passwordConfirm, Club myClub) {
+    public UserJoinDto(String email, String password, String passwordConfirm) {
         this.email = email;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
-        this.myClub=myClub;
     }
 
     public User toEntity(){
         User user=User.builder()
                 .email(email)
                 .password(password)
-                .myClub(myClub)
                 .build();
         return user;
     }

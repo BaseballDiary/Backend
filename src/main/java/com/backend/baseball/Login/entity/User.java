@@ -36,10 +36,9 @@ public class User {
     @Column(nullable = false,columnDefinition = "integer default 0")
     private int temperature; // 야구 온도
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT '두산'") // ✅ 기본값 '두산' 설정
     @NotNull
-    private Club myClub;
+    private String myClub;
 
     @OneToMany(mappedBy = "user") //관계설정
     private List<Diary> diaries = new ArrayList<>();
@@ -52,7 +51,7 @@ public class User {
     }
 
     // 클럽 변경
-    public void changeClub(Club newClub) {
+    public void changeClub(String newClub) {
         this.myClub = newClub;
     }
 
