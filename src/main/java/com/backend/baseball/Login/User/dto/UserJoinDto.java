@@ -1,5 +1,6 @@
 package com.backend.baseball.Login.User.dto;
 
+import com.backend.baseball.Login.enums.Club;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -29,17 +30,24 @@ public class UserJoinDto {
     @NotBlank(message = "비밀번호 확인을 입력해야 합니다.")
     private String passwordConfirm;
 
+    @Schema(description = "구단 선택", example = "SSG")
+    @NotNull
+    private Club myClub;
+
+
     @Builder
-    public UserJoinDto(String email, String password, String passwordConfirm) {
+    public UserJoinDto(String email, String password, String passwordConfirm, Club myClub) {
         this.email = email;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
+        this.myClub=myClub;
     }
 
     public User toEntity(){
         User user=User.builder()
                 .email(email)
                 .password(password)
+                .myClub(myClub)
                 .build();
         return user;
     }
