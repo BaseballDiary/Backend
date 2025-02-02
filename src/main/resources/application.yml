@@ -26,3 +26,7 @@ spring:
     user:
       name: abcd
       roles: USER, ADMIN
+
+  springdoc:
+    swagger-ui:
+      persistAuthorization: true
