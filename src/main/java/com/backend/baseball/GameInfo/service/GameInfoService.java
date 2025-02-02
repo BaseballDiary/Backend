@@ -35,7 +35,7 @@ public class GameInfoService {
         if(user == null){
             return null;
         }
-        String club = user.getMyClub().toString();
+        String club = user.getMyClub();
         LocalDate date = LocalDate.parse(dateString);
         GameInfo myClubGameInfo = gameInfoRepository.findGamesByClubAndDate(club, date);
         if(myClubGameInfo == null){
