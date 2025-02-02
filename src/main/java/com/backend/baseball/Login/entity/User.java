@@ -2,6 +2,7 @@ package com.backend.baseball.Login.entity;
 
 import com.backend.baseball.Diary.entity.Diary;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +35,9 @@ public class User {
     @Column(nullable = false,columnDefinition = "integer default 0")
     private int temperature; // 야구 온도
 
+
+    
+    @NotNull
     @Column(nullable = false)
     private String myClub;
 
