@@ -1,11 +1,8 @@
 package com.backend.baseball.Login.User.service;
 
 import com.backend.baseball.Login.User.controller.response.UserEmailResponse;
+import com.backend.baseball.Login.User.dto.*;
 import com.backend.baseball.Login.entity.User;
-import com.backend.baseball.Login.User.dto.UserEmailDto;
-import com.backend.baseball.Login.User.dto.UserJoinDto;
-import com.backend.baseball.Login.User.dto.UserPasswordChangeDto;
-import com.backend.baseball.Login.User.dto.UserPasswordResetDto;
 import com.backend.baseball.Login.User.exception.*;
 import com.backend.baseball.Login.User.repository.UserRepository;
 import lombok.Builder;
@@ -58,18 +55,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User changeUserPassword(Long certificateId, UserPasswordChangeDto userPasswordChangeDto) {
-        User user=this.getByCertificateId(certificateId);
-        if(!userPasswordChangeDto.getNewPassword().equals(userPasswordChangeDto.getNewPasswordConfirm())){
-            throw new ConfirmPasswordMismatchException();
-        }
-        if(!passwordEncoder.matches(userPasswordChangeDto.getNewPassword(),user.getPassword())){
+        User user = this.getByCertificateId(certificateId);
+
+        if (!passwordEncoder.matches(userPasswordChangeDto.getCurrentPassword(), user.getPassword())) {
             throw new CurrentPasswordMismatchException();
         }
 
-        String encodedPassword= passwordEncoder.encode(userPasswordChangeDto.getNewPassword());
+        if (!userPasswordChangeDto.getNewPassword().equals(userPasswordChangeDto.getNewPasswordConfirm())) {
+            throw new ConfirmPasswordMismatchException();
+        }
+
+        String encodedPassword = passwordEncoder.encode(userPasswordChangeDto.getNewPassword());
         user.changeUserPassword(encodedPassword);
 
         return userRepository.save(user);
+    }
+
+
+    @Override
+    public User myPagePasswordAuth(Long certificateId, MyPagePasswordAuthDto myPagePasswordAuthDto) {
+        User user=this.getByCertificateId(certificateId);
+        if(!passwordEncoder.matches(myPagePasswordAuthDto.getCurrentPassword(),user.getPassword())){
+            throw new CurrentPasswordMismatchException();
+        }
+        return user;
     }
 
     @Override
@@ -85,17 +94,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User resetUserPassword(UserPasswordResetDto userPasswordResetDto) {
-        Optional<User> user=userRepository.findByEmail(userPasswordResetDto.getEmail());
+        User user = userRepository.findByEmail(userPasswordResetDto.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User", null));
 
-        if(!userPasswordResetDto.getNewPassword().equals(userPasswordResetDto.getNewPasswordConfirm())){
+        if (!userPasswordResetDto.getNewPassword().equals(userPasswordResetDto.getNewPasswordConfirm())) {
             throw new ConfirmPasswordMismatchException();
         }
 
-        String encodedPassword= passwordEncoder.encode(userPasswordResetDto.getNewPassword());
-        user.get().changeUserPassword(encodedPassword);
+        String encodedPassword = passwordEncoder.encode(userPasswordResetDto.getNewPassword());
+        user.changeUserPassword(encodedPassword);
 
-        return userRepository.save(user.get());
+        return userRepository.save(user);
     }
+
+
 
     @Override
     public Boolean confirmDupEmail(UserEmailDto userEmailDto) {
