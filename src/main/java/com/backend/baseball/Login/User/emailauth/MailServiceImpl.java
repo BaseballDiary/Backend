@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 import java.util.Random;
 
@@ -26,19 +25,18 @@ public class MailServiceImpl implements MailService {
     @Value("${spring.mail.username}")
     private String senderEmail;
 
-    private String createRandomNumber(){
+    private String createRandomNumber() {
         Random rand = new Random();
-        String randomNum="";
-        for(int i = 0;i<6;i++){
-            String random=Integer.toString(rand.nextInt(10));
-            randomNum+=random;
+        StringBuilder randomNum = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
+            randomNum.append(rand.nextInt(10));
         }
-        return randomNum;
+        return randomNum.toString();
     }
 
     @Override
     public MailCertificationResponse sendMailPasswordReset(String email) {
-        if(userRepository.findByEmail(email).isEmpty()){
+        if (userRepository.findByEmail(email).isEmpty()) {
             throw new EmailNotResistedException();
         }
         return this.sendMailJoin(email);
@@ -46,49 +44,43 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public MailCertificationResponse sendMailJoin(String email) {
-        MimeMessage message=javaMailSender.createMimeMessage();
-        String randomNum=createRandomNumber();
+        MimeMessage message = javaMailSender.createMimeMessage();
+        String randomNum = createRandomNumber();
 
         try {
             message.setFrom(senderEmail);
             message.setRecipients(MimeMessage.RecipientType.TO, email);
             message.setSubject("이메일 인증");
-            String body = "";
-            body += "<h3>" + "요청하신 인증 번호입니다." + "</h3>";
-            body += "<h1>" + randomNum + "</h1>";
-            body += "<h3>" + "감사합니다." + "</h3>";
-            message.setText(body,"UTF-8", "html");
+            String body = "<h3>요청하신 인증 번호입니다.</h3><h1>" + randomNum + "</h1><h3>감사합니다.</h3>";
+            message.setText(body, "UTF-8", "html");
         } catch (MessagingException e) {
             e.printStackTrace();
         }
 
         javaMailSender.send(message);
-        mailCertification.createMailCertification(email,randomNum);
+        mailCertification.createMailCertification(email, randomNum);
         return new MailCertificationResponse(email);
     }
 
     @Override
     public Boolean verifyEmail(MailCertificationDto requestDto) {
-        if(isVerify(requestDto)){
+        if (isVerify(requestDto)) {
             throw new CertificationNumberMismatchException();
         }
         mailCertification.deleteMailCertification(requestDto.getEmail());
 
         return true;
     }
-    private Boolean isVerify(MailCertificationDto requestDto){
+
+    private Boolean isVerify(MailCertificationDto requestDto) {
         return !(mailCertification.hasKey(requestDto.getEmail())
-        &&mailCertification.getMailCertification(requestDto.getEmail())
+                && mailCertification.getMailCertification(requestDto.getEmail())
                 .equals(requestDto.getAuthNumber()));
     }
 
     @Override
     public Boolean confirmDupEmail(UserEmailDto userEmailDto) {
         Optional<User> user = userRepository.findByEmail(userEmailDto.getEmail());
-        if(user.isEmpty()){
-            return Boolean.TRUE;
-        }else{
-            return Boolean.FALSE;
-        }
+        return user.isEmpty();
     }
 }
