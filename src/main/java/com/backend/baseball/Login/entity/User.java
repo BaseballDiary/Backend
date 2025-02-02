@@ -29,14 +29,14 @@ public class User {
     @Column(nullable = false,length = 50,unique = true)
     private String email; // 이메일
 
-    @Column(nullable = true,length = 300,unique = true)
+    @Column(nullable = true,length = 30)
     private String nickname; // 닉네임
 
     @Column(nullable = false,columnDefinition = "integer default 0")
     private int temperature; // 야구 온도
 
 
-
+    
     @Column(nullable = true)
     private String myClub;
 
