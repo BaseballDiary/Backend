@@ -12,6 +12,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,12 +27,22 @@ public class CrawlingPitcherRanking {
     private final PitcherRankingRepository pitcherRankingRepository;
     private final List<PitcherRanking> list;
 
+    @Value("${webdriver.chrome.path}")
+    private String chromeDriverPath;
+
     @Transactional
     public List<PitcherRanking> crawling(String year) {
         String url ="https://sports.daum.net/record/kbo/pitcher?season=";
 
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\pwyic\\Downloads\\chromedriver-win64\\chromedriver.exe");
-        WebDriver driver = new ChromeDriver();
+        System.setProperty("webdriver.chrome.driver", chromeDriverPath);
+        // ChromeOptions 추가 (AWS 서버에서도 작동하도록 설정)
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");  // GUI 없이 실행 (서버 환경 필수)
+        options.addArguments("--no-sandbox"); // 보안 샌드박스 비활성화
+        options.addArguments("--disable-dev-shm-usage"); // 메모리 문제 해결
+        options.addArguments("--disable-gpu"); // GPU 비활성화
+
+        WebDriver driver = new ChromeDriver(options); // 옵션 추가된 WebDriver 생성
 
         try {
             driver.get(url + year);    //브라우저에서 url로 이동한다.
