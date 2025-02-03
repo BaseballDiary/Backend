@@ -35,7 +35,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: BBDServer
-
           path: build/libs/*.jar
 
   deploy:
@@ -60,7 +59,7 @@ jobs:
           chmod 600 private_key.pem
           jar_file=$(find build/libs -name '*.jar' ! -name '*plain.jagr' | head -n 1)
 
-          scp -i private_key.pem -o StrictHostKeyChecking=no "$jar_file" $EC2_USERNAME@$EC2_HOST:/home/$EC2_USERNAME/umc7thServer.jar
+          scp -i private_key.pem -o StrictHostKeyChecking=no "$jar_file" $EC2_USERNAME@$EC2_HOST:/home/$EC2_USERNAME/BBDServer.jar
           ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "
             pgrep java | xargs -r kill -15  # 기존에 실행 중인 Java 프로세스 종료
             sleep 10
