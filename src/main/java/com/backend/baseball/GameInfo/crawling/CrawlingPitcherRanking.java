@@ -27,14 +27,14 @@ public class CrawlingPitcherRanking {
     private final PitcherRankingRepository pitcherRankingRepository;
     private final List<PitcherRanking> list;
 
-    //@Value("${webdriver.chrome.path}")
-    //private String chromeDriverPath;
+    @Value("${webdriver.chrome.path}")
+    private String chromeDriverPath;
 
     @Transactional
     public List<PitcherRanking> crawling(String year) {
         String url ="https://sports.daum.net/record/kbo/pitcher?season=";
 
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\pwyic\\Downloads\\chromedriver-win64\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", chromeDriverPath);
         // ChromeOptions 추가 (AWS 서버에서도 작동하도록 설정)
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless");  // GUI 없이 실행 (서버 환경 필수)
