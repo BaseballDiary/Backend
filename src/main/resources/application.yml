@@ -31,8 +31,6 @@ spring:
     swagger-ui:
       persistAuthorization: true
 
-  #webdriver:
-  #  chrome:
-  #    path: C:\\Users\\pwyic\\Downloads\\chromedriver-win64\\chromedriver.exe
-
-      #path: /usr/bin/chromedriver   #이 경로 맞는지 확인!
+  webdriver:
+    chrome:
+      path: /usr/bin/chromedriver   #이 경로 맞는지 확인!
