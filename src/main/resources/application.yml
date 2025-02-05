@@ -33,4 +33,4 @@ spring:
 
   webdriver:
     chrome:
-      path: /usr/bin/chromedriver   #이 경로 맞는지 확인!
+      path: /usr/local/bin/chromedriver   #이 경로 맞는지 확인!
