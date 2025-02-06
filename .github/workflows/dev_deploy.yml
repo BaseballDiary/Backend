@@ -57,7 +57,8 @@ jobs:
           echo "$EC2_SSH_KEY" > private_key.pem
           chmod 600 private_key.pem
           #.jar 파일 찾기
-          jar_file=$(find build/libs -name '*.jar' | head -n 1)
+          jar_file=$(find build/libs -name '*.jar' ! -name '*plain.jar' | head -n 1)
+
 
           #.jar 파일 배포
           scp -i private_key.pem -o StrictHostKeyChecking=no "$jar_file" $EC2_USERNAME@$EC2_HOST:/home/$EC2_USERNAME/BBDServer.jar
