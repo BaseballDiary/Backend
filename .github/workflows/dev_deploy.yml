@@ -2,18 +2,16 @@ name: BBD CI/CD Pipeline
 
 on:
   push:
-    branches: [ develop ]  # main 브랜치에 push가 일어날 때 실행
+    branches: [ develop ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
-      - uses: actions/checkout@v4  # 저장소 코드 체크아웃
+      - uses: actions/checkout@v4
 
-      - name: Set up JDK 17  # Java 개발 킷 설정
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -21,6 +19,7 @@ jobs:
 
       - name: Make application.yml  # application.yml 파일 생성
         run: |
+          mkdir -p ./src/main/resources
           cd ./src/main/resources
           echo "${{ secrets.APPLICATION_YML }}" > ./application.yml
           ls -l ./application.yml
@@ -40,6 +39,7 @@ jobs:
         with:
           name: BBDServer
           path: build/libs/*.jar
+
 
   deploy:
     needs: build  # build 작업이 성공적으로 완료된 후 실행
@@ -63,8 +63,8 @@ jobs:
           jar_file=$(find build/libs -name '*.jar' ! -name '*plain.jar' | head -n 1)
           scp -v -i private_key.pem -o StrictHostKeyChecking=no "$jar_file" $EC2_USERNAME@$EC2_HOST:/home/$EC2_USERNAME/BBDServer.jar
           ssh -v -i private_key.pem -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "
-            pgrep java | xargs -r kill -15
+            pgrep java | xargs -r kill -15 
             sleep 10
-            nohup java -jar /home/$EC2_USERNAME/BBDServer.jar > app.log 2>&1 &
+            nohup java -jar /home/$EC2_USERNAME/BBDServer.jar > app.log 2>&1 &  
           "
           rm -f private_key.pem
