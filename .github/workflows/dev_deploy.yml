@@ -72,8 +72,11 @@ jobs:
             chmod +x /home/$EC2_USERNAME/BBDServer.jar
           
             # 새 어플리케이션 실행
-            nohup java -jar /home/$EC2_USERNAME/BBDServer.jar > /home/$EC2_USERNAME/app.log 2>&1 &  # 새 버전 애플리케이션 실행
+            java -jar /home/$EC2_USERNAME/BBDServer.jar > /home/$EC2_USERNAME/app.log 2>&1 &  # 새 버전 애플리케이션 실행
           "
-          
+          # 배포 상태 확인
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "
+            pgrep -f 'java.*BBDServer.jar' || echo 'Application failed to start'
+          "
           rm -f private_key.pem  # 민감한 정보 삭제
 
