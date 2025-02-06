@@ -61,10 +61,10 @@ jobs:
 
 
           #.jar 파일 배포
-          scp -i private_key.pem -o StrictHostKeyChecking=no "$jar_file" $EC2_USERNAME@$EC2_HOST:/home/$EC2_USERNAME/BBDServer.jar
+          scp -v -i private_key.pem -o StrictHostKeyChecking=no "$jar_file" $EC2_USERNAME@$EC2_HOST:/home/$EC2_USERNAME/BBDServer.jar
           
           # java 프로세스 종료 및 새 애플리케이션 실행
-          ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "
+          ssh -v -i private_key.pem -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "
             # 기존 Java 프로세스 종료
             pgrep -f 'java.*BBDServer.jar' | xargs -r kill -9
 
@@ -73,10 +73,6 @@ jobs:
           
             # 새 어플리케이션 실행
             nohup java -jar /home/$EC2_USERNAME/BBDServer.jar > /home/$EC2_USERNAME/app.log 2>&1 &  # 새 버전 애플리케이션 실행
-          "
-          # 배포 상태 확인
-          ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "
-            pgrep -f 'java.*BBDServer.jar' || echo 'Application failed to start'
           "
           
           rm -f private_key.pem  # 민감한 정보 삭제
