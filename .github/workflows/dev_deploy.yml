@@ -2,7 +2,7 @@ name: BBD CI/CD Pipeline
 
 on:
   push:
-    branches: [ develop ]  # main 브랜치에 push가 일어날 때 실행
+    branches: [ main ]  # main 브랜치에 push가 일어날 때 실행
 
 jobs:
   build:
@@ -46,6 +46,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: BBDServer
+
           path: build/libs/
 
       - name: Deploy to EC2  # EC2에 배포
@@ -56,26 +57,13 @@ jobs:
         run: |
           echo "$EC2_SSH_KEY" > private_key.pem
           chmod 600 private_key.pem
-          #.jar 파일 찾기
           jar_file=$(find build/libs -name '*.jar' ! -name '*plain.jar' | head -n 1)
-
-
-          #.jar 파일 배포
-          scp -v -i private_key.pem -o StrictHostKeyChecking=no "$jar_file" $EC2_USERNAME@$EC2_HOST:/home/$EC2_USERNAME/BBDServer.jar
-          
-          # java 프로세스 종료 및 새 애플리케이션 실행
-          ssh -vvv -i private_key.pem -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "
-            # 기존 Java 프로세스 종료
-            pgrep -f 'java.*BBDServer.jar' | xargs -r kill -9
-
-            # 새 JAR 파일에 실행 권한 부여
-            chmod +x /home/$EC2_USERNAME/BBDServer.jar
-          
-            # 새 어플리케이션 실행
+          scp -i private_key.pem -o StrictHostKeyChecking=no "$jar_file" $EC2_USERNAME@$EC2_HOST:/home/$EC2_USERNAME/BBDServer.jar
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "
+            pgrep -f 'java.*BBDServer.jar' | xargs -r kill -9  # 기존에 실행 중인 Java 프로세스 종료
+            sleep 10
             nohup java -jar /home/$EC2_USERNAME/BBDServer.jar > /home/$EC2_USERNAME/app.log 2>&1 &  # 새 버전 애플리케이션 실행
-        
             # 배포 상태 확인
             pgrep -f 'java.*BBDServer.jar' || echo 'Application failed to start'
           "
           rm -f private_key.pem  # 민감한 정보 삭제
-
