@@ -1,6 +1,5 @@
 package com.backend.baseball.Diary.service;
 
-import com.backend.baseball.Diary.dto.DiaryResponse;
 import com.backend.baseball.Diary.entity.Diary;
 import com.backend.baseball.Diary.enums.ViewType;
 import com.backend.baseball.Diary.repository.DiaryRepository;

@@ -1,8 +1,5 @@
 package com.backend.baseball.Diary.service;
 
-import com.backend.baseball.Diary.dto.AddDiaryRequest;
-import com.backend.baseball.Diary.dto.DiaryResponse;
-import com.backend.baseball.Diary.dto.UpdateDiaryRequest;
 import com.backend.baseball.Diary.entity.Diary;
 import com.backend.baseball.Diary.repository.DiaryRepository;
 import com.backend.baseball.GameInfo.entity.GameInfo;
@@ -14,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service

@@ -1,9 +1,6 @@
 package com.backend.baseball.Diary.controller;
 
-import com.backend.baseball.Diary.dto.AddDiaryRequest;
-import com.backend.baseball.Diary.dto.UpdateDiaryRequest;
 import com.backend.baseball.Diary.entity.Diary;
-import com.backend.baseball.GameInfo.entity.GameInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
