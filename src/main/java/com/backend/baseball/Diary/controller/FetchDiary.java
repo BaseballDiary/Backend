@@ -1,6 +1,5 @@
 package com.backend.baseball.Diary.controller;
 
-import com.backend.baseball.Diary.dto.DiaryResponse;
 import com.backend.baseball.Diary.service.DiaryService;
 import com.backend.baseball.Diary.service.FetchDiaryService;
 import jakarta.servlet.http.HttpSession;

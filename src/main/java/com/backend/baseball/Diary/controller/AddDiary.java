@@ -1,7 +1,5 @@
 package com.backend.baseball.Diary.controller;
 
-import com.backend.baseball.Diary.dto.AddDiaryRequest;
-import com.backend.baseball.Diary.dto.UpdateDiaryRequest;
 import com.backend.baseball.Diary.entity.Diary;
 import com.backend.baseball.Diary.service.DiaryService;
 import com.backend.baseball.GameInfo.entity.GameInfo;

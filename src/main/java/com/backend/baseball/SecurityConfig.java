@@ -19,6 +19,12 @@ public class SecurityConfig {  // localhost 8080 기본 로그인 화면 제거
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/login", "/logout").permitAll() // ✅ 로그인 & 로그아웃 엔드포인트 허용
                         .requestMatchers("/resources/**").permitAll()
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll() //swagger 관련 요청 허용 코드
                         .anyRequest().permitAll() // ✅ 다른 모든 요청 허용 (보안 강화 필요시 authenticated()로 변경)
                 )
 
