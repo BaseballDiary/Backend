@@ -43,12 +43,9 @@ dependencies {
 	//implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 
-	//웹 크롤링(위에 두개가 원래)
-	//implementation 'org.seleniumhq.selenium:selenium-java:4.8.0'
-	//implementation 'org.seleniumhq.selenium:selenium-devtools-v130:4.28.1'
-	implementation 'org.seleniumhq.selenium:selenium-java:4.25.0'
-	implementation 'org.seleniumhq.selenium:selenium-devtools-v133:4.25.0'
-	//implementation 'org.seleniumhq.selenium:selenium-devtools-v132:4.19.1'
+	//웹 크롤링
+	implementation 'org.seleniumhq.selenium:selenium-java:4.8.0'
+	implementation 'org.seleniumhq.selenium:selenium-devtools:4.10.0'
 	implementation 'org.jsoup:jsoup:1.18.3'
 
 	//스웨거
