@@ -45,7 +45,6 @@ dependencies {
 
 	//웹 크롤링
 	implementation 'org.seleniumhq.selenium:selenium-java:4.8.0'
-	implementation 'org.seleniumhq.selenium:selenium-devtools:4.10.0'
 	implementation 'org.jsoup:jsoup:1.18.3'
 
 	//스웨거
