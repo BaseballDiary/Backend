@@ -30,6 +30,9 @@ public class Diary {
     @Column
     private LocalDate date;
 
+    @Column
+    private String day; //요일
+
     @Column(nullable = false)
     private ViewType viewType;
 

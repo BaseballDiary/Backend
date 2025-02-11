@@ -14,8 +14,5 @@ public class FetchGameByDateDTO {
     @NotNull
     private LocalDate gameDate; //"2024-05-02"
 
-    @NotNull
-    private LocalTime gameTime; //"18:30"
-
 
 }
