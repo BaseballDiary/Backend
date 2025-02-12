@@ -12,6 +12,7 @@ import com.backend.baseball.Diary.dto.SaveDiaryRequestDTO;
 import com.backend.baseball.Login.entity.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 //프론트에서 년-월-일 보내면 해당하는 경기 정보 보내주기
-public class FetchGameByDateController {
+public class FetchGameByDateController implements FetchGameByDateControllerDocs{
 
     private final GameInfoService gameInfoService;
     private final DiaryService diaryService;
@@ -30,7 +31,7 @@ public class FetchGameByDateController {
 
     //로그인한 사용자의 `certificated_id`를 통해 내 구단이 포함된 경기 일정만 조회
     @PostMapping("diary/create/fetchgame")
-    public List<GameResponseDTO> fetchUserTeamGamesByDate(
+    public ResponseEntity<List<GameResponseDTO>> fetchUserTeamGamesByDate(
             @RequestBody FetchGameByDateDTO request,
             HttpSession session) {
 
@@ -42,16 +43,17 @@ public class FetchGameByDateController {
         }
 
         //2. 특정 날짜의 경기 중, 사용자의 구단이 포함된 경기만 필터링하여 반환
-        return gameInfoService.getUserTeamGameInfoByDate(request.getGameDate().toString(), certificatedId);
+        List<GameResponseDTO> games = gameInfoService.getUserTeamGameInfoByDate(request.getGameDate().toString(), certificatedId);
+        return ResponseEntity.ok(games);
     }
 
 
     @PostMapping("/diary/create/saveGame")
-    public DiaryResponseDTO fetchGameAndSaveDiary(
+    public ResponseEntity<DiaryResponseDTO> fetchGameAndSaveDiary(
             @RequestBody FetchGameByDateDTO request,
             HttpSession session) {
 
-        // 1️⃣ 세션에서 로그인한 사용자 가져오기
+        //1.세션에서 로그인한 사용자 가져오기
         User user = (User) session.getAttribute("loginUser");
         if (user == null) {
             throw new IllegalStateException("로그인이 필요합니다.");
@@ -75,7 +77,7 @@ public class FetchGameByDateController {
         saveRequest.setContents("");  // 기본값 설정
         saveRequest.setImgUrl("");  // 기본값 설정
 
-        //5. 다이어리 저장
-        return diaryService.saveGameToDiary(saveRequest, session); //DTO 기반으로 호출
-    }
+        //5.일기 저장
+        DiaryResponseDTO savedDiary = diaryService.saveGameToDiary(saveRequest, session);
+        return ResponseEntity.ok(savedDiary);    }
 }

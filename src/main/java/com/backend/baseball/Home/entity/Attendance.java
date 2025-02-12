@@ -1,4 +1,4 @@
-package com.backend.baseball.GameInfo.entity;
+package com.backend.baseball.Home.entity;
 
 import com.backend.baseball.Login.entity.User;
 import jakarta.persistence.*;

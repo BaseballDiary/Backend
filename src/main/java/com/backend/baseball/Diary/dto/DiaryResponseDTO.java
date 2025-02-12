@@ -2,14 +2,16 @@ package com.backend.baseball.Diary.dto;
 
 import com.backend.baseball.Diary.entity.Diary;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Getter
+@Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DiaryResponseDTO {
 
     private Long diaryId;
@@ -35,7 +37,7 @@ public class DiaryResponseDTO {
     private String contents;  // 다이어리 내용
     private List<String> imgUrl;  // 이미지 경로
 
-    // 📌 Diary 엔티티를 ResponseDTO로 변환
+    //Diary 엔티티를 ResponseDTO로 변환
     public static DiaryResponseDTO fromEntity(Diary diary) {
         return DiaryResponseDTO.builder()
                 .diaryId(diary.getDiaryId())
