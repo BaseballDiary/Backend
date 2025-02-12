@@ -71,7 +71,7 @@ public class Diary {
         this.viewType = viewType;
         this.content = content;
         this.imgUrl = imgUrl;
-        this.gameInfo = gameInfo; // ✅ gameId 변경
+        this.gameInfo = gameInfo;
     }
 
 }
