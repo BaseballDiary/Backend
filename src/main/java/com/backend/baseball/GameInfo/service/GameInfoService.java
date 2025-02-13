@@ -8,7 +8,6 @@ import com.backend.baseball.GameInfo.repository.GameInfoRepository;
 import com.backend.baseball.Login.User.repository.UserRepository;
 import com.backend.baseball.Login.entity.User;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class GameInfoService {
 
     private final GameInfoRepository gameInfoRepository;
