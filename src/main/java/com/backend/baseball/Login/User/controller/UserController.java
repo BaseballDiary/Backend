@@ -39,6 +39,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new CreateUserResponse(joinUser.getCertificateId(), "User created successfully"));
     }
+    /*
+    @PostMapping("/selectNickname")
+    public ResponseEntity<String> selectNickname(@Login LoginInfo loginInfo,@RequestBody UserInfoChangeDto userInfoChangeDto){
+        userService.updateNickname();
+    }
+    */
+
 
     @Operation(summary = "이메일 중복 확인", description = "입력한 이메일이 이미 사용 중인지 확인합니다.")
     @PostMapping("/confirmEmail")
