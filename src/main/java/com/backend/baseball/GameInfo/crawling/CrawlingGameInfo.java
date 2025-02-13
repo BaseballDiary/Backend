@@ -100,11 +100,12 @@ public class CrawlingGameInfo {
 
                 //장소
                 //String place = match.select("div.MatchBox_stadium__13gft").text().replace("경기장", "").trim();
-                String place = doc.selectFirst("div.MatchBox_stadium__13gft").text();
-                //String[] places = place.split("경기장"); // 줄바꿈 기준으로 분리
-                //place = places[1];
+                String place = match.selectFirst("div.MatchBox_stadium__13gft").text();
                 log.info("경기 장소 출력 잘 되는지 확인 : "+ place);
                 gameInfo.setPlace(place);
+                //String[] places = place.split("경기장"); // 줄바꿈 기준으로 분리
+                //place = places[1];
+                log.info("match 요소 출력: " + match.html());
 
                 // 경기 상태
                 String status = match.select("em.MatchBox_status__2pbzi").text();
