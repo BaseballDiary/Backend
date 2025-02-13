@@ -52,7 +52,7 @@ public class CrawlingGameInfo {
 
         try {
             driver.get(url + date);    //브라우저에서 url로 이동한다.
-            Thread.sleep(4000);
+            Thread.sleep(5000);
 
             getDataList(driver, date);
 
@@ -106,8 +106,8 @@ public class CrawlingGameInfo {
                 //String[] places = place.split("경기장"); // 줄바꿈 기준으로 분리
                 //place = places[1];
 
-                Element matchSubInfo = match.selectFirst("div.MatchBox_match_sub_info__ITq89");
-                log.info("ITq89의 HTML: \n" + matchSubInfo.html());
+                Element matchSubInfo = match.selectFirst("div.MatchBox_item_content__3SGZf");
+                log.info("3SGZf의 HTML: \n" + matchSubInfo.outerHtml());
 
 
                 // 경기 상태
