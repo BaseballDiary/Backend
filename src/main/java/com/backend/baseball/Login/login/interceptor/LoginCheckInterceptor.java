@@ -17,13 +17,15 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         HttpSession session = request.getSession(false);
         if(session==null||session.getAttribute(SessionConst.LOGIN_USER_INFO)==null){
-            log.info("미인증 사용자 요청");
+            log.info("미인증 사용자 요청: 세션 없음");
 
-            request.getRequestDispatcher("/api/error").forward(request, response);
-
+            // ❌ 에러 메시지 추가
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Unauthorized: No session found.");
+            response.getWriter().flush();
             return false;
         }
-
+        log.info("세션 인증 성공: {}", session.getId());
         return true;
     }
 }
