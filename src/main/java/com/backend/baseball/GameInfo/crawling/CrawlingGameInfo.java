@@ -99,8 +99,8 @@ public class CrawlingGameInfo {
 
                 //장소
                 String place = match.select("div.MatchBox_stadium__13gft").text();
-                String[] places = place.split("경기장"); // 줄바꿈 기준으로 분리
-                place = places[1];
+                //String[] places = place.split("경기장"); // 줄바꿈 기준으로 분리
+                //place = places[1];
                 //log.info(place);
                 gameInfo.setPlace(place);
 
