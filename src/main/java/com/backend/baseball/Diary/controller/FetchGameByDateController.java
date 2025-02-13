@@ -33,6 +33,7 @@ public class FetchGameByDateController implements FetchGameByDateControllerDocs{
     private final GameInfoRepository gameInfoRepository;
 
     //로그인한 사용자의 `certificated_id`를 통해 내 구단이 포함된 경기 일정만 조회
+    @Override
     @PostMapping("diary/create/fetchgame")
     public ResponseEntity<List<GameResponseDTO>> fetchUserTeamGamesByDate(
             @RequestBody FetchGameByDateDTO request,
@@ -50,7 +51,7 @@ public class FetchGameByDateController implements FetchGameByDateControllerDocs{
         return ResponseEntity.ok(games);
     }
 
-
+    @Override
     @PostMapping("/diary/create/saveGame")
     public ResponseEntity<DiaryResponseDTO> fetchGameAndSaveDiary(
             @RequestBody FetchGameByDateDTO request,
