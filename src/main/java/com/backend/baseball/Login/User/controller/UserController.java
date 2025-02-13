@@ -10,6 +10,7 @@ import com.backend.baseball.Login.login.service.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,10 +31,11 @@ public class UserController {
     @Operation(summary = "회원 가입", description = "새로운 사용자를 등록합니다.")
     @PostMapping
     public ResponseEntity<CreateUserResponse> saveUser(
+            HttpServletResponse response,
             @RequestBody @Valid UserJoinDto userJoinDto,
             HttpServletRequest request) {
         User joinUser = userService.join(userJoinDto);
-        loginService.makeLoginSession(LoginInfo.from(joinUser), request);
+        loginService.makeLoginSession(LoginInfo.from(joinUser), request,response);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new CreateUserResponse(joinUser.getCertificateId(), "User created successfully"));
     }
