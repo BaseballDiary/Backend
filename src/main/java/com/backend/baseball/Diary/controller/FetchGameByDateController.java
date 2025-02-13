@@ -10,6 +10,7 @@ import com.backend.baseball.GameInfo.entity.GameInfo;
 import com.backend.baseball.GameInfo.service.GameInfoService;
 import com.backend.baseball.Diary.dto.SaveDiaryRequestDTO;
 import com.backend.baseball.Login.entity.User;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,8 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Diary API", description = "야구 일기 생성 시 야구경기 정보 가져오기")
+
 //프론트에서 년-월-일 보내면 해당하는 경기 정보 보내주기
 public class FetchGameByDateController implements FetchGameByDateControllerDocs{
 
