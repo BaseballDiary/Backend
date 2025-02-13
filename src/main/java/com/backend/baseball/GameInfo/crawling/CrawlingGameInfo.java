@@ -56,7 +56,6 @@ public class CrawlingGameInfo {
         try {
             driver.get(url + date);    //브라우저에서 url로 이동한다.
             Thread.sleep(5000);
-            log.info(driver.getPageSource());
             getDataList(driver, date);
 
         } catch (Exception e) {
@@ -74,6 +73,8 @@ public class CrawlingGameInfo {
 
         // 테이블 데이터 파싱
         for(WebElement tableElement : tableElements) {
+            String tableHtml = tableElement.getAttribute("outerHTML");
+            log.info("각 테이블 HTML: \n" + tableHtml);
 
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
             WebElement matchElement = wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -121,8 +122,8 @@ public class CrawlingGameInfo {
 
 
 
-                String matchHtml = matchElement.getAttribute("outerHTML");
-                log.info("3SGZf의 HTML: \n" + matchHtml);
+                //String matchHtml = matchElement.getAttribute("outerHTML");
+                //log.info("3SGZf의 HTML: \n" + matchHtml);
 
 
                 // 경기 상태
