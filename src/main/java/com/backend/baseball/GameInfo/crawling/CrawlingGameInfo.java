@@ -59,7 +59,20 @@ public class CrawlingGameInfo {
         try {
             driver.get(url + date);    //브라우저에서 url로 이동한다.
             Thread.sleep(5000);
-            getDataList(driver, date);
+
+            // 리다이렉션 확인: 현재 페이지의 URL이 원래 요청한 날짜와 다른 경우
+            // ex) 2024-07-01은 경기가 없으므로 url이 2024-07-02로 리다이렉트 되어 2024-07-01 데이터가 없음에도 계속해서 2024.07 데이터를 크롤링 하는 문제가 있었음.
+            String currentUrl = driver.getCurrentUrl();
+            if (!currentUrl.endsWith(date)) {
+                // 리다이렉션된 날짜를 추출
+                String redirectedDate = currentUrl.split("date=")[1];
+                log.info("Redirected to: " + redirectedDate);
+
+                // 리다이렉션된 날짜로 크롤링 처리
+                getDataList(driver, redirectedDate);
+            } else {
+                getDataList(driver, date);
+            }
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -127,7 +140,7 @@ public class CrawlingGameInfo {
                     notCancel(match, gameInfo);
                 }
                 if (gameInfo.getTeam1() == null || gameInfo.getTeam2() == null) {
-                    log.warn("누락된 데이터 발견! 저장하지 않음: " + gameInfo);
+                    log.warn("누락된 데이터 발견! 저장하지 않음: " + gameInfo.getGameDate());
                     continue; // null 값이 포함된 레코드는 저장하지 않음
                 }
 
