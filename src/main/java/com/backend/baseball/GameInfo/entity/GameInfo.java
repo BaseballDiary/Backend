@@ -37,7 +37,7 @@ public class GameInfo {
     @Column(nullable = false)
     private LocalDate gameDate; //경기 날짜
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
     String place; //경기 장소
 
     @Column(nullable = false)
