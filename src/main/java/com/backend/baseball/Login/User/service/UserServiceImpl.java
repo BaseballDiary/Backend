@@ -115,4 +115,20 @@ public class UserServiceImpl implements UserService {
         Optional<User> user=userRepository.findByEmail(userEmailDto.getEmail());
         return user.isEmpty();
     }
+
+    @Override
+    @Transactional
+    public void updateNickname(Long certificateId, String nickname) {
+        User user = getByCertificateId(certificateId);
+        user.changeNickname(nickname);
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void updateClub(Long certificateId, String myClub) {
+        User user = getByCertificateId(certificateId);
+        user.changeClub(myClub);
+        userRepository.save(user);
+    }
 }
