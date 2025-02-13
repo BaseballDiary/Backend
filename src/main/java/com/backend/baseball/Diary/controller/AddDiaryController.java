@@ -21,8 +21,8 @@ public class AddDiaryController implements AddDiaryControllerDocs{
     private final DiaryService diaryService;
 
     // 일기 저장 API
-    @PostMapping("/create")
     @Override
+    @PostMapping("/create")
     public ResponseEntity<DiaryResponseDTO> saveDiary(
             @RequestBody SaveDiaryRequestDTO request, //DTO 변경
             HttpSession session) {
@@ -32,8 +32,8 @@ public class AddDiaryController implements AddDiaryControllerDocs{
     }
 
     //일기 수정 API
-    @PutMapping("/{diaryId}")
     @Override
+    @PutMapping("/{diaryId}")
     public ResponseEntity<DiaryResponseDTO> updateDiary(
             @PathVariable Long diaryId,
             @RequestBody DiaryUpdateRequestDTO request,
@@ -51,9 +51,8 @@ public class AddDiaryController implements AddDiaryControllerDocs{
 
 
     //일기 삭제 API
-
-    @DeleteMapping("/{diaryId}")
     @Override
+    @DeleteMapping("/{diaryId}")
     public ResponseEntity<Map<String, Object>> deleteDiary(
             @PathVariable Long diaryId,
             HttpSession session) {
