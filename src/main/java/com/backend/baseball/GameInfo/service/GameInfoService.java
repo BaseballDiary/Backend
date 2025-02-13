@@ -32,7 +32,6 @@ public class GameInfoService {
         LocalDate date = LocalDate.parse(dateString);
         List<GameInfo> todayGameInfo = gameInfoRepository.findByGameDate(date);
         if(todayGameInfo.isEmpty()){
-            log.info("=====DB에 없어서 크롤링 시작함=====");
             todayGameInfo = crawlingGameInfo.crawling(dateString);
         }
         return todayGameInfo;
