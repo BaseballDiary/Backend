@@ -14,12 +14,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -32,6 +30,23 @@ public class FetchGameByDateController{
     private final GameInfoService gameInfoService;
     private final DiaryService diaryService;
     private final GameInfoRepository gameInfoRepository;
+
+
+    //야구일기 작성버튼 클릭 시 내구단 보내기
+    @GetMapping("/fetchMyClub")
+    public ResponseEntity<Map<String, String>> fetchMyClub(HttpSession session) {
+        // 세션에서 로그인한 사용자 정보 가져오기
+        User user = (User) session.getAttribute("loginUser");
+
+        if (user == null) {
+            throw new IllegalStateException("로그인이 필요합니다.");
+        }
+
+        // 사용자의 구단 정보 반환
+        String myClub = user.getMyClub();
+        return ResponseEntity.ok(Map.of("myClub", myClub));
+    }
+
 
     //로그인한 사용자의 `certificated_id`를 통해 내 구단이 포함된 경기 일정만 조회
     @PostMapping("/create/fetchgame")
