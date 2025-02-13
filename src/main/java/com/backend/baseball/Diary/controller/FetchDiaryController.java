@@ -25,7 +25,7 @@ public class FetchDiaryController{
     private final UserService userService;
     private final HttpSession httpSession;
 
-    @Override
+
     @GetMapping("/{year}")
     public ResponseEntity<StatsResponseDTO> getStats(@PathVariable String year, HttpSession session) {
         StatsResponseDTO stats = diaryService.getStatsByYear(year, session); //HttpSession 전달
@@ -33,7 +33,6 @@ public class FetchDiaryController{
     }
 
     //직관, 집관일기 리스트
-    @Override
     @GetMapping("/{year}/view")
     public ResponseEntity<?> getDiaries(
             @PathVariable String year,
@@ -50,7 +49,6 @@ public class FetchDiaryController{
         return ResponseEntity.badRequest().body("Invalid status parameter");
     }
 
-    @Override
     @GetMapping("/{diaryId}")
     public ResponseEntity<DiaryDetailDTO> getDiary(@PathVariable Long diaryId) {
         DiaryDetailDTO response = diaryService.getDiaryById(diaryId);
