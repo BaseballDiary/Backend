@@ -13,10 +13,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
@@ -71,6 +74,13 @@ public class CrawlingGameInfo {
 
         // 테이블 데이터 파싱
         for(WebElement tableElement : tableElements) {
+
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            WebElement matchElement = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.cssSelector("div.MatchBox_item_content__3SGZf")
+            ));
+
+
             String pageSource = tableElement.getAttribute("outerHTML");
             Document doc = Jsoup.parse(pageSource);
 
@@ -106,8 +116,13 @@ public class CrawlingGameInfo {
                 //String[] places = place.split("경기장"); // 줄바꿈 기준으로 분리
                 //place = places[1];
 
-                Element matchSubInfo = match.selectFirst("div.MatchBox_item_content__3SGZf");
-                log.info("3SGZf의 HTML: \n" + matchSubInfo.outerHtml());
+                /*Element matchSubInfo = match.selectFirst("div.MatchBox_item_content__3SGZf");
+                log.info("3SGZf의 HTML: \n" + matchSubInfo.outerHtml());*/
+
+
+
+                String matchHtml = matchElement.getAttribute("outerHTML");
+                log.info("3SGZf의 HTML: \n" + matchHtml);
 
 
                 // 경기 상태
