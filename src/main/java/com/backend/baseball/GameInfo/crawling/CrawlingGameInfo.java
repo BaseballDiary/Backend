@@ -68,8 +68,17 @@ public class CrawlingGameInfo {
                 String redirectedDate = currentUrl.split("date=")[1];
                 log.info("Redirected to: " + redirectedDate);
 
-                // 리다이렉션된 날짜로 크롤링 처리
-                getDataList(driver, redirectedDate);
+                // DB에서 리다이렉션된 날짜에 대한 데이터가 있는지 확인
+                LocalDate redirectedLocalDate = LocalDate.parse(redirectedDate);
+                List<GameInfo> existingData = gameInfoRepository.findByGameDate(redirectedLocalDate);
+
+                if (existingData.isEmpty()) {
+                    // DB에 해당 날짜 정보가 없다면 크롤링
+                    getDataList(driver, redirectedDate);
+                } else {
+                    log.info("Data for " + redirectedDate + " already exists. Skipping crawl.");
+                    return existingData;
+                }
             } else {
                 getDataList(driver, date);
             }
