@@ -10,10 +10,15 @@ import java.util.List;
 @RequestMapping("/teams") // 공통 URL 적용
 public class TeamApiController {
 
-    /** 📌 모든 구단 목록 반환 */
-    @GetMapping
-    public ResponseEntity<List<String>> getTeams() {
+
+    @PostMapping
+    public ResponseEntity<String> selectTeam(@RequestParam String teamClub) {
         List<String> teams = Arrays.asList("SSG", "LG", "KIA", "두산", "한화", "KT", "NC", "롯데", "삼성", "키움");
-        return ResponseEntity.ok(teams);
+
+        if (!teams.contains(teamClub)) {
+            return ResponseEntity.badRequest().body("존재하지 않는 구단입니다.");
+        }
+        return ResponseEntity.ok("구단이 성공적으로 선택되었습니다: " + teamClub);
     }
+
 }
