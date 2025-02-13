@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -58,6 +60,15 @@ public class CrawlingGameInfo {
             Thread.sleep(5000);
             getDataList(driver, date);
 
+
+            String pageSource = driver.getPageSource();
+            try (FileWriter writer = new FileWriter("/home/ubuntu/Backend/page_source.html")) {
+                writer.write(pageSource);
+                System.out.println("페이지 HTML 저장 완료!");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -73,14 +84,6 @@ public class CrawlingGameInfo {
 
         // 테이블 데이터 파싱
         for(WebElement tableElement : tableElements) {
-            String tableHtml = tableElement.getAttribute("outerHTML");
-            log.info("각 테이블 HTML: \n" + tableHtml);
-
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-            WebElement matchElement = wait.until(ExpectedConditions.presenceOfElementLocated(
-                    By.cssSelector("div.MatchBox_item_content__3SGZf")
-            ));
-
 
             String pageSource = tableElement.getAttribute("outerHTML");
             Document doc = Jsoup.parse(pageSource);
@@ -106,7 +109,6 @@ public class CrawlingGameInfo {
                 String timeText = match.select("div.MatchBox_time__nIEfd").text();
                 String[] lines = timeText.split("시간"); // 줄바꿈 기준으로 분리
                 timeText = lines[1];
-                //log.info("경기 시간 출력 잘 되는지 확인 : "+ timeText);
                 gameInfo.setTime(timeText);
 
                 //장소
@@ -121,9 +123,6 @@ public class CrawlingGameInfo {
                 log.info("3SGZf의 HTML: \n" + matchSubInfo.outerHtml());*/
 
 
-
-                //String matchHtml = matchElement.getAttribute("outerHTML");
-                //log.info("3SGZf의 HTML: \n" + matchHtml);
 
 
                 // 경기 상태
