@@ -8,6 +8,7 @@ import com.backend.baseball.GameInfo.repository.GameInfoRepository;
 import com.backend.baseball.Login.User.repository.UserRepository;
 import com.backend.baseball.Login.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GameInfoService {
 
     private final GameInfoRepository gameInfoRepository;
@@ -30,6 +32,7 @@ public class GameInfoService {
         LocalDate date = LocalDate.parse(dateString);
         List<GameInfo> todayGameInfo = gameInfoRepository.findByGameDate(date);
         if(todayGameInfo.isEmpty()){
+            log.info("=====DB에 없어서 크롤링 시작함=====");
             todayGameInfo = crawlingGameInfo.crawling(dateString);
         }
         return todayGameInfo;

@@ -21,6 +21,7 @@ public class AddDiaryController{
     private final DiaryService diaryService;
 
     // 일기 저장 API
+
     @PostMapping("/create")
     public ResponseEntity<DiaryResponseDTO> saveDiary(
             @RequestBody SaveDiaryRequestDTO request, //DTO 변경
@@ -31,6 +32,7 @@ public class AddDiaryController{
     }
 
     //일기 수정 API
+
     @PutMapping("/{diaryId}")
     public ResponseEntity<DiaryResponseDTO> updateDiary(
             @PathVariable Long diaryId,

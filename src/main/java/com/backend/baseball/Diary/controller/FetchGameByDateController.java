@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Diary API", description = "야구 일기 생성 시 야구경기 정보 가져오기")
-
+@RequestMapping("/diary")
 //프론트에서 년-월-일 보내면 해당하는 경기 정보 보내주기
 public class FetchGameByDateController{
 
@@ -33,7 +34,8 @@ public class FetchGameByDateController{
     private final GameInfoRepository gameInfoRepository;
 
     //로그인한 사용자의 `certificated_id`를 통해 내 구단이 포함된 경기 일정만 조회
-    @PostMapping("diary/create/fetchgame")
+    @Override
+    @PostMapping("/create/fetchgame")
     public ResponseEntity<List<GameResponseDTO>> fetchUserTeamGamesByDate(
             @RequestBody FetchGameByDateDTO request,
             HttpSession session) {
@@ -50,8 +52,8 @@ public class FetchGameByDateController{
         return ResponseEntity.ok(games);
     }
 
-
-    @PostMapping("/diary/create/saveGame")
+    @Override
+    @PostMapping("/create/saveGame")
     public ResponseEntity<DiaryResponseDTO> fetchGameAndSaveDiary(
             @RequestBody FetchGameByDateDTO request,
             HttpSession session) {
