@@ -38,10 +38,10 @@ public class GameInfo {
     private LocalDate gameDate; //경기 날짜
 
     //@Column(nullable = false)
-    String place; //경기 장소
+    private String place; //경기 장소
 
     @Column(nullable = false)
-    String time; //경기 시간
+    private String time; //경기 시간
 
     @OneToOne(mappedBy = "gameInfo")
     private Diary diary;

@@ -95,7 +95,7 @@ public class CrawlingGameInfo {
                 String timeText = match.select("div.MatchBox_time__nIEfd").text();
                 String[] lines = timeText.split("시간"); // 줄바꿈 기준으로 분리
                 timeText = lines[1];
-                log.info("경기 시간 출력 잘 되는지 확인 : "+ timeText);
+                //log.info("경기 시간 출력 잘 되는지 확인 : "+ timeText);
                 gameInfo.setTime(timeText);
 
                 //장소
