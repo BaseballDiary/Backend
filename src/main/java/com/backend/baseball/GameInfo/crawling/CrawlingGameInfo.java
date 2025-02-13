@@ -56,7 +56,7 @@ public class CrawlingGameInfo {
         try {
             driver.get(url + date);    //브라우저에서 url로 이동한다.
             Thread.sleep(5000);
-
+            log.info(driver.getPageSource());
             getDataList(driver, date);
 
         } catch (Exception e) {
@@ -75,7 +75,7 @@ public class CrawlingGameInfo {
         // 테이블 데이터 파싱
         for(WebElement tableElement : tableElements) {
 
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
             WebElement matchElement = wait.until(ExpectedConditions.presenceOfElementLocated(
                     By.cssSelector("div.MatchBox_item_content__3SGZf")
             ));
