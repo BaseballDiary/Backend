@@ -22,10 +22,10 @@ public class GameInfo {
     @Column(nullable = false)
     private String gameStatus; //경기 상태
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private String team1; //팀1
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private String team2; //팀2
 
     @Column(nullable = true)
