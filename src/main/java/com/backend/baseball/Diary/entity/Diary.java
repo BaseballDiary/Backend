@@ -44,6 +44,13 @@ public class Diary {
     @Column(name = "image_url")
     private List<String> imgUrl;
 
+    @Transient
+    private String year;
+
+    public String getYear(){
+        return date !=null ? String.valueOf(date.getYear()) : null;
+    }
+
     @PrePersist
     public void prePersist() {
         if (this.date == null) {
