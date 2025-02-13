@@ -26,7 +26,7 @@ import java.util.Optional;
 @Tag(name = "Diary API", description = "야구 일기 생성 시 야구경기 정보 가져오기")
 
 //프론트에서 년-월-일 보내면 해당하는 경기 정보 보내주기
-public class FetchGameByDateController implements FetchGameByDateControllerDocs{
+public class FetchGameByDateController{
 
     private final GameInfoService gameInfoService;
     private final DiaryService diaryService;

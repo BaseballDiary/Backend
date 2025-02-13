@@ -16,13 +16,12 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 @RequestMapping("/diary")
 @Tag(name = "Diary API", description = "야구 일기 생성/수정/삭제 API")
-public class AddDiaryController implements AddDiaryControllerDocs{
+public class AddDiaryController{
 
     private final DiaryService diaryService;
 
     // 일기 저장 API
     @PostMapping("/create")
-    @Override
     public ResponseEntity<DiaryResponseDTO> saveDiary(
             @RequestBody SaveDiaryRequestDTO request, //DTO 변경
             HttpSession session) {
@@ -33,7 +32,6 @@ public class AddDiaryController implements AddDiaryControllerDocs{
 
     //일기 수정 API
     @PutMapping("/{diaryId}")
-    @Override
     public ResponseEntity<DiaryResponseDTO> updateDiary(
             @PathVariable Long diaryId,
             @RequestBody DiaryUpdateRequestDTO request,
@@ -53,7 +51,6 @@ public class AddDiaryController implements AddDiaryControllerDocs{
     //일기 삭제 API
 
     @DeleteMapping("/{diaryId}")
-    @Override
     public ResponseEntity<Map<String, Object>> deleteDiary(
             @PathVariable Long diaryId,
             HttpSession session) {
