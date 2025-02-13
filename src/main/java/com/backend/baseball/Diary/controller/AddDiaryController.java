@@ -3,8 +3,8 @@ package com.backend.baseball.Diary.controller;
 import com.backend.baseball.Diary.dto.DiaryResponseDTO;
 import com.backend.baseball.Diary.dto.DiaryUpdateRequestDTO;
 import com.backend.baseball.Diary.dto.SaveDiaryRequestDTO;
-import com.backend.baseball.Diary.entity.Diary;
 import com.backend.baseball.Diary.service.DiaryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +14,14 @@ import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/diary")
+@Tag(name = "Diary API", description = "야구 일기 생성/수정/삭제 API")
 public class AddDiaryController implements AddDiaryControllerDocs{
 
     private final DiaryService diaryService;
 
     // 일기 저장 API
-    @PostMapping("/diary/create")
+    @PostMapping("/create")
     public ResponseEntity<DiaryResponseDTO> saveDiary(
             @RequestBody SaveDiaryRequestDTO request, //DTO 변경
             HttpSession session) {

@@ -6,6 +6,7 @@ import com.backend.baseball.Diary.dto.viewDiary.OnSiteDiaryDTO;
 import com.backend.baseball.Diary.dto.viewDiary.StatsResponseDTO;
 import com.backend.baseball.Diary.service.DiaryService;
 import com.backend.baseball.Login.User.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/diary")
 @RequiredArgsConstructor
+@Tag(name = "Diary API", description = "야구 일기 불러오기")
+
 public class FetchDiaryController implements FetchDiaryControllerDocs{
     private final DiaryService diaryService;
     private final UserService userService;
