@@ -60,15 +60,6 @@ public class CrawlingGameInfo {
             Thread.sleep(5000);
             getDataList(driver, date);
 
-
-            String pageSource = driver.getPageSource();
-            try (FileWriter writer = new FileWriter("/home/ubuntu/Backend/page_source.html")) {
-                writer.write(pageSource);
-                System.out.println("페이지 HTML 저장 완료!");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -134,6 +125,11 @@ public class CrawlingGameInfo {
                 } else { //경기 취소가 아닌 경우
                     notCancel(match, gameInfo);
                 }
+                if (gameInfo.getTeam1() == null || gameInfo.getTeam2() == null) {
+                    log.warn("누락된 데이터 발견! 저장하지 않음: " + gameInfo);
+                    continue; // null 값이 포함된 레코드는 저장하지 않음
+                }
+
                 list.add(gameInfo);
             }
         }
