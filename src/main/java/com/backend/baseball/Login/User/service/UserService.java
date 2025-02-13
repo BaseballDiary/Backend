@@ -12,4 +12,6 @@ public interface UserService {
     UserEmailResponse getUserEmail(Long certificateId);
     User resetUserPassword(UserPasswordResetDto userPasswordResetDto);
     Boolean confirmDupEmail(UserEmailDto userEmailDto);
+    void updateNickname(Long certificateId, String nickname);
+    void updateClub(Long certificateId, String myClub);
 }

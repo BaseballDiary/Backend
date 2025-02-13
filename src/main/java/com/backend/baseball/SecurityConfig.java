@@ -28,9 +28,12 @@ public class SecurityConfig {  // localhost 8080 기본 로그인 화면 제거
                         .anyRequest().permitAll() // ✅ 다른 모든 요청 허용 (보안 강화 필요시 authenticated()로 변경)
                 )
 
+
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/h2-console/**")
                         .disable()) // ✅ H2 콘솔 CSRF 비활성화
+                .sessionManagement(session->session
+                        .sessionFixation().migrateSession())
 
                 .headers(headersConfigurer ->
                         headersConfigurer
