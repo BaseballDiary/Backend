@@ -17,6 +17,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileWriter;
@@ -41,7 +42,7 @@ public class CrawlingGameInfo {
     @Value("${webdriver.chrome.path}")
     private String chromeDriverPath;
 
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public List<GameInfo> crawling(String date){
         String url ="https://m.sports.naver.com/kbaseball/schedule/index?category=kbo&date=";
 
