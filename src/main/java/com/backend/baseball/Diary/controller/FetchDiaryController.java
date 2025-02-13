@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Diary API", description = "야구 일기 불러오기")
 
-public class FetchDiaryController implements FetchDiaryControllerDocs{
+public class FetchDiaryController{
     private final DiaryService diaryService;
     private final UserService userService;
     private final HttpSession httpSession;
