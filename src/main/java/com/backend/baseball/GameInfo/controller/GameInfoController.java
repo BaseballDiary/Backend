@@ -29,7 +29,9 @@ public class GameInfoController implements GameInfoControllerDocs{
         log.info("오늘의 경기 조회 컨트롤러 실행");
         try {
             List<GameInfo> list = gameInfoService.getTodayGameInfo(date);
-            if(list.isEmpty())
+            if(list==null)
+                return ResponseEntity.ok(new ApiResponse("오늘의 경기가 없습니다.", null));
+            if(list!=null && list.isEmpty())
                 return ResponseEntity.status(400).body(new ApiResponse<>("API 실패: 오늘의 경기 순위 조회 중 오류 발생", null));
 
             return ResponseEntity.ok(new ApiResponse("오늘의 경기 순위 조회 성공", list));

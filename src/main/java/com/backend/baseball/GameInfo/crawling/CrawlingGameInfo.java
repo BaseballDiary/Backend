@@ -61,24 +61,11 @@ public class CrawlingGameInfo {
             Thread.sleep(5000);
 
             // 리다이렉션 확인: 현재 페이지의 URL이 원래 요청한 날짜와 다른 경우
-            // ex) 2024-07-01은 경기가 없으므로 url이 2024-07-02로 리다이렉트 되어 2024-07-01 데이터가 없음에도 계속해서 2024.07 데이터를 크롤링 하는 문제가 있었음.
             String currentUrl = driver.getCurrentUrl();
             if (!currentUrl.endsWith(date)) {
-                // 리다이렉션된 날짜를 추출
-                String redirectedDate = currentUrl.split("date=")[1];
-                log.info("Redirected to: " + redirectedDate);
+                log.info("오늘의 경기 정보 없음");
+                return null;  //DB에 해당 데이터도 없는데 리다이렉션 되는 경우 => 경기가 없는 날짜 !
 
-                // DB에서 리다이렉션된 날짜에 대한 데이터가 있는지 확인
-                LocalDate redirectedLocalDate = LocalDate.parse(redirectedDate);
-                List<GameInfo> existingData = gameInfoRepository.findByGameDate(redirectedLocalDate);
-
-                if (existingData.isEmpty()) {
-                    // DB에 해당 날짜 정보가 없다면 크롤링
-                    getDataList(driver, redirectedDate);
-                } else {
-                    log.info("Data for " + redirectedDate + " already exists. Skipping crawl.");
-                    return existingData;
-                }
             } else {
                 getDataList(driver, date);
             }
