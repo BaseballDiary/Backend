@@ -10,8 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
-    @Query("SELECT d FROM Diary d WHERE d.user = :user AND YEAR(d.date) = :year")
-    List<Diary> findByUserAndYear(User user, int year);
+    // ✅ 특정 연도 및 공개 유형(ViewType)에 따른 일기 조회 (year은 String 타입)
+    @Query("SELECT d FROM Diary d WHERE FUNCTION('YEAR', d.date) = CAST(:year AS int) AND d.viewType = :viewType")
     List<Diary> findByYearAndViewType(@Param("year") String year, @Param("viewType") String viewType);
-
 }
