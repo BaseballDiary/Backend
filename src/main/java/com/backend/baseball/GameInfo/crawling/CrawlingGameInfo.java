@@ -50,7 +50,7 @@ public class CrawlingGameInfo {
 
         try {
             driver.get(url + date);    //브라우저에서 url로 이동한다.
-            Thread.sleep(3000);
+            Thread.sleep(4000);
 
             getDataList(driver, date);
 
