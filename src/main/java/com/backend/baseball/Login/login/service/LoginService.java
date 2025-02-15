@@ -34,19 +34,23 @@ public class LoginService {
     }
 
     public void makeLoginSession(LoginInfo loginInfo, HttpServletRequest request, HttpServletResponse response){
-        HttpSession session = request.getSession(true); // 있으면 기존 세션 사용, 없으면 세션을 새로 만듬.
-        session.setAttribute(SessionConst.LOGIN_USER_INFO,loginInfo);
-
-        // JSESSIONID 쿠키 생성
-        String jsessionid=session.getId();
-        String contextPath=request.getContextPath();
+        HttpSession session = request.getSession(true); // 세션 생성 또는 기존 세션 사용
+        session.setAttribute(SessionConst.LOGIN_USER_INFO, loginInfo);
 
         // JSESSIONID 쿠키 설정
-        String cookieHeader = String.format(
-                "JSESSIONID=%s; Path=%s; HttpOnly; Secure; SameSite=None",
-                jsessionid,
-                contextPath.isEmpty() ? "/" : contextPath
-        );
+        String jsessionid = session.getId();
+        String contextPath = request.getContextPath();
+
+        // ✅ HTTPS 환경 확인
+        boolean isSecure = request.isSecure();
+
+        // ✅ 쿠키 설정
+        String cookieHeader = "JSESSIONID=" + jsessionid + "; Path=" + (contextPath.isEmpty() ? "/" : contextPath) + "; HttpOnly; SameSite=None";
+
+        // ✅ HTTPS 환경에서만 Secure 속성 추가
+        if (isSecure) {
+            cookieHeader += "; Secure";
+        }
 
         response.setHeader("Set-Cookie", cookieHeader);
     }
