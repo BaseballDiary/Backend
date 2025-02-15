@@ -52,8 +52,8 @@ public class DiaryResponseDTO {
                 .time(diary.getGameInfo().getTime())
                 .location(diary.getGameInfo().getPlace())
                 .gameStatus(diary.getGameInfo().getGameStatus())
-                .contents(diary.getContent())  // 다이어리 내용 포함
-                .imgUrl(diary.getImgUrl())  // 이미지 포함
+                .contents(diary.getContents())  // 다이어리 내용 포함
+                .imgUrl(diary.getImgUrls())  // 이미지 포함
                 .build();
     }
 
