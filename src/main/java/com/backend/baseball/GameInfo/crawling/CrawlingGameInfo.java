@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -112,8 +113,21 @@ public class CrawlingGameInfo {
                 timeText = lines[1];
                 gameInfo.setTime(timeText);
 
-
-                log.info("match HTML 구조 확인: " + match.html());
+                try {
+                    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));// 요소가 나타날 때까지 기다리기
+                    List<WebElement> matchess = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+                            By.cssSelector("div.MatchBox_match_sub_info__ITq89")
+                    ));// 요소가 정상적으로 로드되었는지 로그로 확인
+                    if (matchess.isEmpty()) {
+                        log.error("경기 정보 요소를 찾지 못했습니다! 크롤링 실패");
+                    } else {
+                        for (WebElement matchs : matchess) {
+                            log.info("경기 HTML 구조: " + matchs.getAttribute("outerHTML"));
+                        }
+                    }
+                }catch (TimeoutException e) {
+                    log.warn("경기 정보를 10초 안에 불러오지 못했습니다.");
+                }
                 //장소
                 //String place = match.select("div.MatchBox_stadium__13gft").text().replace("경기장", "").trim();
                 //String place = match.selectFirst("div.MatchBox_stadium__13gft").text();
