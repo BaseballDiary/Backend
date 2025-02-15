@@ -1,4 +1,4 @@
-package com.backend.baseball.Config.security;
+/*package com.backend.baseball.Config.security;
 
 import com.backend.baseball.Login.User.repository.UserRepository;
 import com.backend.baseball.Login.entity.User;
@@ -19,6 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
-        return new CustomUserDetails(user.getCertificateId()); // ✅ 로그인한 사용자 정보 반환
+        return new CustomUserDetails(user.getCertificateId());
     }
 }
+*/

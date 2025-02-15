@@ -1,4 +1,4 @@
-package com.backend.baseball.Config.security;
+/*package com.backend.baseball.Config.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,13 +8,13 @@ import java.util.Collections;
 public class CustomUserDetails implements UserDetails {
     private final Long id; // 로그인한 사용자의 식별자로 사용할 필드
 
-    public CustomUserDetails(Long id) {  // ✅ 생성자 수정
+    public CustomUserDetails(Long id) {
         this.id=id;
     }
 
     @Override
     public String getUsername() {
-        return String.valueOf(id); // ✅ SPRING_SESSION.PRINCIPAL_NAME 컬럼에 저장됨
+        return String.valueOf(id);
     }
 
     @Override
@@ -47,3 +47,4 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 }
+*/
