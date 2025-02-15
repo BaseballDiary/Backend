@@ -1,35 +1,35 @@
 package com.backend.baseball.Config.security;
 
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
-import java.util.Collections;
 
+@Getter
 public class CustomUserDetails implements UserDetails {
-    private final Long certificationId;  // 기존: ID 기반
-    private final String email;  // ✅ 추가
+    private final Long certificationId; // ✅ 인증 ID (User의 certificateId와 연결)
 
-
-    public CustomUserDetails(Long certificationId, String email) { // ✅ email 추가
+    public CustomUserDetails(Long certificationId) { // ✅ 생성자 수정
         this.certificationId = certificationId;
-        this.email = email;
-
     }
 
-    @Override
-    public String getUsername() {
-        return email; // ✅ UserDetails의 username은 email로 사용
-        // ✅ SPRING_SESSION.PRINCIPAL_NAME 컬럼에 저장됨
+    public Long getCertificationId() { // ✅ 이 메서드가 없으면 오류 발생
+        return certificationId;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList(); // 권한 없음
+        return null;
     }
 
     @Override
     public String getPassword() {
-        return null; // 사용하지 않음
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return certificationId.toString();
     }
 
     @Override
