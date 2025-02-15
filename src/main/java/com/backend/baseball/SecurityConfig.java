@@ -40,7 +40,7 @@ public class SecurityConfig {  // localhost 8080 기본 로그인 화면 제거
                         .ignoringRequestMatchers("/h2-console/**")
                         .disable()) // ✅ H2 콘솔 CSRF 비활성화
                 .sessionManagement(session->session
-                        .sessionFixation().migrateSession())
+                        .sessionFixation().none())
 
                 .headers(headersConfigurer ->
                         headersConfigurer
