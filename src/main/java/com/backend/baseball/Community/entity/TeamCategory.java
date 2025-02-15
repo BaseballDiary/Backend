@@ -9,14 +9,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
 @Getter
-public class Team {
+@Entity
+public class TeamCategory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long teamCertificateId;
+    private Long teamCategoryCertificateId;
 
     @Column(nullable = false)
-    private String teamClub;
-
+    private String teamCategoryName;
 }

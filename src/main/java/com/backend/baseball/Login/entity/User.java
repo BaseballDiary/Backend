@@ -1,5 +1,6 @@
 package com.backend.baseball.Login.entity;
 
+
 import com.backend.baseball.Diary.entity.Diary;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -42,6 +43,7 @@ public class User {
 
     @OneToMany(mappedBy = "user") //관계설정
     private List<Diary> diaries = new ArrayList<>();
+
 
 
 
