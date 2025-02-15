@@ -4,10 +4,7 @@ import com.backend.baseball.Diary.enums.ViewType;
 import com.backend.baseball.GameInfo.entity.GameInfo;
 import com.backend.baseball.Login.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -20,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Getter
+@Setter
 @Entity
 public class Diary {
     @Id
@@ -37,12 +35,12 @@ public class Diary {
     private ViewType viewType;
 
     @Column(nullable = false)
-    private String content;
+    private String contents;
 
     @ElementCollection
     @CollectionTable(name = "diary_images", joinColumns = @JoinColumn(name = "diary_id"))
     @Column(name = "image_url")
-    private List<String> imgUrl;
+    private List<String> imgUrls;
 
     @Transient
     private String year;
@@ -61,8 +59,8 @@ public class Diary {
     @Builder
     public Diary(ViewType viewType, String content, List<String> imgUrl){
         this.viewType = viewType;
-        this.content = content;
-        this.imgUrl = imgUrl;
+        this.contents = content;
+        this.imgUrls = imgUrl;
     }
 
     @OneToOne
@@ -76,9 +74,18 @@ public class Diary {
     public void update(LocalDate date, ViewType viewType, String content, List<String> imgUrl, GameInfo gameInfo) {
         this.date = date;
         this.viewType = viewType;
-        this.content = content;
-        this.imgUrl = imgUrl;
+        this.contents = content;
+        this.imgUrls = imgUrl;
         this.gameInfo = gameInfo;
+    }
+
+    public void updateDiary(String contents, List<String> imgUrls) {
+        if (contents != null) {
+            this.contents = contents;
+        }
+        if (imgUrls != null) {
+            this.imgUrls = imgUrls;
+        }
     }
 
 }
