@@ -4,7 +4,7 @@ import com.backend.baseball.Diary.dto.viewDiary.AtHomeDiaryDTO;
 import com.backend.baseball.Diary.dto.viewDiary.DiaryDetailDTO;
 import com.backend.baseball.Diary.dto.viewDiary.OnSiteDiaryDTO;
 import com.backend.baseball.Diary.service.DiaryService;
-import com.backend.baseball.Login.User.service.UserService;
+import com.backend.baseball.User.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
