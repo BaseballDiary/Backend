@@ -147,54 +147,7 @@ public class DiaryService {
 
 
 
-    //년도별 스탯 불러오기
-    public StatsResponseDTO getStatsByYear(String year, HttpSession session) {
-        User user = (User) session.getAttribute("loginUser");
-        if (user == null) {
-            throw new IllegalStateException("로그인이 필요합니다.");
-        }
-        String myClub = user.getMyClub();
 
-        List<Diary> diaries = diaryRepository.findByYearAndViewType(year, "onSite");
-
-        long myWins = 0;
-        long myLosses = 0;
-        long myDraws = 0;
-
-        for (Diary diary : diaries) {
-            GameInfo gameInfo = diary.getGameInfo();
-
-            int team1Score = gameInfo.getTeam1Score() != null ? Integer.parseInt(gameInfo.getTeam1Score()) : 0;
-            int team2Score = gameInfo.getTeam2Score() != null ? Integer.parseInt(gameInfo.getTeam2Score()) : 0;
-
-            if (myClub.equals(gameInfo.getTeam1())) {
-                if (team1Score > team2Score) myWins++;
-                else if (team1Score < team2Score) myLosses++;
-                else myDraws++;
-            } else if (myClub.equals(gameInfo.getTeam2())) {
-                if (team2Score > team1Score) myWins++;
-                else if (team2Score < team1Score) myLosses++;
-                else myDraws++;
-            }
-        }
-
-        long myGames = diaries.size();
-        int myWinRate = myGames > 0 ? (int) ((myWins * 100) / myGames) : 0;
-
-        TeamRanking teamRanking = teamRankingRepository.findByYearAndTeamName(year, myClub)
-                .orElseThrow(() -> new EntityNotFoundException("Team ranking not found"));
-
-        return new StatsResponseDTO(
-                new MyStatsDTO((int) myWins, (int) myLosses, (int) myDraws, (int) myGames, myWinRate),
-                new TeamStatsDTO(
-                        Integer.parseInt(teamRanking.getWin()),
-                        Integer.parseInt(teamRanking.getLose()),
-                        Integer.parseInt(teamRanking.getTie()),
-                        Integer.parseInt(teamRanking.getGameNum()),
-                        (int) (Double.parseDouble(teamRanking.getWinningRate()) * 100)
-                )
-        );
-    }
 
     //직관일기 리스트 불러오기
     public List<OnSiteDiaryDTO> getOnSiteDiaries(String year, HttpSession session) {
