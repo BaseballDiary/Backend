@@ -47,22 +47,33 @@ public class FetchGameByDateController implements FetchGameByDateControllerDocs{
 
 
     //로그인한 사용자의 `certificated_id`를 통해 내 구단이 포함된 경기 일정만 조회
+    //사용자 식별 id, 내 구단, 날짜에 맞는 경기 하나만! 보내줄거임
     @PostMapping("/create/fetchgame")
-    public ResponseEntity<List<GameResponseDTO>> fetchUserTeamGamesByDate(
+    public ResponseEntity<GameResponseDTO> fetchUserTeamGameByDate(
             @RequestBody FetchGameByDateDTO request,
             HttpSession session) {
 
-        //1. 세션에서 로그인한 사용자의 `certificated_id` 가져오기
+        // 1. 세션에서 로그인한 사용자의 `certificated_id` 가져오기
         Long certificatedId = (Long) session.getAttribute("certificated_id");
 
         if (certificatedId == null) {
             throw new IllegalStateException("로그인이 필요합니다.");
         }
 
-        //2. 특정 날짜의 경기 중, 사용자의 구단이 포함된 경기만 필터링하여 반환
-        List<GameResponseDTO> games = gameInfoService.getUserTeamGameInfoByDate(request.getGameDate().toString(), certificatedId);
-        return ResponseEntity.ok(games);
+        // 2. 특정 날짜의 경기 중, 사용자의 구단이 포함된 경기만 필터링하여 가져오기
+        List<GameResponseDTO> games = gameInfoService.getUserTeamGameInfoByDate(
+                request.getGameDate().toString(), certificatedId
+        );
+
+        // 3. 경기 리스트가 비어있으면 예외 처리
+        if (games.isEmpty()) {
+            return ResponseEntity.notFound().build(); // 경기가 없으면 404 반환
+        }
+
+        // 4. 첫 번째 경기만 반환
+        return ResponseEntity.ok(games.get(0));
     }
+
 
     @PostMapping("/create/saveGame")
     public ResponseEntity<DiaryResponseDTO> fetchGameAndSaveDiary(
