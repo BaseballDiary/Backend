@@ -59,7 +59,7 @@ public class CrawlingGameInfo {
 
         try {
             driver.get(url + date);    //브라우저에서 url로 이동한다.
-            Thread.sleep(5000);
+            Thread.sleep(10000);
 
             // 리다이렉션 확인: 현재 페이지의 URL이 원래 요청한 날짜와 다른 경우
             String currentUrl = driver.getCurrentUrl();
@@ -113,7 +113,7 @@ public class CrawlingGameInfo {
                 timeText = lines[1];
                 gameInfo.setTime(timeText);
 
-                try {
+                /*try {
                     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));// 요소가 나타날 때까지 기다리기
                     List<WebElement> matchess = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
                             By.cssSelector("div.MatchBox_match_sub_info__ITq89")
@@ -127,7 +127,8 @@ public class CrawlingGameInfo {
                     }
                 }catch (TimeoutException e) {
                     log.warn("경기 정보를 10초 안에 불러오지 못했습니다.");
-                }
+                }*/
+
                 //장소
                 //String place = match.select("div.MatchBox_stadium__13gft").text().replace("경기장", "").trim();
                 //String place = match.selectFirst("div.MatchBox_stadium__13gft").text();
@@ -135,7 +136,7 @@ public class CrawlingGameInfo {
                 //gameInfo.setPlace(place);
                 //String[] places = place.split("경기장"); // 줄바꿈 기준으로 분리
                 //place = places[1];
-                /*try {
+                try {
                     Element placeElement = match.selectFirst("div.MatchBox_stadium__13gft");
                     if (placeElement != null) {
                         String place = placeElement.text().trim();
@@ -146,7 +147,7 @@ public class CrawlingGameInfo {
                     }
                 } catch (Exception e) {
                     log.error("경기 장소 추출 중 오류 발생", e);
-                }*/
+                }
 
                 // 경기 상태
                 String status = match.select("em.MatchBox_status__2pbzi").text();
