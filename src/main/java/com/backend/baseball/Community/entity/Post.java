@@ -41,11 +41,11 @@ public class Post extends BaseTimeEntity{
     @JoinColumn(name="certificate_id")
     private User user;
 
-    @OneToMany(mappedBy = "post",fetch=FetchType.LAZY,cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE, orphanRemoval = true)
     @OrderBy("commentCertificateId asc")
     private List<Comment> comments;
 
-
+    @ManyToOne()
 
 
 
