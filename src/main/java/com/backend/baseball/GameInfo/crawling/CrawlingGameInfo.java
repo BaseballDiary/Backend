@@ -85,6 +85,16 @@ public class CrawlingGameInfo {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         List<WebElement> tableElements = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("div.ScheduleLeagueType_match_list_group__18ML9")));
 
+        // "경기장"이 포함된 요소 찾기
+        List<WebElement> allElements = driver.findElements(By.xpath("//*[contains(text(), '경기장')]"));
+
+        if (!allElements.isEmpty()) {
+            for (WebElement element : allElements) {
+                System.out.println("경기장 포함 요소: " + element.getAttribute("outerHTML"));
+            }
+        } else {
+            System.out.println("경기장이 포함된 요소를 찾을 수 없습니다.");
+        }
         //List<WebElement> tableElements = driver.findElements(By.cssSelector("div.ScheduleLeagueType_match_list_group__18ML9"));
 
         // 테이블 데이터 파싱
@@ -139,7 +149,7 @@ public class CrawlingGameInfo {
                 //gameInfo.setPlace(place);
                 //String[] places = place.split("경기장"); // 줄바꿈 기준으로 분리
                 //place = places[1];
-                try {
+                /*try {
                     Element placeElement = match.selectFirst("div.MatchBox_stadium__13gft");
                     if (placeElement != null) {
                         String place = placeElement.text().trim();
@@ -150,7 +160,7 @@ public class CrawlingGameInfo {
                     }
                 } catch (Exception e) {
                     log.error("경기 장소 추출 중 오류 발생", e);
-                }
+                }*/
 
                 // 경기 상태
                 String status = match.select("em.MatchBox_status__2pbzi").text();
