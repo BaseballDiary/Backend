@@ -65,7 +65,8 @@ public class SecurityConfig {  // localhost 8080 기본 로그인 화면 제거
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
                 "http://3.39.169.50:8080",
-                "https://www.baseballdiary.shop"
+                "https://www.baseballdiary.shop",
+                "https://api.baseballdiary.shop" //세연 추가
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
