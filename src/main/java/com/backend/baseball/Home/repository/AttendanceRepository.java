@@ -1,7 +1,7 @@
 package com.backend.baseball.Home.repository;
 
 import com.backend.baseball.Home.entity.Attendance;
-import com.backend.baseball.Login.entity.User;
+import com.backend.baseball.User.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;

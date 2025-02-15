@@ -1,8 +1,6 @@
 package com.backend.baseball.GameInfo.repository;
 
 import com.backend.baseball.GameInfo.entity.GameInfo;
-import com.backend.baseball.GameInfo.entity.TeamRanking;
-import com.backend.baseball.Login.enums.Club;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
