@@ -81,12 +81,11 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailService userDetailService)
-            throws Exception {
+    public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userService);
-        authProvider.setPasswordEncoder(bCryptPasswordEncoder);
-        return new ProviderManager(authProvider);
+        authProvider.setPasswordEncoder(bCryptPasswordEncoder());
+        return new ProviderManager(List.of(authProvider));
     }
 
     @Bean
