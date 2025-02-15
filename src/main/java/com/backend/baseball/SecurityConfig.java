@@ -43,7 +43,11 @@ public class SecurityConfig {  // localhost 8080 기본 로그인 화면 제거
                         .ignoringRequestMatchers("/h2-console/**")
                         .disable()) // ✅ H2 콘솔 CSRF 비활성화
                 .sessionManagement(session->session
-                        .sessionFixation().migrateSession())
+                        //.sessionFixation().migrateSession()
+                         .sessionFixation().none()  // ✅ 세션 고정 방지, 기존 세션 유지
+                                .maximumSessions(1) // ✅ 하나의 로그인 세션 유지
+                                .maxSessionsPreventsLogin(true) // ✅ 새로운 로그인 시 기존 세션 유지 (로그아웃 X)
+                         )
 
                 .headers(headersConfigurer ->
                         headersConfigurer
