@@ -16,14 +16,16 @@ import com.backend.baseball.User.entity.User;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Diary API", description = "야구 일기 생성 시 야구경기 정보 가져오기")
@@ -38,22 +40,30 @@ public class FetchGameByDateController{
     private final GameInfoRepository gameInfoRepository;
 
 
-    //야구일기 작성버튼 클릭 시 내구단 보내기
     @GetMapping("/fetchMyClub")
     public ResponseEntity<MyClubResponseDTO> fetchMyClub() {
-        // ✅ SecurityContext에서 인증 객체 가져오기
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (principal == null || !(principal instanceof String email)) {
-            return ResponseEntity.status(401).body(new MyClubResponseDTO("로그인이 필요합니다.")); // 401 Unauthorized 반환
+        log.info("현재 인증 정보: {}", authentication);
+
+        if (authentication == null || authentication.getPrincipal() == null) {
+            log.error("인증 정보가 없음! SecurityContextHolder가 비어 있음.");
+            return ResponseEntity.status(401).body(new MyClubResponseDTO("로그인이 필요합니다."));
         }
 
-        // ✅ 로그인한 사용자의 certificationId를 기반으로 DB에서 사용자 정보 가져오기
+        Object principal = authentication.getPrincipal();
+        log.info("인증된 사용자: {}", principal);
+
+        if (!(principal instanceof String email)) {
+            return ResponseEntity.status(401).body(new MyClubResponseDTO("로그인이 필요합니다."));
+        }
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("사용자 정보를 찾을 수 없습니다."));
 
-        return ResponseEntity.ok(new MyClubResponseDTO(user.getMyClub())); // ✅ DTO 사용
+        return ResponseEntity.ok(new MyClubResponseDTO(user.getMyClub()));
     }
+
 
 
     //로그인한 사용자의 `certificated_id`를 통해 내 구단이 포함된 경기 일정만 조회
