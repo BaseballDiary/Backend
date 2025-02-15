@@ -25,10 +25,6 @@ public class PostApiController {
 //""
     private final PostService postService;
 
-    @GetMapping("/home")
-    public String okas(){
-        return "welcome";
-    }
 
     /*CREATE */
     @PostMapping("/posts")
