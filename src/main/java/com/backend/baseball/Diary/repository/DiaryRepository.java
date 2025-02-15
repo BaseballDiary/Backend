@@ -2,6 +2,7 @@ package com.backend.baseball.Diary.repository;
 
 import com.backend.baseball.Diary.entity.Diary;
 import com.backend.baseball.Diary.enums.ViewType;
+import com.backend.baseball.GameInfo.entity.GameInfo;
 import com.backend.baseball.Login.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,7 +19,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     @Query("SELECT d FROM Diary d WHERE YEAR(d.date) = :year AND d.viewType = :viewType")
     List<Diary> findByYearAndViewType(@Param("year") String year, @Param("viewType") String viewType);
 
-    Optional<Diary> findByGameId(Long gameId);
-
+    Optional<Diary> findByGameInfo(GameInfo gameInfo);
 }
 

@@ -56,7 +56,11 @@ public class DiaryService {
 
     //경기 정보만 있는 Diary에다가 내용, imgUrl저장
     public Optional<Diary> findByGameId(Long gameId) {
-        return diaryRepository.findByGameId(gameId);
+        Optional<GameInfo> gameInfoOpt = gameInfoRepository.findById(gameId);
+        if (gameInfoOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        return diaryRepository.findByGameInfo(gameInfoOpt.get()); // 올바른 방식
     }
 
     @Transactional
