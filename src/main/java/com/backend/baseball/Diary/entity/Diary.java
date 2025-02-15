@@ -2,7 +2,7 @@ package com.backend.baseball.Diary.entity;
 
 import com.backend.baseball.Diary.enums.ViewType;
 import com.backend.baseball.GameInfo.entity.GameInfo;
-import com.backend.baseball.Login.entity.User;
+import com.backend.baseball.User.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 

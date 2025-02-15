@@ -3,7 +3,7 @@ package com.backend.baseball.Diary.repository;
 import com.backend.baseball.Diary.entity.Diary;
 import com.backend.baseball.Diary.enums.ViewType;
 import com.backend.baseball.GameInfo.entity.GameInfo;
-import com.backend.baseball.Login.entity.User;
+import com.backend.baseball.User.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

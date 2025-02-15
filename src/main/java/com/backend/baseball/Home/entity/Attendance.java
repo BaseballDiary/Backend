@@ -1,6 +1,6 @@
 package com.backend.baseball.Home.entity;
 
-import com.backend.baseball.Login.entity.User;
+import com.backend.baseball.User.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
