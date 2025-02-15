@@ -5,7 +5,7 @@ import com.backend.baseball.Diary.dto.DiaryUpdateRequestDTO;
 import com.backend.baseball.Diary.dto.SaveDiaryRequestDTO;
 import com.backend.baseball.Diary.entity.Diary;
 import com.backend.baseball.Diary.service.DiaryService;
-import com.backend.baseball.Login.entity.User;
+import com.backend.baseball.User.entity.User;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
