@@ -2,6 +2,7 @@ package com.backend.baseball;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -24,6 +25,8 @@ public class SecurityConfig {  // localhost 8080 기본 로그인 화면 제거
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화
 
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // ✅ OPTIONS 요청 허용
+
                         .requestMatchers("/login", "/logout").permitAll() // ✅ 로그인 & 로그아웃 엔드포인트 허용
                         .requestMatchers("/resources/**").permitAll()
                         .requestMatchers(
@@ -40,7 +43,11 @@ public class SecurityConfig {  // localhost 8080 기본 로그인 화면 제거
                         .ignoringRequestMatchers("/h2-console/**")
                         .disable()) // ✅ H2 콘솔 CSRF 비활성화
                 .sessionManagement(session->session
-                        .sessionFixation().none())
+                        //.sessionFixation().migrateSession()
+                         .sessionFixation().none()  // ✅ 세션 고정 방지, 기존 세션 유지
+                                .maximumSessions(1) // ✅ 하나의 로그인 세션 유지
+                                .maxSessionsPreventsLogin(true) // ✅ 새로운 로그인 시 기존 세션 유지 (로그아웃 X)
+                         )
 
                 .headers(headersConfigurer ->
                         headersConfigurer

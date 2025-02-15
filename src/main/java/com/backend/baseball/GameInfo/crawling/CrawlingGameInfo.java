@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -58,7 +59,7 @@ public class CrawlingGameInfo {
 
         try {
             driver.get(url + date);    //브라우저에서 url로 이동한다.
-            Thread.sleep(5000);
+            Thread.sleep(10000);
 
             // 리다이렉션 확인: 현재 페이지의 URL이 원래 요청한 날짜와 다른 경우
             String currentUrl = driver.getCurrentUrl();
@@ -112,8 +113,22 @@ public class CrawlingGameInfo {
                 timeText = lines[1];
                 gameInfo.setTime(timeText);
 
+                /*try {
+                    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));// 요소가 나타날 때까지 기다리기
+                    List<WebElement> matchess = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+                            By.cssSelector("div.MatchBox_match_sub_info__ITq89")
+                    ));// 요소가 정상적으로 로드되었는지 로그로 확인
+                    if (matchess.isEmpty()) {
+                        log.error("경기 정보 요소를 찾지 못했습니다! 크롤링 실패");
+                    } else {
+                        for (WebElement matchs : matchess) {
+                            log.info("경기 HTML 구조: " + matchs.getAttribute("outerHTML"));
+                        }
+                    }
+                }catch (TimeoutException e) {
+                    log.warn("경기 정보를 10초 안에 불러오지 못했습니다.");
+                }*/
 
-                log.debug("match HTML 구조 확인: " + match.html());
                 //장소
                 //String place = match.select("div.MatchBox_stadium__13gft").text().replace("경기장", "").trim();
                 //String place = match.selectFirst("div.MatchBox_stadium__13gft").text();
@@ -171,19 +186,25 @@ public class CrawlingGameInfo {
 
         if(winner.isEmpty()) { //동점인 경우
             Elements tiedElements = match.select("div.MatchBoxTeamArea_team_item__3w5mq"); //동점
-            for (Element tiedElement : tiedElements) {
-                String team1 = tiedElement.selectFirst("strong.MatchBoxTeamArea_team__3aB4O").text();
+            if (tiedElements.size() < 2) {
+                log.warn("동점 경기 div 개수가 2개 미만! HTML 구조 변경 가능성 확인 필요");
+            } else {
+                Element team1Element = tiedElements.get(0);
+                Element team2Element = tiedElements.get(1);
+
+                String team1 = team1Element.selectFirst("strong.MatchBoxTeamArea_team__3aB4O").text();
                 gameInfo.setTeam1(team1);
 
-                String team1Score = tiedElement.select("strong.MatchBoxTeamArea_score_wrap__3eSae").text();
+                String team1Score = team1Element.select("strong.MatchBoxTeamArea_score__1_YFB").text();
                 gameInfo.setTeam1Score(team1Score);
 
-                String team2 = tiedElement.select("strong.MatchBoxTeamArea_team__3aB4O").text();
+                String team2 = team2Element.select("strong.MatchBoxTeamArea_team__3aB4O").text();
                 gameInfo.setTeam2(team2);
 
                 gameInfo.setTeam2Score(team1Score); //동점이니까
+
+                return;
             }
-            return ;
         }
 
         for(Element winnerElement : winner) {
