@@ -20,10 +20,6 @@ public class HomeController {
     private final UserRepository userRepository;
     private final AttendanceService attendanceService;
 
-    @GetMapping
-    public String home() {
-        return "Welcome to Baseball Diary API!";
-    }
 
     //출석 정보 제공 API
     @PostMapping("/attendance")
