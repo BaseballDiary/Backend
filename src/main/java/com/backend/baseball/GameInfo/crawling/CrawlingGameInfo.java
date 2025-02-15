@@ -168,6 +168,25 @@ public class CrawlingGameInfo {
     public static void notCancel(Element match, GameInfo gameInfo){
         // 승리 팀 정보
         Elements winner = match.select("div.MatchBoxTeamArea_type_winner__2o1Hm");
+
+        if(winner.isEmpty()) { //동점인 경우
+            Elements tiedElements = match.select("div.MatchBoxTeamArea_team_item__3w5mq"); //동점
+            for (Element tiedElement : tiedElements) {
+                String team1 = tiedElement.select("strong.MatchBoxTeamArea_team__3aB4O").text();
+                gameInfo.setTeam1(team1);
+
+                String team1Score = tiedElement.select("strong.MatchBoxTeamArea_score_wrap__3eSae").text();
+                gameInfo.setTeam1Score(team1Score);
+
+                String team2 = tiedElement.select("strong.MatchBoxTeamArea_team__3aB4O").text();
+                gameInfo.setTeam2(team2);
+
+                String team2Score = tiedElement.select("strong.MatchBoxTeamArea_score_wrap__3eSae").text();
+                gameInfo.setTeam2Score(team2Score);
+            }
+            return ;
+        }
+
         for(Element winnerElement : winner) {
             String winnerTeam = winnerElement.select("strong.MatchBoxTeamArea_team__3aB4O").text();
             gameInfo.setTeam1(winnerTeam);
