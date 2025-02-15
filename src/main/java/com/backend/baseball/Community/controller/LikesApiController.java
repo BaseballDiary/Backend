@@ -17,7 +17,7 @@ public class LikesApiController {
 
     /** 📌 좋아요 추가 */
     @PostMapping
-    public ResponseEntity<Void> likePost(@RequestBody LikesRequestDto likesRequestDto, @Login User user) {
+    public ResponseEntity<Void> likePost(@RequestBody LikesRequestDto likesRequestDto) {
         //likesRequestDto.setCertificateId(user.getCertificateId()); // 로그인 유저의 ID 설정
         likesService.insert(likesRequestDto);
         return ResponseEntity.ok().build();
@@ -25,7 +25,7 @@ public class LikesApiController {
 
     /** 📌 좋아요 취소 */
     @DeleteMapping
-    public ResponseEntity<Void> unlikePost(@RequestBody LikesRequestDto likesRequestDto, @Login User user) {
+    public ResponseEntity<Void> unlikePost(@RequestBody LikesRequestDto likesRequestDto) {
         //likesRequestDto.setCertificateId(user.getCertificateId()); // 로그인 유저의 ID 설정
         likesService.delete(likesRequestDto);
         return ResponseEntity.ok().build();

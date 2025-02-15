@@ -50,4 +50,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p WHERE p.likeCount >= 10 AND p.createdAt >= :timeLimit AND p.teamClub = :teamClub ORDER BY p.likeCount DESC")
     List<Post> findPopularPostsByTeam(@Param("timeLimit") LocalDateTime timeLimit, @Param("teamClub") String teamClub);
 
+
+
+
 }

@@ -31,10 +31,25 @@ public class CommentApiController {
         return ResponseEntity.ok(commentService.save(postCertificateId,user.getNickname(),commentRequestDto));
     }
 
+    /*CREATE*/
+    @PostMapping("/posts/{postCertificateId}/comments")
+    public ResponseEntity<Long> save(@PathVariable Long postCertificateId,
+                                     @RequestBody CommentRequestDto commentRequestDto,
+                                     @Login User user){
+        return ResponseEntity.ok(commentService.save(postCertificateId,user.getNickname(),commentRequestDto));
+    }
+
     /*READ*/
     // 특정 아이디를 가진 게시글의 댓글을 모두 조회
     @GetMapping("/teams/{teamClub}/posts/{postCertificateId}/comments")
     public List<CommentResponseDto> read(@PathVariable Long postCertificateId, @PathVariable String teamClub) {
+        return commentService.findAll(postCertificateId);
+    }
+
+    /*READ*/
+    // 특정 아이디를 가진 게시글의 댓글을 모두 조회
+    @GetMapping("/posts/{postCertificateId}/comments")
+    public List<CommentResponseDto> read(@PathVariable Long postCertificateId) {
         return commentService.findAll(postCertificateId);
     }
 
@@ -45,9 +60,23 @@ public class CommentApiController {
         return ResponseEntity.ok(commentCertificateId);
     }
 
+    /*UPDATE*/
+    @PutMapping({"/posts/{postCertificateId}/comments/{commentCertificateId}"})
+    public ResponseEntity<Long> update(@PathVariable Long postCertificateId, @PathVariable Long commentCertificateId, @RequestBody CommentRequestDto commentRequestDto) {
+        commentService.update(postCertificateId,commentCertificateId,commentRequestDto);
+        return ResponseEntity.ok(commentCertificateId);
+    }
+
     /*DELETE*/
     @DeleteMapping("/teams/{teamClub}/posts/{postCertificateId}/comments/{commentCertificateId}")
     public ResponseEntity<Long> delete(@PathVariable Long postCertificateId, @PathVariable Long commentCertificateId, @PathVariable String teamClub) {
+        commentService.delete(postCertificateId,commentCertificateId);
+        return ResponseEntity.ok(commentCertificateId);
+    }
+
+    /*DELETE*/
+    @DeleteMapping("/posts/{postCertificateId}/comments/{commentCertificateId}")
+    public ResponseEntity<Long> delete(@PathVariable Long postCertificateId, @PathVariable Long commentCertificateId) {
         commentService.delete(postCertificateId,commentCertificateId);
         return ResponseEntity.ok(commentCertificateId);
     }
