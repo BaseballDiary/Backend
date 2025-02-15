@@ -5,26 +5,41 @@ import com.backend.baseball.User.dto.LoginResponseDTO;
 import com.backend.baseball.User.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 public class LoginController {
 
     private final LoginService loginService;
+    private final AuthenticationManager authenticationManager;
 
     // ✅ 로그인 추가 (프론트에서 email, password를 JSON으로 보내야 함)
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request,
-                                                  HttpServletRequest httpRequest,
-                                                  HttpServletResponse httpResponse) {
-        LoginResponseDTO response = loginService.login(request, httpRequest, httpResponse);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO request, HttpServletRequest httpServletRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        HttpSession session = httpServletRequest.getSession(true); // 🔥 세션 강제 생성
+        log.info("로그인 성공 - 세션 ID: " + session.getId());
+
+        return ResponseEntity.ok(new LoginResponseDTO(request.getEmail(),"로그인 성공", session.getId()));
     }
+
+
 
     // ✅ 로그아웃 (세션 무효화)
     @PostMapping("/logout")
