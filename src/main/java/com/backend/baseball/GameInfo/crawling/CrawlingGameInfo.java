@@ -171,19 +171,25 @@ public class CrawlingGameInfo {
 
         if(winner.isEmpty()) { //동점인 경우
             Elements tiedElements = match.select("div.MatchBoxTeamArea_team_item__3w5mq"); //동점
-            for (Element tiedElement : tiedElements) {
-                String team1 = tiedElement.selectFirst("strong.MatchBoxTeamArea_team__3aB4O").text();
+            if (tiedElements.size() < 2) {
+                log.warn("동점 경기 div 개수가 2개 미만! HTML 구조 변경 가능성 확인 필요");
+            } else {
+                Element team1Element = tiedElements.get(0);
+                Element team2Element = tiedElements.get(1);
+
+                String team1 = team1Element.selectFirst("strong.MatchBoxTeamArea_team__3aB4O").text();
                 gameInfo.setTeam1(team1);
 
-                String team1Score = tiedElement.select("strong.MatchBoxTeamArea_score_wrap__3eSae").text();
+                String team1Score = team1Element.select("strong.MatchBoxTeamArea_score__1_YFB").text();
                 gameInfo.setTeam1Score(team1Score);
 
-                String team2 = tiedElement.select("strong.MatchBoxTeamArea_team__3aB4O").text();
+                String team2 = team2Element.select("strong.MatchBoxTeamArea_team__3aB4O").text();
                 gameInfo.setTeam2(team2);
 
                 gameInfo.setTeam2Score(team1Score); //동점이니까
+
+                return;
             }
-            return ;
         }
 
         for(Element winnerElement : winner) {
