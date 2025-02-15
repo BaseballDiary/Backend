@@ -3,7 +3,6 @@ package com.backend.baseball.Diary.controller;
 import com.backend.baseball.Diary.dto.viewDiary.AtHomeDiaryDTO;
 import com.backend.baseball.Diary.dto.viewDiary.DiaryDetailDTO;
 import com.backend.baseball.Diary.dto.viewDiary.OnSiteDiaryDTO;
-import com.backend.baseball.Diary.dto.viewDiary.StatsResponseDTO;
 import com.backend.baseball.Diary.service.DiaryService;
 import com.backend.baseball.Login.User.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,12 +24,6 @@ public class FetchDiaryController{
     private final UserService userService;
     private final HttpSession httpSession;
 
-
-    @GetMapping("/{year}")
-    public ResponseEntity<StatsResponseDTO> getStats(@PathVariable String year, HttpSession session) {
-        StatsResponseDTO stats = diaryService.getStatsByYear(year, session); //HttpSession 전달
-        return ResponseEntity.ok(stats);
-    }
 
     //직관, 집관일기 리스트
     @GetMapping("/{year}/view")

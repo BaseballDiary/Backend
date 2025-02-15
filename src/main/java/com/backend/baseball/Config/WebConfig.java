@@ -1,4 +1,4 @@
-package com.backend.baseball.Config;
+/*package com.backend.baseball.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,4 +25,4 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
 
-}
+}*/
