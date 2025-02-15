@@ -35,7 +35,7 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
-                .requestMatchers(toH2Console())
+                .requestMatchers("/h2-console/**")  // ✅ 변경된 방식
                 .requestMatchers(new AntPathRequestMatcher("/static/**"));
     }
 
@@ -70,11 +70,7 @@ public class WebSecurityConfig {
                 )
 
 
-                .formLogin(formLogin -> formLogin
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/")
-                        .failureUrl("/home")
-                )
+
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true)
