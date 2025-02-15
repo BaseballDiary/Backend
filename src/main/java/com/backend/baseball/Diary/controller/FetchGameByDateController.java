@@ -3,6 +3,7 @@ package com.backend.baseball.Diary.controller;
 import com.backend.baseball.Diary.dto.DiaryResponseDTO;
 import com.backend.baseball.Diary.dto.FetchGameByDateDTO;
 import com.backend.baseball.Diary.dto.GameResponseDTO;
+import com.backend.baseball.Diary.dto.viewDiary.MyClubResponseDTO;
 import com.backend.baseball.Diary.entity.Diary;
 import com.backend.baseball.GameInfo.repository.GameInfoRepository;
 import com.backend.baseball.Diary.service.DiaryService;
@@ -25,7 +26,7 @@ import java.util.Optional;
 @Tag(name = "Diary API", description = "야구 일기 생성 시 야구경기 정보 가져오기")
 @RequestMapping("/diary")
 //프론트에서 년-월-일 보내면 해당하는 경기 정보 보내주기
-public class FetchGameByDateController{
+public class FetchGameByDateController implements FetchGameByDateControllerDocs{
 
     private final GameInfoService gameInfoService;
     private final DiaryService diaryService;
@@ -34,17 +35,14 @@ public class FetchGameByDateController{
 
     //야구일기 작성버튼 클릭 시 내구단 보내기
     @GetMapping("/fetchMyClub")
-    public ResponseEntity<Map<String, String>> fetchMyClub(HttpSession session) {
-        // 세션에서 로그인한 사용자 정보 가져오기
+    public ResponseEntity<MyClubResponseDTO> fetchMyClub(HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
 
         if (user == null) {
             throw new IllegalStateException("로그인이 필요합니다.");
         }
 
-        // 사용자의 구단 정보 반환
-        String myClub = user.getMyClub();
-        return ResponseEntity.ok(Map.of("myClub", myClub));
+        return ResponseEntity.ok(new MyClubResponseDTO(user.getMyClub())); // ✅ DTO 사용
     }
 
 

@@ -3,9 +3,11 @@ package com.backend.baseball.Diary.controller;
 import com.backend.baseball.Diary.dto.DiaryResponseDTO;
 import com.backend.baseball.Diary.dto.FetchGameByDateDTO;
 import com.backend.baseball.Diary.dto.GameResponseDTO;
+import com.backend.baseball.Diary.dto.viewDiary.MyClubResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpSession;
@@ -22,10 +24,10 @@ public interface FetchGameByDateControllerDocs {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "사용자 구단 반환 성공",
                     content = @Content(mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"myClub\": \"두산\"}"))
-            ),            @ApiResponse(responseCode = "401", description = "로그인이 필요합니다.")
+                            schema = @Schema(implementation = MyClubResponseDTO.class))
+            )
     })
-    ResponseEntity<Map<String, String>> fetchMyClub(HttpSession session);
+    ResponseEntity<MyClubResponseDTO> fetchMyClub(HttpSession session);
 
     @Operation(summary = "사용자 팀 경기 일정 조회", description = "특정 날짜의 사용자 팀이 포함된 경기 일정을 조회하는 API")
     @ApiResponses(value = {
