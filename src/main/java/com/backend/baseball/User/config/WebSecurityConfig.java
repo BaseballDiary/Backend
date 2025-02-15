@@ -74,8 +74,8 @@ public class WebSecurityConfig {
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
                 )
                 .formLogin(formLogin -> formLogin
-                        .loginPage("/login") // ✅ 올바른 상대 URL
-                        .failureUrl("/login?error") // ✅ 올바른 에러 페이지 설정
+                        .loginPage("/login")
+                        .failureUrl("/home")
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login")
