@@ -4,9 +4,11 @@ import com.backend.baseball.Login.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
 @Builder
-public class LoginInfo {
+public class LoginInfo implements Serializable {
     private Long certificationId;
 
     public static LoginInfo from(User user){
