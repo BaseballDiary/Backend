@@ -69,12 +69,10 @@ public class WebSecurityConfig {
                         .maxSessionsPreventsLogin(true) // ✅ 기존 세션 유지, 새로운 로그인 불가
                 )
 
-                // ✅ H2 Console 프레임 허용
-                .headers(headers -> headers
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-                )
+
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
+                        .defaultSuccessUrl("/")
                         .failureUrl("/home")
                 )
                 .logout(logout -> logout
