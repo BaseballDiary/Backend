@@ -1,6 +1,6 @@
 package com.backend.baseball.Diary.controller;
 
-import com.backend.baseball.Config.security.CustomUserDetails;
+import com.backend.baseball.User.service.UserDetailService;
 import com.backend.baseball.Diary.dto.DiaryResponseDTO;
 import com.backend.baseball.Diary.dto.FetchGameByDateDTO;
 import com.backend.baseball.Diary.dto.GameResponseDTO;
@@ -11,8 +11,8 @@ import com.backend.baseball.Diary.service.DiaryService;
 import com.backend.baseball.GameInfo.entity.GameInfo;
 import com.backend.baseball.GameInfo.service.GameInfoService;
 import com.backend.baseball.Diary.dto.SaveDiaryRequestDTO;
-import com.backend.baseball.Login.User.repository.UserRepository;
-import com.backend.baseball.Login.entity.User;
+import com.backend.baseball.User.repository.UserRepository;
+import com.backend.baseball.User.entity.User;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -44,12 +44,12 @@ public class FetchGameByDateController{
         // ✅ SecurityContext에서 인증 객체 가져오기
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (!(principal instanceof CustomUserDetails userDetails)) {
-            throw new IllegalStateException("로그인이 필요합니다.");
+        if (principal == null || !(principal instanceof String email)) {
+            return ResponseEntity.status(401).body(new MyClubResponseDTO("로그인이 필요합니다.")); // 401 Unauthorized 반환
         }
 
         // ✅ 로그인한 사용자의 certificationId를 기반으로 DB에서 사용자 정보 가져오기
-        User user = userRepository.findByCertificateId(userDetails.getCertificationId())
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("사용자 정보를 찾을 수 없습니다."));
 
         return ResponseEntity.ok(new MyClubResponseDTO(user.getMyClub())); // ✅ DTO 사용
