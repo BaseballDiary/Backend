@@ -35,7 +35,20 @@ public interface FetchGameByDateControllerDocs {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "경기 일정 반환 성공",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GameResponseDTO.class))
+                            schema = @Schema(implementation = GameResponseDTO.class),examples = @ExampleObject(value = """
+                            {
+                                "gameId": 123,
+                                "team1": "두산",
+                                "team2": "LG",
+                                "team1Score": 5,
+                                "team2Score": 3,
+                                "gameDate": "2025-02-15",
+                                "day": "토요일",
+                                "time": "18:00",
+                                "location": "잠실구장",
+                                "gameStatus": "종료"
+                            }
+                            """))
             ),
             @ApiResponse(responseCode = "401", description = "로그인이 필요합니다.",
                     content = @Content(mediaType = "application/json",
@@ -64,5 +77,5 @@ public interface FetchGameByDateControllerDocs {
             ),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    ResponseEntity<DiaryResponseDTO> fetchGameAndSaveDiary(@RequestBody FetchGameByDateDTO request, HttpSession session);
+    ResponseEntity<DiaryResponseDTO> saveGameDiary(@RequestBody GameResponseDTO request, HttpSession session);
 }
