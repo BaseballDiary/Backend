@@ -26,7 +26,7 @@ import java.util.Optional;
 @Tag(name = "Diary API", description = "야구 일기 생성 시 야구경기 정보 가져오기")
 @RequestMapping("/diary")
 //프론트에서 년-월-일 보내면 해당하는 경기 정보 보내주기
-public class FetchGameByDateController implements FetchGameByDateControllerDocs{
+public class FetchGameByDateController implements FetchGameByDateControllerDocs {
 
     private final GameInfoService gameInfoService;
     private final DiaryService diaryService;
@@ -74,37 +74,26 @@ public class FetchGameByDateController implements FetchGameByDateControllerDocs{
         return ResponseEntity.ok(games.get(0));
     }
 
-
     @PostMapping("/create/saveGame")
-    public ResponseEntity<DiaryResponseDTO> fetchGameAndSaveDiary(
-            @RequestBody FetchGameByDateDTO request,
+    public ResponseEntity<DiaryResponseDTO> saveGameDiary(
+            @RequestBody GameResponseDTO request, // 경기 정보 저장
             HttpSession session) {
 
-        //1.세션에서 로그인한 사용자 가져오기
+        // 1. 세션에서 로그인한 사용자 가져오기
         User user = (User) session.getAttribute("loginUser");
         if (user == null) {
             throw new IllegalStateException("로그인이 필요합니다.");
         }
 
-        //2. 사용자의 구단 정보 가져오기
-        String userClub = user.getMyClub();
-
-        //3. 날짜와 구단 정보로 경기 찾기
-        Optional<GameInfo> gameInfoOpt = gameInfoRepository.findGamesByClubAndDate(userClub, request.getGameDate());
-
-        if (gameInfoOpt.isEmpty()) {
-            throw new IllegalStateException("해당 날짜와 구단에 맞는 경기 정보를 찾을 수 없습니다.");
-        }
-
-        GameInfo gameInfo = gameInfoOpt.get(); //경기 정보 가져오기
-
-        //4. SaveDiaryRequestDTO 객체 생성
+        // 2. 경기 정보만 저장 (내용, 이미지 없이)
         SaveDiaryRequestDTO saveRequest = new SaveDiaryRequestDTO();
-        saveRequest.setGameId(gameInfo.getGameCertificateId()); //gameId 설정
-        saveRequest.setContents("");  // 기본값 설정
-        saveRequest.setImgUrl("");  // 기본값 설정
+        saveRequest.setGameId(request.getGameId());  // 경기 ID 저장
+        saveRequest.setContents("");  // 초기값 (내용 없음)
+        saveRequest.setImgUrls(List.of());  // 초기값 (이미지 없음)
 
-        //5.일기 저장
+        // 3. 일기 저장 (경기 정보만)
         DiaryResponseDTO savedDiary = diaryService.saveGameToDiary(saveRequest, session);
-        return ResponseEntity.ok(savedDiary);    }
+
+        return ResponseEntity.ok(savedDiary);
+    }
 }

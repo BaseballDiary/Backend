@@ -54,6 +54,18 @@ public class DiaryService {
                 .orElseThrow(() -> new IllegalStateException("해당 날짜의 경기 정보를 찾을 수 없습니다."));
     }
 
+    //경기 정보만 있는 Diary에다가 내용, imgUrl저장
+    public Optional<Diary> findByGameId(Long gameId) {
+        return diaryRepository.findByGameId(gameId);
+    }
+
+    @Transactional
+    public DiaryResponseDTO updateDiaryContents(Diary diary) {
+        diaryRepository.save(diary);
+        return DiaryResponseDTO.fromEntity(diary);
+    }
+
+
     //다이어리 저장
     @Transactional
     public DiaryResponseDTO saveGameToDiary(SaveDiaryRequestDTO request, HttpSession session) {
@@ -71,8 +83,8 @@ public class DiaryService {
         Diary diary = Diary.builder()
                 .user(user)
                 .gameInfo(gameInfo)
-                .content(request.getContents() != null ? request.getContents() : "") // 기본값 빈 문자열
-                .imgUrl(request.getImgUrl() != null ? Collections.singletonList(request.getImgUrl()) : Collections.emptyList()) // ✅ List<String> 변환
+                .contents(request.getContents() != null ? request.getContents() : "") // 기본값 빈 문자열
+                .imgUrls(request.getImgUrls() != null ? request.getImgUrls() : Collections.emptyList())
                 .build();
 
         // 4. Diary 저장
@@ -96,7 +108,7 @@ public class DiaryService {
 
         //일기 내용과 이미지 리스트 업데이트 (null 체크 후 변경)
         if (request.getContent() != null) {
-            diary.update(diary.getDate(), diary.getViewType(), request.getContent(), diary.getImgUrl(), diary.getGameInfo());
+            diary.update(diary.getDate(), diary.getViewType(), request.getContent(), diary.getImgUrls(), diary.getGameInfo());
         }
 
         if (request.getUploadImages() != null) {
@@ -104,7 +116,7 @@ public class DiaryService {
             List<String> imageUrls = request.getUploadImages().stream()
                     .map(id -> "https://example.com/images/" + id) // ID를 실제 URL로 변환
                     .toList();
-            diary.update(diary.getDate(), diary.getViewType(), diary.getContent(), imageUrls, diary.getGameInfo());
+            diary.update(diary.getDate(), diary.getViewType(), diary.getContents(), imageUrls, diary.getGameInfo());
         }
 
         //return diaryRepository.save(diary);
@@ -271,8 +283,8 @@ public class DiaryService {
                 myClub.equals(gameInfo.getTeam1()) ? team1Score : team2Score,
                 myClub.equals(gameInfo.getTeam1()) ? gameInfo.getTeam2() : gameInfo.getTeam1(),
                 myClub.equals(gameInfo.getTeam1()) ? team2Score : team1Score,
-                diary.getImgUrl(),
-                diary.getContent()
+                diary.getImgUrls(),
+                diary.getContents()
         );
     }
 }
