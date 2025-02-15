@@ -1,5 +1,6 @@
 package com.backend.baseball.Diary.controller;
 
+import com.backend.baseball.Config.security.CustomUserDetails;
 import com.backend.baseball.Diary.dto.DiaryResponseDTO;
 import com.backend.baseball.Diary.dto.FetchGameByDateDTO;
 import com.backend.baseball.Diary.dto.GameResponseDTO;
@@ -10,11 +11,13 @@ import com.backend.baseball.Diary.service.DiaryService;
 import com.backend.baseball.GameInfo.entity.GameInfo;
 import com.backend.baseball.GameInfo.service.GameInfoService;
 import com.backend.baseball.Diary.dto.SaveDiaryRequestDTO;
+import com.backend.baseball.Login.User.repository.UserRepository;
 import com.backend.baseball.Login.entity.User;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +29,9 @@ import java.util.Optional;
 @Tag(name = "Diary API", description = "야구 일기 생성 시 야구경기 정보 가져오기")
 @RequestMapping("/diary")
 //프론트에서 년-월-일 보내면 해당하는 경기 정보 보내주기
-public class FetchGameByDateController implements FetchGameByDateControllerDocs {
+public class FetchGameByDateController{
+    private final UserRepository userRepository; // ✅ 자동 주입
+
 
     private final GameInfoService gameInfoService;
     private final DiaryService diaryService;
@@ -35,12 +40,17 @@ public class FetchGameByDateController implements FetchGameByDateControllerDocs 
 
     //야구일기 작성버튼 클릭 시 내구단 보내기
     @GetMapping("/fetchMyClub")
-    public ResponseEntity<MyClubResponseDTO> fetchMyClub(HttpSession session) {
-        User user = (User) session.getAttribute("loginUser");
+    public ResponseEntity<MyClubResponseDTO> fetchMyClub() {
+        // ✅ SecurityContext에서 인증 객체 가져오기
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (user == null) {
+        if (!(principal instanceof CustomUserDetails userDetails)) {
             throw new IllegalStateException("로그인이 필요합니다.");
         }
+
+        // ✅ 로그인한 사용자의 certificationId를 기반으로 DB에서 사용자 정보 가져오기
+        User user = userRepository.findByCertificateId(userDetails.getCertificationId())
+                .orElseThrow(() -> new IllegalStateException("사용자 정보를 찾을 수 없습니다."));
 
         return ResponseEntity.ok(new MyClubResponseDTO(user.getMyClub())); // ✅ DTO 사용
     }
