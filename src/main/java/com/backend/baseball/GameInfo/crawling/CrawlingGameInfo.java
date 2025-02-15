@@ -50,16 +50,17 @@ public class CrawlingGameInfo {
         System.setProperty("webdriver.chrome.driver", chromeDriverPath);
         // ChromeOptions 추가 (AWS 서버에서도 작동하도록 설정)
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");  // GUI 없이 실행 (서버 환경 필수)
+        ////////////////////////////options.addArguments("--headless");  // GUI 없이 실행 (서버 환경 필수)
         options.addArguments("--no-sandbox"); // 보안 샌드박스 비활성화
         options.addArguments("--disable-dev-shm-usage"); // 메모리 문제 해결
         options.addArguments("--disable-gpu"); // GPU 비활성화
+        options.addArguments("--enable-logging", "--v=1");  // 디버그 로그 활성화 -> 장소 안뜨는 문제 때문에 추가.
 
         WebDriver driver = new ChromeDriver(options); // 옵션 추가된 WebDriver 생성
 
         try {
             driver.get(url + date);    //브라우저에서 url로 이동한다.
-            Thread.sleep(10000);
+            Thread.sleep(6000);
 
             // 리다이렉션 확인: 현재 페이지의 URL이 원래 요청한 날짜와 다른 경우
             String currentUrl = driver.getCurrentUrl();
