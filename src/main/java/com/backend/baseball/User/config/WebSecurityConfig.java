@@ -51,7 +51,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // ✅ OPTIONS 요청 허용
                         .requestMatchers(
-                                "/login", "/signup", "/user", "/logout"
+                                "/login", "/signup", "/user", "/logout","/auth"
                         ).permitAll() // ✅ 로그인 & 로그아웃 관련 엔드포인트 허용
                         .requestMatchers("/resources/**").permitAll() // ✅ 정적 리소스 허용
                         .requestMatchers(
