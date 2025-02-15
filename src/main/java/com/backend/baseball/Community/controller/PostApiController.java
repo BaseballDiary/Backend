@@ -7,6 +7,7 @@ import com.backend.baseball.Community.service.PostService;
 import com.backend.baseball.Login.entity.User;
 import com.backend.baseball.Login.login.argumentresolver.Login;
 import jakarta.validation.constraints.Pattern;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,11 @@ import java.util.List;
 public class PostApiController {
 //""
     private final PostService postService;
+
+    @GetMapping("/home")
+    public String okas(){
+        return "welcome";
+    }
 
     /*CREATE */
     @PostMapping("/posts")
