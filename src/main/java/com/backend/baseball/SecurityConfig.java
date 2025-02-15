@@ -2,6 +2,7 @@ package com.backend.baseball;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -24,6 +25,8 @@ public class SecurityConfig {  // localhost 8080 기본 로그인 화면 제거
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화
 
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // ✅ OPTIONS 요청 허용
+
                         .requestMatchers("/login", "/logout").permitAll() // ✅ 로그인 & 로그아웃 엔드포인트 허용
                         .requestMatchers("/resources/**").permitAll()
                         .requestMatchers(
