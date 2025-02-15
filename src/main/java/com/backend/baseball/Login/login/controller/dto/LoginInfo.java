@@ -10,11 +10,12 @@ import java.io.Serializable;
 @Builder
 public class LoginInfo implements Serializable {
     private Long certificationId;
+    private String email;  // ✅ email 추가 (SecurityContextHolder에 저장할 필드)
 
-    public static LoginInfo from(User user){
+    public static LoginInfo from(User user) {
         return LoginInfo.builder()
                 .certificationId(user.getCertificateId())
+                .email(user.getEmail())  // ✅ email 포함
                 .build();
     }
-
 }
