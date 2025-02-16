@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     //이메일과 패스워드로 회원 정보를 조회
-    Optional<User> findByEmailAndPw(String email, String password);
+    Optional<User> findByEmailAndPassword(String email, String password);
 }
