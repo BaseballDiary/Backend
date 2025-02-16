@@ -61,8 +61,15 @@ public class WebSecurityConfig {
                 )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
-                        .defaultSuccessUrl("/home", true)  // ✅ 로그인 성공 시 /home으로 이동
-                        .failureUrl("/login?error=true")  // ✅ 로그인 실패 시 /login?error=true
+                        .successHandler((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_OK);  // ✅ 성공 시 200 응답 반환 (리디렉트 방지)
+                            response.getWriter().write("{\"message\": \"로그인 성공\"}");
+                            response.setContentType("application/json");
+                            response.setCharacterEncoding("UTF-8");
+                        })
+                        .failureHandler((request, response, exception) -> {
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인 실패");
+                        })
                         .permitAll()
                 )
                 .logout(logout -> logout
