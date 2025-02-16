@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String email); //email로 사용자 정보 가져옴
-    Optional<User> findByCertificateId(Long certificateId); // certificateId로 사용자 조회
 
+    //이메일과 패스워드로 회원 정보를 조회
+    Optional<User> findByEmailAndPw(String email, String password);
 }
