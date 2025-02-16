@@ -30,6 +30,22 @@ public class AccountController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(HttpServletRequest req, HttpServletResponse res, @RequestBody LoginRequestDTO loginReq) {
+        //입력 값이 비어 있다면
+        if (!StringUtils.hasLength(loginReq.getEmail()) || !StringUtils.hasLength(loginReq.getPassword())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        String output = accountHelper.login(loginReq, req, res);
+
+        if (output == null) { //로그인 실패 시
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(output, HttpStatus.OK);
+    }
+
     @GetMapping("/check")
     public ResponseEntity<?> check(HttpServletRequest req) {
         return new ResponseEntity<>(accountHelper.isLoggedIn(req), HttpStatus.OK);
