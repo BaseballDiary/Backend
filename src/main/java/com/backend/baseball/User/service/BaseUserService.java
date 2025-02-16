@@ -21,7 +21,7 @@ public class BaseUserService implements UserService{
     //회원 데이터 조회
     @Override
     public User find(String email, String password) {
-        Optional<User> userOptional = userRepository.findByEmailAndPw(email, password);
+        Optional<User> userOptional = userRepository.findByEmailAndPassword(email, password);
 
         //회원 데이터가 있으면 해당 값 리턴(없으면 null 리턴)
         return userOptional.orElse(null);
