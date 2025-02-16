@@ -25,7 +25,7 @@ public class FetchMyClubController {
     @GetMapping("/fetchMyClub")
     public ResponseEntity<?> fetchMyClub(HttpServletRequest req) {
         // 현재 로그인한 사용자의 memberId 가져오기
-        Integer memberId = accountHelper.getMemberId(req);
+        Long memberId = accountHelper.getMemberId(req);
 
         // 로그인되지 않은 경우
         if (memberId == null) {

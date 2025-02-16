@@ -39,10 +39,10 @@ public class SessionAccountHelper implements AccountHelper{
 
     //회원 아이디 조회
     @Override
-    public Integer getMemberId(HttpServletRequest req){
+    public Long getMemberId(HttpServletRequest req){
         Object memberId = HttpUtils.getSessionValue(req, AccountConstants.MEMBER_ID_NAME);
         if(memberId !=null){
-            return (int) memberId;
+            return (Long) memberId;
         }
         return null;
     }
