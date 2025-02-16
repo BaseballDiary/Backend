@@ -26,62 +26,63 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
-
-    //스프링 시큐리티 기능 비활
+    // 스프링 시큐리티 기능 비활성화
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
-                .requestMatchers("/h2-console/**")  // ✅ 변경된 방식
+                .requestMatchers("/h2-console/**")
                 .requestMatchers(new AntPathRequestMatcher("/static/**"));
     }
 
-    //특정 HTTP 요청에 대한 웹 기반 보안 구성
+    // CORS 설정 추가
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "https://www.baseballdiary.shop",
+                "https://api.baseballdiary.shop"
+        )); // 허용할 Origin 지정
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Cookie"));
+        configuration.setExposedHeaders(List.of("Set-Cookie", "Authorization"));
+        configuration.setAllowCredentials(true); // 인증 정보 포함 허용
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    // 특정 HTTP 요청에 대한 웹 기반 보안 구성
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**")
-                        .disable())
-
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ CORS 활성화
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // ✅ OPTIONS 요청 허용
-                        .requestMatchers(
-                                "/login", "/signup", "/user", "/logout","/auth/**"
-                        ).permitAll() // ✅ 로그인 & 로그아웃 관련 엔드포인트 허용
-                        .requestMatchers("/resources/**").permitAll() // ✅ 정적 리소스 허용
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/login", "/signup", "/user", "/logout", "/auth/**").permitAll()
+                        .requestMatchers("/resources/**").permitAll()
                         .requestMatchers("/diary/**").permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**",
                                 "/webjars/**"
-                        ).permitAll() // ✅ Swagger 관련 요청 허용
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
-                // ✅ 세션 관리 설정
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // ✅ 필요할 때만 세션 생성, 최근 추가
-                        .sessionFixation().none()  // ✅ 기존 세션 유지 (세션 고정 공격 방지)
-                        .maximumSessions(1) // ✅ 하나의 로그인 세션 유지
-                        .maxSessionsPreventsLogin(false) // ✅ 기존 세션 유지, 새로운 로그인 불가 - false로 바꿔서 반대
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .sessionFixation().none()
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false)
                 )
-
-
-
-                .logout(logout -> logout
-                        .logoutSuccessUrl("/login")
-                        .invalidateHttpSession(true)
-                )
-                .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
-
-
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 }
