@@ -2,6 +2,7 @@ package com.backend.baseball.User.config;
 
 import com.backend.baseball.Config.CorsConfig;
 import com.backend.baseball.User.service.UserDetailService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -60,7 +61,12 @@ public class WebSecurityConfig {
                 )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login") // ✅ 폼 로그인 설정
-                        .defaultSuccessUrl("/home", true) // ✅ 로그인 성공 후 이동할 페이지
+                        .successHandler((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_OK); // ✅ 로그인 성공 시 200 응답
+                        })
+                        .failureHandler((request, response, exception) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // ✅ 로그인 실패 시 401 응답
+                        })
                         .permitAll()
                 )
                 .logout(logout -> logout
