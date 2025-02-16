@@ -60,13 +60,9 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
-                        .loginPage("/login") // ✅ 폼 로그인 설정
-                        .successHandler((request, response, authentication) -> {
-                            response.setStatus(HttpServletResponse.SC_OK); // ✅ 로그인 성공 시 200 응답
-                        })
-                        .failureHandler((request, response, exception) -> {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // ✅ 로그인 실패 시 401 응답
-                        })
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/home", true)  // ✅ 로그인 성공 시 /home으로 이동
+                        .failureUrl("/login?error=true")  // ✅ 로그인 실패 시 /login?error=true
                         .permitAll()
                 )
                 .logout(logout -> logout
