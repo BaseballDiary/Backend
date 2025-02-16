@@ -1,5 +1,6 @@
 package com.backend.baseball.User.config;
 
+import com.backend.baseball.Config.CorsConfig;
 import com.backend.baseball.User.service.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
