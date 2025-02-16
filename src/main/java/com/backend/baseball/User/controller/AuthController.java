@@ -1,9 +1,7 @@
 package com.backend.baseball.User.controller;
 
-import com.backend.baseball.User.dto.AddUserRequest;
 import com.backend.baseball.User.dto.MailDTO;
 import com.backend.baseball.User.service.MailService;
-import com.backend.baseball.User.service.UserService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
