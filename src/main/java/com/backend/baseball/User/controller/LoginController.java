@@ -34,7 +34,10 @@ public class LoginController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        HttpSession session = httpServletRequest.getSession(true); // 🔥 세션 강제 생성
+        HttpSession session = httpServletRequest.getSession(false); // ✅ 기존 세션이 없으면 null 반환
+        if (session == null) {
+            session = httpServletRequest.getSession(true); // ✅ 필요할 때만 생성
+        }
 
         // ✅ 로그인한 사용자 정보 가져오기
         User user = loginService.findByEmail(request.getEmail());
