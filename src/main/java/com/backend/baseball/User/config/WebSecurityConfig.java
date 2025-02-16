@@ -65,9 +65,10 @@ public class WebSecurityConfig {
                 )
                 // ✅ 세션 관리 설정
                 .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // ✅ 필요할 때만 세션 생성, 최근 추가
                         .sessionFixation().none()  // ✅ 기존 세션 유지 (세션 고정 공격 방지)
                         .maximumSessions(1) // ✅ 하나의 로그인 세션 유지
-                        .maxSessionsPreventsLogin(true) // ✅ 기존 세션 유지, 새로운 로그인 불가
+                        .maxSessionsPreventsLogin(false) // ✅ 기존 세션 유지, 새로운 로그인 불가 - false로 바꿔서 반대
                 )
 
 
@@ -106,7 +107,7 @@ public class WebSecurityConfig {
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
-        configuration.setExposedHeaders(List.of("Set-Cookie")); // ✅ Set-Cookie 헤더 노출
+        configuration.setExposedHeaders(List.of("Set-Cookie", "Authrozation")); // ✅ Set-Cookie 헤더 노출
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
