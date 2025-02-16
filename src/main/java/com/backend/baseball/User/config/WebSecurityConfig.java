@@ -45,6 +45,8 @@ public class WebSecurityConfig {
                 )
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource())) // ✅ 분리된 CORS 설정 적용
                 .csrf(csrf -> csrf.disable()) // ✅ CSRF 비활성화
+                .formLogin(AbstractHttpConfigurer::disable) // 폼 로그인 완전 비활성화
+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // ✅ OPTIONS 요청 허용
                         .requestMatchers(
