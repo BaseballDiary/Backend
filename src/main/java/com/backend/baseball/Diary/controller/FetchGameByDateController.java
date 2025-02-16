@@ -41,20 +41,28 @@ public class FetchGameByDateController{
 
 
     @GetMapping("/fetchMyClub")
-    public ResponseEntity<MyClubResponseDTO> fetchMyClub(HttpSession session) {
-        // ✅ 세션에서 `certificateId` 가져오기
-        Long certificateId = (Long) session.getAttribute("certificateId");
-
-        if (certificateId == null) {
+    public ResponseEntity<MyClubResponseDTO> fetchMyClub(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            log.warn("사용자가 인증되지 않음! 401 Unauthorized 반환");
             return ResponseEntity.status(401).body(new MyClubResponseDTO("로그인이 필요합니다."));
         }
 
-        // ✅ `certificateId`를 이용하여 사용자 조회
-        User user = userRepository.findByCertificateId(certificateId)
+        // ✅ 인증된 사용자 정보 로그 출력
+        log.info("현재 인증된 사용자: {}", authentication);
+        log.info("사용자 이름: {}", authentication.getName());
+        log.info("권한 정보: {}", authentication.getAuthorities());
+
+        // ✅ 이메일을 통해 사용자 정보 조회
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("사용자 정보를 찾을 수 없습니다."));
+
+        log.info("조회된 사용자 정보: {}", user);
 
         return ResponseEntity.ok(new MyClubResponseDTO(user.getMyClub()));
     }
+
+
 
 
 
