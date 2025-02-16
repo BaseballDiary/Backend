@@ -55,6 +55,7 @@ public class WebSecurityConfig {
                                 "/login", "/signup", "/user", "/logout","/auth/**"
                         ).permitAll() // ✅ 로그인 & 로그아웃 관련 엔드포인트 허용
                         .requestMatchers("/resources/**").permitAll() // ✅ 정적 리소스 허용
+                        .requestMatchers("/diary/**").permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
