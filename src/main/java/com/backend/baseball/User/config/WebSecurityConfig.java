@@ -59,23 +59,7 @@ public class WebSecurityConfig {
                         ).permitAll() // ✅ Swagger 관련 요청 허용
                         .anyRequest().authenticated()
                 )
-                .formLogin(formLogin -> formLogin
-                        .loginPage("/login")
-                        .successHandler((request, response, authentication) -> {
-                            response.setStatus(HttpServletResponse.SC_OK);  // ✅ 성공 시 200 응답 반환 (리디렉트 방지)
-                            response.getWriter().write("{\"message\": \"로그인 성공\"}");
-                            response.setContentType("application/json");
-                            response.setCharacterEncoding("UTF-8");
-                        })
-                        .failureHandler((request, response, exception) -> {
-                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인 실패");
-                        })
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutSuccessUrl("/login")
-                        .invalidateHttpSession(true)
-                )
+
                 .build();
     }
 
