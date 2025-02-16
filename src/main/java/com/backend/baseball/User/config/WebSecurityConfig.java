@@ -44,7 +44,7 @@ public class WebSecurityConfig {
                         channel.anyRequest().requiresSecure() // ✅ 모든 요청을 HTTPS로 강제
                 )
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource())) // ✅ 분리된 CORS 설정 적용
-                .csrf(AbstractHttpConfigurer::disable) // ✅ CSRF 비활성화
+                .csrf(csrf -> csrf.disable()) // ✅ CSRF 비활성화
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // ✅ OPTIONS 요청 허용
                         .requestMatchers(
