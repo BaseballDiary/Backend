@@ -39,6 +39,9 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .requiresChannel(channel ->
+                        channel.anyRequest().requiresSecure() // ✅ 모든 요청을 HTTPS로 강제
+                )
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource())) // ✅ 분리된 CORS 설정 적용
                 .csrf(AbstractHttpConfigurer::disable) // ✅ CSRF 비활성화
                 .authorizeHttpRequests(auth -> auth
