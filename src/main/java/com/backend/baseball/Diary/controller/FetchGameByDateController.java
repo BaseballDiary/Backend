@@ -41,28 +41,21 @@ public class FetchGameByDateController{
 
 
     @GetMapping("/fetchMyClub")
-    public ResponseEntity<MyClubResponseDTO> fetchMyClub() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public ResponseEntity<MyClubResponseDTO> fetchMyClub(HttpSession session) {
+        // ✅ 세션에서 `certificateId` 가져오기
+        Long certificateId = (Long) session.getAttribute("certificateId");
 
-        log.info("현재 인증 정보: {}", authentication);
-
-        if (authentication == null || authentication.getPrincipal() == null) {
-            log.error("인증 정보가 없음! SecurityContextHolder가 비어 있음.");
+        if (certificateId == null) {
             return ResponseEntity.status(401).body(new MyClubResponseDTO("로그인이 필요합니다."));
         }
 
-        Object principal = authentication.getPrincipal();
-        log.info("인증된 사용자: {}", principal);
-
-        if (!(principal instanceof String email)) {
-            return ResponseEntity.status(401).body(new MyClubResponseDTO("로그인이 필요합니다."));
-        }
-
-        User user = userRepository.findByEmail(email)
+        // ✅ `certificateId`를 이용하여 사용자 조회
+        User user = userRepository.findByCertificateId(certificateId)
                 .orElseThrow(() -> new IllegalStateException("사용자 정보를 찾을 수 없습니다."));
 
         return ResponseEntity.ok(new MyClubResponseDTO(user.getMyClub()));
     }
+
 
 
 

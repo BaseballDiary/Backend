@@ -50,5 +50,11 @@ public class LoginService {
         return new LoginResponseDTO(user.getEmail(), "로그인 성공", session.getId());
 
     }
+    //이메일로 사용자 조회하는 메서드 추가
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다: " + email));
+    }
+
 }
 

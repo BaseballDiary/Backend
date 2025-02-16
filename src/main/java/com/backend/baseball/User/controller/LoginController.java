@@ -2,6 +2,7 @@ package com.backend.baseball.User.controller;
 
 import com.backend.baseball.User.dto.LoginRequestDTO;
 import com.backend.baseball.User.dto.LoginResponseDTO;
+import com.backend.baseball.User.entity.User;
 import com.backend.baseball.User.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,9 +35,18 @@ public class LoginController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         HttpSession session = httpServletRequest.getSession(true); // 🔥 세션 강제 생성
-        log.info("로그인 성공 - 세션 ID: " + session.getId());
 
-        return ResponseEntity.ok(new LoginResponseDTO(request.getEmail(),"로그인 성공", session.getId()));
+        // ✅ 로그인한 사용자 정보 가져오기
+        User user = loginService.findByEmail(request.getEmail());
+
+        // ✅ 세션에 사용자 ID와 이메일 저장
+        session.setAttribute("userId", user.getCertificateId());
+        session.setAttribute("loginUser", user);
+        session.setAttribute("email", user.getEmail());
+
+        log.info("로그인 성공 - 세션 ID: {}", session.getId());
+
+        return ResponseEntity.ok(new LoginResponseDTO(request.getEmail(), "로그인 성공", session.getId()));
     }
 
 
