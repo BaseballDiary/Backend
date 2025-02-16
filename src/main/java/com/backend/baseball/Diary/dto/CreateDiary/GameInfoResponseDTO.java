@@ -1,13 +1,15 @@
 package com.backend.baseball.Diary.dto.CreateDiary;
 
 import com.backend.baseball.GameInfo.entity.GameInfo;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class GameInfoResponseDTO {
     private Long gameId;
     private String team1;
@@ -22,17 +24,17 @@ public class GameInfoResponseDTO {
 
     // 엔티티 -> DTO 변환 메서드
     public static GameInfoResponseDTO fromEntity(GameInfo gameInfo) {
-        return new GameInfoResponseDTO(
-                gameInfo.getGameCertificateId(),
-                gameInfo.getTeam1(),
-                gameInfo.getTeam2(),
-                gameInfo.getTeam1Score() != null ? Integer.parseInt(gameInfo.getTeam1Score()) : null,
-                gameInfo.getTeam2Score() != null ? Integer.parseInt(gameInfo.getTeam2Score()) : null,
-                gameInfo.getGameDate(),
-                gameInfo.getGameDate().getDayOfWeek().toString(), // 요일 변환
-                gameInfo.getTime(),
-                gameInfo.getPlace(),
-                gameInfo.getGameStatus()
-        );
+        return GameInfoResponseDTO.builder()
+                .gameId(gameInfo.getGameCertificateId())
+                .team1(gameInfo.getTeam1())
+                .team2(gameInfo.getTeam2())
+                .team1Score(Integer.parseInt(gameInfo.getTeam1Score()))
+                .team2Score(Integer.parseInt(gameInfo.getTeam2Score()))
+                .gameDate(gameInfo.getGameDate())
+                .day("")
+                .time(gameInfo.getTime())
+                .location(gameInfo.getPlace())
+                .gameStatus(gameInfo.getGameStatus())
+                .build();
     }
 }
