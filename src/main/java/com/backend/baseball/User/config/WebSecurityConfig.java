@@ -39,6 +39,7 @@ public class WebSecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
+                "http://3.39.169.50:8080",
                 "http://localhost:5173",
                 "https://www.baseballdiary.shop",
                 "https://api.baseballdiary.shop"
