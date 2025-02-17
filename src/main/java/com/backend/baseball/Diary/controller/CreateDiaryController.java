@@ -122,14 +122,51 @@ public class CreateDiaryController extends CreateDiaryControllerDocs{
         // ✅ 로그인한 사용자의 certificate_id 설정
         diary.setUser(user);
 
-        // 이미지 URL이 없으면 NULL 처리
-        diary.setImgUrls(request.getImgUrls() != null && !request.getImgUrls().isEmpty() ? request.getImgUrls() : null);
+        // 이미지 URL이 없거나 빈 배열이면 NULL 처리
+        diary.setImgUrls((request.getImgUrls() == null || request.getImgUrls().isEmpty()) ? null : request.getImgUrls());
+
 
         // Diary 저장
         diaryRepository.save(diary);
 
         return ResponseEntity.ok("{\"status\": 200, \"message\": \"일기를 성공적으로 저장했습니다.\"}");
     }
+
+    // 삭제 기능 추가
+    @DeleteMapping("/{diaryId}")
+    public ResponseEntity<?> deleteDiary(@PathVariable("diaryId") Long diaryId, HttpServletRequest req) {
+        // 현재 로그인한 사용자 조회
+        Long memberId = accountHelper.getMemberId(req);
+        if (memberId == null) {
+            return ResponseEntity.status(401).body("{\"status\": 401, \"message\": \"로그인이 필요합니다.\"}");
+        }
+
+        Optional<User> userOptional = userRepository.findById(memberId);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(404).body("{\"status\": 404, \"message\": \"사용자를 찾을 수 없습니다.\"}");
+        }
+
+        User user = userOptional.get();
+
+        // diaryId로 Diary 조회
+        Optional<Diary> diaryOpt = diaryRepository.findById(diaryId);
+        if (diaryOpt.isEmpty()) {
+            return ResponseEntity.status(404).body("{\"status\": 404, \"message\": \"해당 diaryId에 대한 일기가 존재하지 않습니다.\"}");
+        }
+
+        Diary diary = diaryOpt.get();
+
+        // 현재 로그인한 사용자가 해당 일기의 작성자인지 확인
+        if (!diary.getUser().getCertificateId().equals(user.getCertificateId())) {
+            return ResponseEntity.status(403).body("{\"status\": 403, \"message\": \"삭제 권한이 없습니다.\"}");
+        }
+
+        // Diary 삭제
+        diaryRepository.delete(diary);
+
+        return ResponseEntity.ok("{\"status\": 200, \"message\": \"일기가 성공적으로 삭제되었습니다.\"}");
+    }
+
 
 
 }

@@ -50,6 +50,7 @@ public class FetchDiaryController {
         );
     }
 
+    @GetMapping("/{diaryId}")
     public ResponseEntity<?> getDiaryById(@PathVariable("diaryId") Long diaryId) {
         Optional<Diary> diaryOpt = diaryRepository.findById(diaryId);
 
