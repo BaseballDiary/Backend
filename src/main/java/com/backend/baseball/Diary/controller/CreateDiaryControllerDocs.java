@@ -22,14 +22,6 @@ public abstract class CreateDiaryControllerDocs {
     @PostMapping("/create/fetchgame")
     public abstract ResponseEntity<?> fetchGame(@RequestParam("date") String dateString, HttpServletRequest req);
 
-    @Operation(summary = "경기 정보 우선 저장", description = "가져온 경기 정보 diary 테이블에 우선 저장")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Diary entry created", content = @Content(schema = @Schema(implementation = Long.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized - login required"),
-            @ApiResponse(responseCode = "404", description = "Game not found")
-    })
-    @PostMapping("/create/saveGame")
-    public abstract ResponseEntity<?> saveGame(@RequestBody SaveGameRequestDTO saveGameRequest, HttpServletRequest req);
 
     @Operation(summary = "야구 일기 최종 생성", description = "일기 내용과 img, viewType 받아서 최종 생성")
     @ApiResponses(value = {

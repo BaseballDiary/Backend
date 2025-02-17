@@ -72,8 +72,6 @@ public class CreateDiaryController extends CreateDiaryControllerDocs{
     }
 
 
-
-
     //일기 저장
     @PostMapping("/create")
     public ResponseEntity<?> createOrUpdateDiary(@RequestBody DiaryAddRequestDTO request) {
@@ -100,7 +98,7 @@ public class CreateDiaryController extends CreateDiaryControllerDocs{
         Diary diary = new Diary();
         diary.setGameInfo(gameInfo);
         diary.setContents(request.getContents());
-        diary.setViewType(ViewType.valueOf(request.getViewType()));
+        diary.setViewType(request.getViewType());
         diary.setScore(request.getScore()); // 점수 저장 (DB에 score 컬럼 JSON으로 추가)
 
         //이미지 URL이 없으면 NULL 처리

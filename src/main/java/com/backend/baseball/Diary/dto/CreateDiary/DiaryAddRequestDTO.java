@@ -16,5 +16,5 @@ public class DiaryAddRequestDTO {
     private String contents;
     private List<String> imgUrls;
     private ViewType viewType;  // 추가된 필드
-    private int score;
+    private String score;
 }

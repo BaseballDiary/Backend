@@ -35,7 +35,7 @@ public class Diary {
     private String contents; // **기본값을 DB에서도 강제 적용**
 
     @Column
-    private int score;
+    private String score;
 
     @ElementCollection
     @CollectionTable(name = "diary_images", joinColumns = @JoinColumn(name = "diary_id"))
