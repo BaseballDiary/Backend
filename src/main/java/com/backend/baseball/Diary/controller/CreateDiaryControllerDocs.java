@@ -23,11 +23,13 @@ public abstract class CreateDiaryControllerDocs {
     public abstract ResponseEntity<?> fetchGame(@RequestParam("date") String dateString, HttpServletRequest req);
 
 
-    @Operation(summary = "야구 일기 최종 생성", description = "일기 내용과 img, viewType 받아서 최종 생성")
+    @Operation(summary = "야구 일기 생성", description = "사용자의 certificateId를 가져와 일기를 생성함")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Diary entry updated", content = @Content(schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "400", description = "No matching diary entry found")
+            @ApiResponse(responseCode = "200", description = "일기 생성 성공", content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "400", description = "필수 값 누락 or 일기 중복 생성"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
+            @ApiResponse(responseCode = "404", description = "사용자 정보 없음 or 경기 정보 없음")
     })
     @PostMapping("/create")
-    public abstract ResponseEntity<?> createOrUpdateDiary(@RequestBody DiaryAddRequestDTO request);
+    public abstract ResponseEntity<?> createDiary(@RequestBody DiaryAddRequestDTO request, HttpServletRequest req);
 }

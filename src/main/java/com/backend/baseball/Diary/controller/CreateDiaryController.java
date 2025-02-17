@@ -35,6 +35,7 @@ public class CreateDiaryController extends CreateDiaryControllerDocs{
     private final DiaryRepository diaryRepository;
 
     //프론트에서 날짜 보내주면 날짜 + 내 구단 조합해서 경기 일정 보내주기
+    @Override
     @GetMapping("/create/fetchgame")
     public ResponseEntity<?> fetchGame(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String dateString, HttpServletRequest req) {
         //1. String -> LocalDate 변환
@@ -74,37 +75,52 @@ public class CreateDiaryController extends CreateDiaryControllerDocs{
 
     //일기 저장
     @PostMapping("/create")
-    public ResponseEntity<?> createOrUpdateDiary(@RequestBody DiaryAddRequestDTO request) {
-        //gameId를 이용해 GameInfo 조회
-        Optional<GameInfo> gameInfoOpt = gameInfoRepository.findById(request.getGameId());
+    public ResponseEntity<?> createDiary(@RequestBody DiaryAddRequestDTO request, HttpServletRequest req) {
+        // 현재 로그인한 사용자 조회
+        Long memberId = accountHelper.getMemberId(req);
+        if (memberId == null) {
+            return ResponseEntity.status(401).body("{\"status\": 401, \"message\": \"로그인이 필요합니다.\"}");
+        }
 
+        Optional<User> userOptional = userRepository.findById(memberId);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(404).body("{\"status\": 404, \"message\": \"사용자를 찾을 수 없습니다.\"}");
+        }
+
+        User user = userOptional.get();
+
+        // gameId를 이용해 GameInfo 조회
+        Optional<GameInfo> gameInfoOpt = gameInfoRepository.findById(request.getGameId());
         if (gameInfoOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("{\"status\": 400, \"message\": \"해당 gameId에 대한 경기 정보가 존재하지 않습니다.\"}");
         }
 
         GameInfo gameInfo = gameInfoOpt.get();
 
-        //기존 Diary가 있는지 확인
+        // 기존 Diary가 있는지 확인
         if (diaryRepository.existsByGameInfo(gameInfo)) {
             return ResponseEntity.status(400).body("{\"status\": 400, \"message\": \"해당 gameId에 대한 일기가 이미 존재합니다.\"}");
         }
 
-        //필수값 검증 (null 허용 X)
+        // 필수값 검증 (null 허용 X)
         if (request.getContents() == null || request.getViewType() == null || request.getScore() == null) {
             return ResponseEntity.badRequest().body("{\"status\": 400, \"message\": \"contents, viewType, score는 필수 입력 값입니다.\"}");
         }
 
-        //새로운 Diary 생성
+        // 새로운 Diary 생성
         Diary diary = new Diary();
         diary.setGameInfo(gameInfo);
         diary.setContents(request.getContents());
         diary.setViewType(request.getViewType());
-        diary.setScore(request.getScore()); // 점수 저장 (DB에 score 컬럼 JSON으로 추가)
+        diary.setScore(request.getScore());
 
-        //이미지 URL이 없으면 NULL 처리
+        // ✅ 로그인한 사용자의 certificate_id 설정
+        diary.setUser(user);
+
+        // 이미지 URL이 없으면 NULL 처리
         diary.setImgUrls(request.getImgUrls() != null && !request.getImgUrls().isEmpty() ? request.getImgUrls() : null);
 
-        //Diary 저장
+        // Diary 저장
         diaryRepository.save(diary);
 
         return ResponseEntity.ok("{\"status\": 200, \"message\": \"일기를 성공적으로 저장했습니다.\"}");
