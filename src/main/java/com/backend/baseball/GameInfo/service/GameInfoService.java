@@ -35,14 +35,16 @@ public class GameInfoService {
         return todayGameInfo;
     }
 
+    public GameInfo getMyClubGameInfo(String email, String dateString){
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new IllegalStateException("사용자를 찾을 수 없습니다."));
 
+            String club = user.getMyClub();
 
-
-
-
-
-
-
+            LocalDate date = LocalDate.parse(dateString);
+            return gameInfoRepository.findGamesByClubAndDate(club, date)
+                    .orElse(GameInfo.builder().gameStatus("경기 없음").build());
+        }
 }
 
 

@@ -19,8 +19,8 @@ public class GameInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gameCertificateId;
 
-    @Version
-    private Long version;
+    /*@Version
+    private Long version;*/
 
     @Column(nullable = false)
     private String gameStatus; //경기 상태
