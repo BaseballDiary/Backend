@@ -34,6 +34,9 @@ public class Diary {
     @Column(nullable = false, columnDefinition = "TEXT DEFAULT '베볼리'")
     private String contents; // **기본값을 DB에서도 강제 적용**
 
+    @Column
+    private String score;
+
     @ElementCollection
     @CollectionTable(name = "diary_images", joinColumns = @JoinColumn(name = "diary_id"))
     @Column(name = "image_url")
