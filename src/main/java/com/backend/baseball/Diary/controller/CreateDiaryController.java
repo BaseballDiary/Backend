@@ -27,7 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/diary")
-public class CreateDiaryController {
+public class CreateDiaryController extends CreateDiaryControllerDocs{
 
     private final GameInfoRepository gameInfoRepository;
     private final AccountHelper accountHelper;
