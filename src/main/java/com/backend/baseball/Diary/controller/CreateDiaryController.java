@@ -35,7 +35,8 @@ public class CreateDiaryController extends CreateDiaryControllerDocs{
     private final DiaryRepository diaryRepository;
 
     //프론트에서 날짜 보내주면 날짜 + 내 구단 조합해서 경기 일정 보내주기
-    @PostMapping("/create/fetchgame")
+    @Override
+    @GetMapping("/create/fetchgame")
     public ResponseEntity<?> fetchGame(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String dateString, HttpServletRequest req) {
         //1. String -> LocalDate 변환
         LocalDate gameDate;
@@ -71,73 +72,101 @@ public class CreateDiaryController extends CreateDiaryControllerDocs{
                 .orElse(ResponseEntity.status(404).build());  // 404 처리 (No matching game found)
     }
 
-
-    //경기 정보를 Diary에 저장하는 API
-    @PostMapping("/create/saveGame")
-    public ResponseEntity<?> saveGame(@RequestBody SaveGameRequestDTO saveGameRequest, HttpServletRequest req) {
-        //현재 로그인한 사용자 확인
+    //일기 저장
+    @PostMapping("/create")
+    public ResponseEntity<?> createDiary(@RequestBody DiaryAddRequestDTO request, HttpServletRequest req) {
+        // 현재 로그인한 사용자 조회
         Long memberId = accountHelper.getMemberId(req);
         if (memberId == null) {
-            return ResponseEntity.status(401).body("로그인이 필요합니다.");
+            return ResponseEntity.status(401).body("{\"status\": 401, \"message\": \"로그인이 필요합니다.\"}");
         }
 
         Optional<User> userOptional = userRepository.findById(memberId);
         if (userOptional.isEmpty()) {
-            return ResponseEntity.status(404).body("사용자를 찾을 수 없습니다.");
+            return ResponseEntity.status(404).body("{\"status\": 404, \"message\": \"사용자를 찾을 수 없습니다.\"}");
         }
+
         User user = userOptional.get();
 
-        //GameInfo 엔티티 조회
-        Optional<GameInfo> gameInfoOptional = gameInfoRepository.findById(saveGameRequest.getGameId());
-        if (gameInfoOptional.isEmpty()) {
-            return ResponseEntity.status(404).body("경기 정보를 찾을 수 없습니다.");
+        // gameId를 이용해 GameInfo 조회
+        Optional<GameInfo> gameInfoOpt = gameInfoRepository.findById(request.getGameId());
+        if (gameInfoOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("{\"status\": 400, \"message\": \"해당 gameId에 대한 경기 정보가 존재하지 않습니다.\"}");
         }
-        GameInfo gameInfo = gameInfoOptional.get();
 
-        //중복 검사: 해당 경기에 대한 일기가 이미 존재하는지 확인
+        GameInfo gameInfo = gameInfoOpt.get();
+
+        // 기존 Diary가 있는지 확인
         if (diaryRepository.existsByGameInfo(gameInfo)) {
-            return ResponseEntity.status(400).body("이미 해당 경기에 대한 일기가 존재합니다.");
+            return ResponseEntity.status(400).body("{\"status\": 400, \"message\": \"해당 gameId에 대한 일기가 이미 존재합니다.\"}");
         }
 
-        //Diary 저장
-        Diary diary = Diary.builder()
-                .date(gameInfo.getGameDate()) // 경기 날짜
-                .day(saveGameRequest.getDay()) // 프론트에서 전달된 요일
-                .viewType(ViewType.atHome) // 기본값으로 atHome 설정
-                .contents("")  //초기에는 내용 비우기
-                .imgUrls(null)  //초기에는 이미지 URL 비우기
-                .gameInfo(gameInfo)
-                .user(user)
-                .build();
-
-        Diary savedDiary = diaryRepository.save(diary);
-
-        // 4️⃣ 저장된 diaryId 반환
-        return ResponseEntity.ok(savedDiary.getDiaryId());
-    }
-
-
-    //일기 저장
-    @PostMapping("/create")
-    public ResponseEntity<?> createOrUpdateDiary(@RequestBody DiaryAddRequestDTO request) {
-        // 1️⃣ gameId와 certificateId를 사용해 기존 Diary 찾기
-        Optional<Diary> diaryOpt = diaryRepository.findByGameInfoGameCertificateIdAndUserCertificateId(
-                request.getGameId(), request.getCertificateId()
-        );
-
-        if (diaryOpt.isPresent()) {
-            // 2️⃣ 기존 Diary 업데이트
-            Diary diary = diaryOpt.get();
-            diary.setContents(request.getContents() != null ? request.getContents() : "베볼리");
-            diary.setImgUrls(request.getImgUrls() != null && !request.getImgUrls().isEmpty() ? request.getImgUrls() :
-                    List.of("https://s3-alpha-sig.figma.com/img/8ee5/0c2e/b058dc79ca1625d68efd4664511165e3"));
-
-            diaryRepository.save(diary);
-            return ResponseEntity.ok("{\"status\": 200, \"message\": \"일기를 성공적으로 업데이트했습니다.\"}");
-        } else {
-            return ResponseEntity.badRequest().body("{\"status\": 400, \"message\": \"해당 gameId와 certificateId에 대한 일기가 존재하지 않습니다.\"}");
+        // 필수값 검증 (null 허용 X)
+        if (request.getContents() == null || request.getViewType() == null || request.getScore() == null) {
+            return ResponseEntity.badRequest().body("{\"status\": 400, \"message\": \"contents, viewType, score는 필수 입력 값입니다.\"}");
         }
+
+        // ✅ 경기 날짜와 요일 가져오기
+        LocalDate gameDate = gameInfo.getGameDate();
+        String gameDay = DateUtils.getKoreanDay(gameDate); // 한글 요일 변환
+
+        // 새로운 Diary 생성
+        Diary diary = new Diary();
+        diary.setGameInfo(gameInfo);
+        diary.setDate(gameDate);  // ✅ 경기 날짜 저장
+        diary.setDay(gameDay);    // ✅ 요일 저장
+        diary.setContents(request.getContents());
+        diary.setViewType(request.getViewType());
+        diary.setScore(request.getScore());
+
+        // ✅ 로그인한 사용자의 certificate_id 설정
+        diary.setUser(user);
+
+        // 이미지 URL이 없거나 빈 배열이면 NULL 처리
+        diary.setImgUrls((request.getImgUrls() == null || request.getImgUrls().isEmpty()) ? null : request.getImgUrls());
+
+
+        // Diary 저장
+        diaryRepository.save(diary);
+
+        return ResponseEntity.ok("{\"status\": 200, \"message\": \"일기를 성공적으로 저장했습니다.\"}");
     }
+
+    // 삭제 기능 추가
+    @DeleteMapping("/{diaryId}")
+    public ResponseEntity<?> deleteDiary(@PathVariable("diaryId") Long diaryId, HttpServletRequest req) {
+        // 현재 로그인한 사용자 조회
+        Long memberId = accountHelper.getMemberId(req);
+        if (memberId == null) {
+            return ResponseEntity.status(401).body("{\"status\": 401, \"message\": \"로그인이 필요합니다.\"}");
+        }
+
+        Optional<User> userOptional = userRepository.findById(memberId);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(404).body("{\"status\": 404, \"message\": \"사용자를 찾을 수 없습니다.\"}");
+        }
+
+        User user = userOptional.get();
+
+        // diaryId로 Diary 조회
+        Optional<Diary> diaryOpt = diaryRepository.findById(diaryId);
+        if (diaryOpt.isEmpty()) {
+            return ResponseEntity.status(404).body("{\"status\": 404, \"message\": \"해당 diaryId에 대한 일기가 존재하지 않습니다.\"}");
+        }
+
+        Diary diary = diaryOpt.get();
+
+        // 현재 로그인한 사용자가 해당 일기의 작성자인지 확인
+        if (!diary.getUser().getCertificateId().equals(user.getCertificateId())) {
+            return ResponseEntity.status(403).body("{\"status\": 403, \"message\": \"삭제 권한이 없습니다.\"}");
+        }
+
+        // Diary 삭제
+        diaryRepository.delete(diary);
+
+        return ResponseEntity.ok("{\"status\": 200, \"message\": \"일기가 성공적으로 삭제되었습니다.\"}");
+    }
+
 
 
 }
