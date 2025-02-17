@@ -11,12 +11,13 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    @Modifying
-    @Query("UPDATE Post p SET p.views = p.views + 1 WHERE p.postCertificateId = :id")
-    int updateView(Long id);
+
 
     Optional<Post> findByPostCertificateId(Long postCertificateId);
 
     Page<Post> findByTeamCategory(TeamCategory teamCategory, Pageable pageable);
 
+    Page<Post> findByLikesGreaterThanEqual(int likes,Pageable pageable);
+
+    Page<Post> findByTeamCategoryAndLikesGreaterThanEqual(TeamCategory teamCategory, int likes, Pageable pageable);
 }

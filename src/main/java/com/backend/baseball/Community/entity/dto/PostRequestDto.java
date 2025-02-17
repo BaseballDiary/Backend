@@ -12,15 +12,15 @@ public class PostRequestDto {
     private Long postCertificateId;
     private String title;
     private String contents;
+    private int likes;
     private User user;
-    private int views;
     private TeamCategory teamCategory;
 
     public Post toEntity(){
         Post post=Post.builder()
                 .title(title)
                 .contents(contents)
-                .views(0)
+                .likes(0)
                 .user(user)
                 .teamCategory(teamCategory)
                 .build();

@@ -17,7 +17,7 @@ public class CommentApiController {
     private final CommentService commentService;
 
     /*CREATE*/
-    @PostMapping("/posts/{postCertificateId}/comments")
+    @PostMapping("/posts/{postCertificateId}/comments/create")
     public ResponseEntity<Long> save(@PathVariable Long postCertificateId
                                     ,@RequestBody CommentRequestDto commentRequestDto
                                     ,User user){
