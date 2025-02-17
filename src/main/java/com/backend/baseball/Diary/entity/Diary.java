@@ -31,15 +31,15 @@ public class Diary {
     @Column(nullable = true)
     private ViewType viewType;
 
-    @Column(nullable = false)
-    private String contents = "베볼리"; // 기본값 설정
+    @Column(nullable = false, columnDefinition = "TEXT DEFAULT '베볼리'")
+    private String contents; // **기본값을 DB에서도 강제 적용**
 
     @ElementCollection
     @CollectionTable(name = "diary_images", joinColumns = @JoinColumn(name = "diary_id"))
     @Column(name = "image_url")
     private List<String> imgUrls = new ArrayList<>(List.of(
             "https://s3-alpha-sig.figma.com/img/8ee5/0c2e/b058dc79ca1625d68efd4664511165e3?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=h~LN0GeB2EHXqKc7rGSxUDJvgZz~DZ2m0F6ET-OgqXREZXTRqRgYgvKDzjX1WxSeptpv0sNn9zNKqVJyDP4m2MT4VAIDZJb7Tzg57u0LGC~3Q3H3U3hLOP7mTYDCeCdPlJRV~1W2K8oYuIB68T3t-qZ0s6-6H5QGWmIqMjWDErIPWSZZdsjRU-htyx3jc49uzaPnaxZkr2YV-8hQJet8h-TI9usgTrWF37lFqZaGUcMeiaAQbN2sw9WJ3US1oeS6JLtZOLg4mXXGK2fWYsRxxUqBl0zV~NSeIjeyyjktzXPbzBiwh1BEJAHtXCWV0GEU463mMcRm2tp4BFqi7giY2g__"
-    )); // 기본값 설정
+    )); // 기본값 적용
 
     @Transient
     private String year;
@@ -54,7 +54,7 @@ public class Diary {
             this.date = LocalDate.now();
         }
         if (this.contents == null || this.contents.isEmpty()) {
-            this.contents = "베볼리";  // 기본값
+            this.contents = "베볼리";  // **JPA에서 기본값 강제 적용**
         }
         if (this.imgUrls == null || this.imgUrls.isEmpty()) {
             this.imgUrls = new ArrayList<>(List.of(
