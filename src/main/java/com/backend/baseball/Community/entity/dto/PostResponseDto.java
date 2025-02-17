@@ -19,7 +19,7 @@ public class PostResponseDto {
     private final Long postCertificateId;
     private final String title;
     private final String contents;
-    private final int views;
+    private final int likes;
     private final TeamCategory teamCategory;
     private final Long userCertificateId;
     private final List<CommentResponseDto> comments;
@@ -31,7 +31,7 @@ public class PostResponseDto {
                 .postCertificateId(post.getPostCertificateId())
                 .title(post.getTitle())
                 .contents(post.getContents())
-                .views(post.getViews())
+                .likes(post.getLikes())
                 .teamCategory(post.getTeamCategory())
                 .userCertificateId(post.getUser().getCertificateId())
                 .comments(post.getComments() !=null?

@@ -17,26 +17,33 @@ public class PostApiController {
 
     private final PostService postService;
 
-    /*CREATE*/
+    // 게시글 생성
     @PostMapping("/posts/create")
     public ResponseEntity save(@RequestBody PostRequestDto postRequestDto, User user,@RequestParam String teamCategoryTitle) {
         Long postCertificateId=postService.save(postRequestDto,user.getNickname(),teamCategoryTitle);
         return ResponseEntity.ok(postCertificateId);
     }
 
-    /*READ - 단일 게시글 조회*/
-    @GetMapping("/posts/read/{postCertificateId}")
-    public ResponseEntity read(@PathVariable Long postCertificateId,@RequestParam String teamCategoryTitle) {
-
-        return ResponseEntity.ok(postService.findByPostCertificateId(postCertificateId));
+    // 단일 게시글 조회
+    @GetMapping("posts/read/{postCertificateId}")
+    public ResponseEntity<PostResponseDto> getPostByPostCertificateId(@PathVariable Long postCertificateId) {
+        return ResponseEntity.ok(postService.getByPostCertificateId(postCertificateId));
     }
 
-    /*전체 게시글 조회*/
-    @GetMapping("/posts")
-    public ResponseEntity<Page<PostResponseDto>> getPostsByTeamCategory(
-            @RequestParam(required = false,defaultValue = "KBO") String teamCategoryTitle
-            , Pageable pageable){
-        return ResponseEntity.ok(postService.pageList(teamCategoryTitle,pageable));
+    // 전체 게시글 조회
+    @GetMapping("/all")
+    public ResponseEntity<Page<PostResponseDto>> getAllPosts(
+            @RequestParam(required = false,defaultValue = "KBO") String teamCategoryTitle,
+            Pageable pageable){
+        return ResponseEntity.ok(postService.getAllPosts(teamCategoryTitle,pageable));
+    }
+
+    // 인기 게시글 조회
+    @GetMapping("/popular")
+    public ResponseEntity<Page<PostResponseDto>> getPopularPosts(
+            @RequestParam(required = false,defaultValue = "KBO") String teamCategoryTitle,
+            Pageable pageable){
+        return ResponseEntity.ok(postService.getPopularPosts(teamCategoryTitle,pageable));
     }
 
 
