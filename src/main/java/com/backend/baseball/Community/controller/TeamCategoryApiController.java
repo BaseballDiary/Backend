@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TeamCategoryApiController {
     private final TeamCategoryService teamCategoryService;
-
+    /*
     @PostMapping("/selectTeamClub")
     public ResponseEntity<String> selectTeamClub(@RequestParam String teamCategoryTitle) {
         if("KBO".equalsIgnoreCase(teamCategoryTitle)) {
@@ -21,5 +21,5 @@ public class TeamCategoryApiController {
         }
         return ResponseEntity.ok("/community/"+teamCategoryTitle);
     }
-
+    */
 }
