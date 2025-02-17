@@ -1,5 +1,6 @@
 package com.backend.baseball.Diary.controller;
 
+import com.backend.baseball.Diary.dto.CreateDiary.DiaryAddRequestDTO;
 import com.backend.baseball.Diary.dto.CreateDiary.GameInfoResponseDTO;
 import com.backend.baseball.Diary.dto.CreateDiary.SaveGameRequestDTO;
 import com.backend.baseball.Diary.entity.Diary;
@@ -20,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -113,5 +115,29 @@ public class CreateDiaryController {
         // 4️⃣ 저장된 diaryId 반환
         return ResponseEntity.ok(savedDiary.getDiaryId());
     }
+
+
+    //일기 저장
+    @PostMapping("/create")
+    public ResponseEntity<?> createOrUpdateDiary(@RequestBody DiaryAddRequestDTO request) {
+        // 1️⃣ gameId와 certificateId를 사용해 기존 Diary 찾기
+        Optional<Diary> diaryOpt = diaryRepository.findByGameInfoGameCertificateIdAndUserCertificateId(
+                request.getGameId(), request.getCertificateId()
+        );
+
+        if (diaryOpt.isPresent()) {
+            // 2️⃣ 기존 Diary 업데이트
+            Diary diary = diaryOpt.get();
+            diary.setContents(request.getContents() != null ? request.getContents() : "베볼리");
+            diary.setImgUrls(request.getImgUrls() != null && !request.getImgUrls().isEmpty() ? request.getImgUrls() :
+                    List.of("https://s3-alpha-sig.figma.com/img/8ee5/0c2e/b058dc79ca1625d68efd4664511165e3"));
+
+            diaryRepository.save(diary);
+            return ResponseEntity.ok("{\"status\": 200, \"message\": \"일기를 성공적으로 업데이트했습니다.\"}");
+        } else {
+            return ResponseEntity.badRequest().body("{\"status\": 400, \"message\": \"해당 gameId와 certificateId에 대한 일기가 존재하지 않습니다.\"}");
+        }
+    }
+
 
 }
