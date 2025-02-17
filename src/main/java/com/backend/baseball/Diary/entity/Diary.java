@@ -31,10 +31,10 @@ public class Diary {
     @Column
     private String day; //요일
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private ViewType viewType;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String contents;
 
     @ElementCollection
