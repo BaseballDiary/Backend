@@ -3,6 +3,7 @@ package com.backend.baseball.Diary.controller;
 import com.backend.baseball.Diary.dto.CreateDiary.GameInfoResponseDTO;
 import com.backend.baseball.Diary.dto.CreateDiary.SaveGameRequestDTO;
 import com.backend.baseball.Diary.entity.Diary;
+import com.backend.baseball.Diary.enums.ViewType;
 import com.backend.baseball.Diary.etc.DateUtils;
 import com.backend.baseball.Diary.repository.DiaryRepository;
 import com.backend.baseball.GameInfo.entity.GameInfo;
@@ -100,7 +101,7 @@ public class CreateDiaryController {
         Diary diary = Diary.builder()
                 .date(gameInfo.getGameDate()) // 경기 날짜
                 .day(saveGameRequest.getDay()) // 프론트에서 전달된 요일
-                .viewType(null) // 기본적으로 PRIVATE 설정
+                .viewType(ViewType.atHome) // 기본값으로 atHome 설정
                 .contents("")  //초기에는 내용 비우기
                 .imgUrls(null)  //초기에는 이미지 URL 비우기
                 .gameInfo(gameInfo)
