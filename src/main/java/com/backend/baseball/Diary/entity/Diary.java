@@ -11,6 +11,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -54,7 +55,14 @@ public class Diary {
         if (this.date == null) {
             this.date = LocalDate.now();
         }
+        if (this.contents == null) {
+            this.contents = "";  // 기본적으로 빈 문자열 저장
+        }
+        if (this.imgUrls == null) {
+            this.imgUrls = new ArrayList<>();  // 기본적으로 빈 리스트 저장
+        }
     }
+
 
     @Builder
     public Diary(ViewType viewType, String content, List<String> imgUrl){
