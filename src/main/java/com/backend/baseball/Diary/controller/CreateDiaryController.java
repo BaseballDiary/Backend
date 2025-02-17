@@ -72,7 +72,6 @@ public class CreateDiaryController extends CreateDiaryControllerDocs{
                 .orElse(ResponseEntity.status(404).build());  // 404 처리 (No matching game found)
     }
 
-
     //일기 저장
     @PostMapping("/create")
     public ResponseEntity<?> createDiary(@RequestBody DiaryAddRequestDTO request, HttpServletRequest req) {
@@ -107,9 +106,15 @@ public class CreateDiaryController extends CreateDiaryControllerDocs{
             return ResponseEntity.badRequest().body("{\"status\": 400, \"message\": \"contents, viewType, score는 필수 입력 값입니다.\"}");
         }
 
+        // ✅ 경기 날짜와 요일 가져오기
+        LocalDate gameDate = gameInfo.getGameDate();
+        String gameDay = DateUtils.getKoreanDay(gameDate); // 한글 요일 변환
+
         // 새로운 Diary 생성
         Diary diary = new Diary();
         diary.setGameInfo(gameInfo);
+        diary.setDate(gameDate);  // ✅ 경기 날짜 저장
+        diary.setDay(gameDay);    // ✅ 요일 저장
         diary.setContents(request.getContents());
         diary.setViewType(request.getViewType());
         diary.setScore(request.getScore());
