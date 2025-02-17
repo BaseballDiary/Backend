@@ -72,7 +72,7 @@ public class CreateDiaryController {
     //경기 정보를 Diary에 저장하는 API
     @PostMapping("/create/saveGame")
     public ResponseEntity<?> saveGame(@RequestBody SaveGameRequestDTO saveGameRequest, HttpServletRequest req) {
-        // 1️⃣ 현재 로그인한 사용자 확인
+        //현재 로그인한 사용자 확인
         Long memberId = accountHelper.getMemberId(req);
         if (memberId == null) {
             return ResponseEntity.status(401).body("로그인이 필요합니다.");
@@ -84,14 +84,19 @@ public class CreateDiaryController {
         }
         User user = userOptional.get();
 
-        // 2️⃣ GameInfo 엔티티 조회
+        //GameInfo 엔티티 조회
         Optional<GameInfo> gameInfoOptional = gameInfoRepository.findById(saveGameRequest.getGameId());
         if (gameInfoOptional.isEmpty()) {
             return ResponseEntity.status(404).body("경기 정보를 찾을 수 없습니다.");
         }
         GameInfo gameInfo = gameInfoOptional.get();
 
-        // 3️⃣ Diary 저장
+        //중복 검사: 해당 경기에 대한 일기가 이미 존재하는지 확인
+        if (diaryRepository.existsByGameInfo(gameInfo)) {
+            return ResponseEntity.status(400).body("이미 해당 경기에 대한 일기가 존재합니다.");
+        }
+
+        //Diary 저장
         Diary diary = Diary.builder()
                 .date(gameInfo.getGameDate()) // 경기 날짜
                 .day(saveGameRequest.getDay()) // 프론트에서 전달된 요일
