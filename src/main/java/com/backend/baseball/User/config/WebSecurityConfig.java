@@ -68,6 +68,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/game/**").permitAll()
                         .requestMatchers("/community/**").permitAll()
                         .requestMatchers(("/posts/**")).permitAll()
+                        .requestMatchers("/settings/**").permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
