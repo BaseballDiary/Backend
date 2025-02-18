@@ -3,6 +3,7 @@ package com.backend.baseball.Diary.controller;
 import com.backend.baseball.Diary.entity.Diary;
 import com.backend.baseball.Diary.enums.ViewType;
 import com.backend.baseball.Diary.repository.DiaryRepository;
+import com.backend.baseball.GameInfo.entity.GameInfo;
 import com.backend.baseball.GameInfo.repository.TeamRankingRepository;
 import com.backend.baseball.User.entity.User;
 import com.backend.baseball.User.helper.AccountHelper;
@@ -101,12 +102,14 @@ public class StatController {
 
         // 경기 통계 계산
         int wins = 0, losses = 0, draws = 0, totalGames = onSiteGames.size();
+
         for (Diary diary : onSiteGames) {
-            if (diary.getScore() != null) {
-                String score = diary.getScore();
-                if (score.contains("승")) wins++;
-                else if (score.contains("패")) losses++;
-                else if (score.contains("무")) draws++;
+            GameInfo gameInfo = diary.getGameInfo(); // 경기 정보 가져오기
+            if (gameInfo != null) {
+                String gameStatus = gameInfo.getGameStatus(); // 경기 결과 (승/패/무)
+                if ("승리".equals(gameStatus)) wins++;
+                else if ("패배".equals(gameStatus)) losses++;
+                else if ("무승부".equals(gameStatus)) draws++;
             }
         }
 
@@ -119,4 +122,5 @@ public class StatController {
                 wins, losses, draws, totalGames, winRate
         ));
     }
+
 }
