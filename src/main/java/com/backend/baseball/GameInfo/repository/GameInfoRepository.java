@@ -21,4 +21,7 @@ public interface GameInfoRepository extends JpaRepository<GameInfo, Long> {
     @Query("SELECT g FROM GameInfo g WHERE g.gameDate = :gameDate AND (g.team1 = :club OR g.team2 = :club)")
     Optional<GameInfo> findByGameDateAndTeam(@Param("gameDate") LocalDate gameDate, @Param("club") String club);
 
+    List<GameInfo> findByGameDateBetween(LocalDate startDate, LocalDate endDate);
+
+
 }
