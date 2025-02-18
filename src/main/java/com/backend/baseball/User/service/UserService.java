@@ -8,4 +8,8 @@ public interface UserService {
 
     //회원 데이터 조회
     User find(String email, String password);
+
+    void selectMyClub(String myClub,String email,String password);
+
+    void updateNickname(String nickname,String email,String password);
 }
