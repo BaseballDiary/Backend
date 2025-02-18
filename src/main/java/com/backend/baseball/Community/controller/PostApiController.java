@@ -49,7 +49,7 @@ public class PostApiController {
             return ResponseEntity.status(403).body("해당 구단에서만 게시글을 작성할 수 있습니다.");
         }
 
-        Long postCertificateId = postService.save(postRequestDto, user.getNickname(), teamCategoryTitle);
+        Long postCertificateId = postService.save(postRequestDto, user.getNickname(), teamClub);
         return ResponseEntity.ok(postCertificateId);
     }
 
