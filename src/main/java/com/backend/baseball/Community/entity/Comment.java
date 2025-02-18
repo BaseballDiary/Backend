@@ -13,7 +13,7 @@ import com.backend.baseball.User.entity.User;
 @NoArgsConstructor
 @Getter
 @Entity
-public class Comment extends BaseTimeEntity{
+public class Comment{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,10 +29,5 @@ public class Comment extends BaseTimeEntity{
     @ManyToOne
     @JoinColumn(name="certificate_id",nullable = false)
     private User user;
-
-    // 댓글 수정
-    public void update(String commentContent){
-        this.commentContent = commentContent;
-    }
 
 }

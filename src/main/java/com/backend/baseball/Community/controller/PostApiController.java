@@ -28,7 +28,7 @@ public class PostApiController {
     @PostMapping("/posts/create")
     public ResponseEntity<?> save(@RequestBody PostRequestDto postRequestDto,
                                   HttpServletRequest req,
-                                  @RequestParam String teamCategoryTitle) {
+                                  @RequestParam String teamClub) {
 
         // 현재 로그인한 사용자 memberId 가져오기
         Long memberId = accountHelper.getMemberId(req);
@@ -45,7 +45,7 @@ public class PostApiController {
         User user = userOptional.get();
 
         // 사용자의 myClub과 teamCategoryTitle이 일치하는지 확인
-        if (!user.getMyClub().equals(teamCategoryTitle)) {
+        if(!user.getMyClub().equals(teamClub)){
             return ResponseEntity.status(403).body("해당 구단에서만 게시글을 작성할 수 있습니다.");
         }
 
@@ -62,17 +62,17 @@ public class PostApiController {
     // 전체 게시글 조회
     @GetMapping("/all")
     public ResponseEntity<Page<PostResponseDto>> getAllPosts(
-            @RequestParam(required = false, defaultValue = "KBO") String teamCategoryTitle,
+            @RequestParam(required = false, defaultValue = "KBO") String teamClub,
             Pageable pageable) {
-        return ResponseEntity.ok(postService.getAllPosts(teamCategoryTitle, pageable));
+        return ResponseEntity.ok(postService.getAllPosts(teamClub, pageable));
     }
 
     // 인기 게시글 조회
     @GetMapping("/popular")
     public ResponseEntity<Page<PostResponseDto>> getPopularPosts(
-            @RequestParam(required = false, defaultValue = "KBO") String teamCategoryTitle,
+            @RequestParam(required = false, defaultValue = "KBO") String teamClub,
             Pageable pageable) {
-        return ResponseEntity.ok(postService.getPopularPosts(teamCategoryTitle, pageable));
+        return ResponseEntity.ok(postService.getPopularPosts(teamClub, pageable));
     }
 
 }
