@@ -28,6 +28,12 @@ public class CommentService {
         User user=userRepository.findByNickname(nickname);
         Post post=postRepository.findByPostCertificateId(postCertificateId).orElseThrow(()->
                 new IllegalStateException("댓글 쓰기 실패: 해당 게시글이 존재하지 않습니다. "+postCertificateId));
+
+        // 사용자의 myClub과 게시글의 teamClub이 동일한지 확인
+        if(!user.getMyClub().equals(post.getTeamClub())){
+            throw new IllegalStateException("해당 구단의 게시글에만 댓글을 작성할 수 있습니다.");
+        }
+
         commentRequestDto.setUser(user);
         commentRequestDto.setPost(post);
         Comment comment=commentRequestDto.toEntity();

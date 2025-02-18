@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import com.backend.baseball.User.entity.User;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -31,35 +32,31 @@ public class CommentApiController {
                                   @RequestBody CommentRequestDto commentRequestDto,
                                   HttpServletRequest req) {
 
-        // 현재 로그인한 사용자 memberId 가져오기
         Long memberId = accountHelper.getMemberId(req);
         if (memberId == null) {
-            return ResponseEntity.status(401).body("로그인이 필요합니다.");
+            return ResponseEntity.status(401).body(Map.of("error", "로그인이 필요합니다."));
         }
 
-        // 사용자 정보 조회
         Optional<User> userOptional = userRepository.findById(memberId);
         if (userOptional.isEmpty()) {
-            return ResponseEntity.status(404).body("사용자를 찾을 수 없습니다.");
+            return ResponseEntity.status(404).body(Map.of("error", "사용자를 찾을 수 없습니다."));
         }
 
         User user = userOptional.get();
 
-        // 게시글 정보 조회
         Optional<Post> postOptional = postRepository.findByPostCertificateId(postCertificateId);
         if (postOptional.isEmpty()) {
-            return ResponseEntity.status(404).body("해당 게시글을 찾을 수 없습니다.");
+            return ResponseEntity.status(404).body(Map.of("error", "해당 게시글을 찾을 수 없습니다."));
         }
 
         Post post = postOptional.get();
 
-        // 사용자의 myClub과 게시글의 teamClub가 일치하는지 확인
-        if(user.getMyClub().equals(post.getTeamClub())){
-            return ResponseEntity.status(403).body("해당 구단의 게시글에만 댓글을 작성할 수 있습니다.");
+        if (!user.getMyClub().equals(post.getTeamClub())) {
+            return ResponseEntity.status(403).body(Map.of("error", "해당 구단의 게시글에만 댓글을 작성할 수 있습니다."));
         }
 
         Long commentCertificateId = commentService.save(postCertificateId, user.getNickname(), commentRequestDto);
-        return ResponseEntity.ok(commentCertificateId);
+        return ResponseEntity.ok(Map.of("message", "댓글이 성공적으로 생성되었습니다.", "commentId", commentCertificateId));
     }
 
     /* 댓글 조회 */
