@@ -16,8 +16,6 @@ public class CommentResponseDto {
     private final String nickname;
     private final Long userCertificateId;
     private final Long postCertificateId;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime modifiedAt;
 
     /*Entity -> Dto*/
     public static CommentResponseDto from(Comment comment) {
@@ -27,8 +25,6 @@ public class CommentResponseDto {
                 .nickname(comment.getUser().getNickname())
                 .userCertificateId(comment.getUser().getCertificateId())
                 .postCertificateId(comment.getPost().getPostCertificateId())
-                .createdAt(comment.getCreatedAt())
-                .modifiedAt(comment.getModifiedAt())
                 .build();
     }
 

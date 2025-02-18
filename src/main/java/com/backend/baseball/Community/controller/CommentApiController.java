@@ -53,8 +53,8 @@ public class CommentApiController {
 
         Post post = postOptional.get();
 
-        // 사용자의 myClub과 게시글의 teamCategory가 일치하는지 확인
-        if (!user.getMyClub().equals(post.getTeamCategory().getTeamCategoryTitle())) {
+        // 사용자의 myClub과 게시글의 teamClub가 일치하는지 확인
+        if(user.getMyClub().equals(post.getTeamClub())){
             return ResponseEntity.status(403).body("해당 구단의 게시글에만 댓글을 작성할 수 있습니다.");
         }
 

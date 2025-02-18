@@ -15,14 +15,12 @@ import java.util.List;
 @Builder
 @Getter
 @Entity
-public class Post extends BaseTimeEntity{
+public class Post{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postCertificateId;
 
-    @Column(length=500,nullable=false)
-    private String title;
 
     @Column(columnDefinition = "TEXT",nullable = false)
     private String contents;
@@ -38,8 +36,8 @@ public class Post extends BaseTimeEntity{
     @OrderBy("commentCertificateId asc")
     private List<Comment> comments;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    private TeamCategory teamCategory;
+
+    private String teamClub;
 
     public void increaseLikes(){
         this.likes+=1;
@@ -48,8 +46,4 @@ public class Post extends BaseTimeEntity{
         this.likes = Math.max(0, this.likes - 1);
     }
 
-    public void update(String title,String contents){
-        this.title = title;
-        this.contents = contents;
-    }
 }

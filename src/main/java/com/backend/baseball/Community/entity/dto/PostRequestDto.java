@@ -1,7 +1,6 @@
 package com.backend.baseball.Community.entity.dto;
 
 import com.backend.baseball.Community.entity.Post;
-import com.backend.baseball.Community.entity.TeamCategory;
 import lombok.Getter;
 import lombok.Setter;
 import com.backend.baseball.User.entity.User;
@@ -10,17 +9,15 @@ import com.backend.baseball.User.entity.User;
 @Getter
 public class PostRequestDto {
     private Long postCertificateId;
-    private String title;
     private String contents;
     private User user;
-    private TeamCategory teamCategory;
+    private String teamClub;
 
     public Post toEntity(){
         Post post=Post.builder()
-                .title(title)
                 .contents(contents)
                 .user(user)
-                .teamCategory(teamCategory)
+                .teamClub(teamClub)
                 .build();
         return post;
     }
