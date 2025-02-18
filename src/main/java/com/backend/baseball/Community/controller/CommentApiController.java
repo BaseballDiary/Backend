@@ -50,8 +50,10 @@ public class CommentApiController {
         }
 
         Post post = postOptional.get();
+        System.out.println("댓글 생성 요청: user.myClub= "+user.getMyClub()+" , post.teamClub= "+post.getTeamClub());
 
         if (!user.getMyClub().equals(post.getTeamClub())) {
+            System.out.println("댓글 작성 차단됨: user.myClub= "+user.getMyClub()+" , post.teamClub= "+post.getTeamClub());
             return ResponseEntity.status(403).body(Map.of("error", "해당 구단의 게시글에만 댓글을 작성할 수 있습니다."));
         }
 
