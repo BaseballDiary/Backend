@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 import com.backend.baseball.User.entity.User;
 
-@RequestMapping("/login")
+@RequestMapping("/settings")
 @RestController
 @RequiredArgsConstructor
 public class UserController {
