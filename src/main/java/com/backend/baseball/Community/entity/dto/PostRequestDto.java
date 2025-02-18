@@ -12,7 +12,6 @@ public class PostRequestDto {
     private Long postCertificateId;
     private String title;
     private String contents;
-    private int likes;
     private User user;
     private TeamCategory teamCategory;
 
@@ -20,7 +19,6 @@ public class PostRequestDto {
         Post post=Post.builder()
                 .title(title)
                 .contents(contents)
-                .likes(0)
                 .user(user)
                 .teamCategory(teamCategory)
                 .build();

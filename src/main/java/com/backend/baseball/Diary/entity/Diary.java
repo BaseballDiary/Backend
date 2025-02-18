@@ -64,11 +64,11 @@ public class Diary {
     }
 
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gameId", unique = true)
     private GameInfo gameInfo;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "certificateId", nullable = false)
     private User user;
 
