@@ -4,6 +4,7 @@ import com.backend.baseball.Diary.entity.Diary;
 import com.backend.baseball.Diary.enums.ViewType;
 import com.backend.baseball.Diary.repository.DiaryRepository;
 import com.backend.baseball.GameInfo.entity.GameInfo;
+import com.backend.baseball.GameInfo.repository.GameInfoRepository;
 import com.backend.baseball.GameInfo.repository.TeamRankingRepository;
 import com.backend.baseball.User.entity.User;
 import com.backend.baseball.User.helper.AccountHelper;
@@ -35,6 +36,7 @@ public class StatController {
     private final UserRepository userRepository;
     private final AccountHelper accountHelper;
     private final DiaryRepository diaryRepository;
+    private final GameInfoRepository gameInfoRepository;
 
     @GetMapping("/teamstat/{year}")
     public ResponseEntity<?> getTeamStatsByYear(
@@ -92,24 +94,60 @@ public class StatController {
         }
 
         User user = userOptional.get();
+        String myClub = user.getMyClub();  // 사용자의 팀 정보 가져오기
 
-        // 해당 년도의 'onSite' (직관) 경기 필터링
+        // 해당 연도의 사용자의 직관(`onSite`) 경기 가져오기
         List<Diary> onSiteGames = diaryRepository.findByUserAndViewTypeAndDateBetween(
                 user, ViewType.onSite,
                 LocalDate.of(yearInt, 1, 1),
                 LocalDate.of(yearInt, 12, 31)
         );
 
-        // 경기 통계 계산
         int wins = 0, losses = 0, draws = 0, totalGames = onSiteGames.size();
 
         for (Diary diary : onSiteGames) {
-            GameInfo gameInfo = diary.getGameInfo(); // 경기 정보 가져오기
-            if (gameInfo != null) {
-                String gameStatus = gameInfo.getGameStatus(); // 경기 결과 (승/패/무)
-                if ("승리".equals(gameStatus)) wins++;
-                else if ("패배".equals(gameStatus)) losses++;
-                else if ("무승부".equals(gameStatus)) draws++;
+            GameInfo gameInfo = diary.getGameInfo();
+            if (gameInfo != null && gameInfo.getTeam1Score() != null && gameInfo.getTeam2Score() != null) {
+                int team1Score = Integer.parseInt(gameInfo.getTeam1Score());
+                int team2Score = Integer.parseInt(gameInfo.getTeam2Score());
+
+                // 내 구단이 팀1인지 팀2인지 판별
+                boolean isTeam1 = gameInfo.getTeam1().equals(myClub);
+
+                if ((isTeam1 && team1Score > team2Score) || (!isTeam1 && team2Score > team1Score)) {
+                    wins++;
+                } else if ((isTeam1 && team1Score < team2Score) || (!isTeam1 && team2Score < team1Score)) {
+                    losses++;
+                } else {
+                    draws++;
+                }
+            }
+        }
+
+        // GameInfo 기준으로 직관한 경기 외에도 전체 경기 포함하여 계산
+        List<GameInfo> allGames = gameInfoRepository.findByGameDateBetween(
+                LocalDate.of(yearInt, 1, 1),
+                LocalDate.of(yearInt, 12, 31)
+        );
+
+        for (GameInfo gameInfo : allGames) {
+            if (gameInfo.getTeam1Score() != null && gameInfo.getTeam2Score() != null) {
+                int team1Score = Integer.parseInt(gameInfo.getTeam1Score());
+                int team2Score = Integer.parseInt(gameInfo.getTeam2Score());
+
+                boolean isTeam1 = gameInfo.getTeam1().equals(myClub);
+                boolean isTeam2 = gameInfo.getTeam2().equals(myClub);
+
+                if (isTeam1 || isTeam2) {
+                    if ((isTeam1 && team1Score > team2Score) || (isTeam2 && team2Score > team1Score)) {
+                        wins++;
+                    } else if ((isTeam1 && team1Score < team2Score) || (isTeam2 && team2Score < team1Score)) {
+                        losses++;
+                    } else {
+                        draws++;
+                    }
+                    totalGames++;
+                }
             }
         }
 
@@ -122,5 +160,6 @@ public class StatController {
                 wins, losses, draws, totalGames, winRate
         ));
     }
+
 
 }
