@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
+@Table(name = "game_info")
 public class GameInfo {
 
     @Id
