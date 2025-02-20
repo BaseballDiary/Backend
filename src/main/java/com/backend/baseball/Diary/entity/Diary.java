@@ -30,6 +30,7 @@ public class Diary {
     private String day; // 요일
 
     @Column(nullable = true)
+    @Enumerated(EnumType.STRING)
     private ViewType viewType;
 
     @Column(nullable = false, columnDefinition = "TEXT DEFAULT '베볼리'")
