@@ -58,7 +58,7 @@ public class CrawlingBatterRanking {
         driver.quit();	//브라우저 닫기
 
         batterRankingRepository.saveAll(list);
-        return list;
+        return batterRankingRepository.findByYear(year);
     }
     public void getDataList(WebDriver driver, String year, List<BatterRanking> list){
 
