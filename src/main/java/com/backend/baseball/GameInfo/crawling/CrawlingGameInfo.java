@@ -79,7 +79,8 @@ public class CrawlingGameInfo {
         driver.quit();	//브라우저 닫기
 
         gameInfoRepository.saveAll(list);
-        return list;
+        LocalDate findDate = LocalDate.parse(date);
+        return gameInfoRepository.findByGameDate(findDate);
     }
     public void getDataList(WebDriver driver, String date){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
