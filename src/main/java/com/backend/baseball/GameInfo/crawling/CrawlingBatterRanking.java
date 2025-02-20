@@ -2,6 +2,7 @@ package com.backend.baseball.GameInfo.crawling;
 
 
 import com.backend.baseball.GameInfo.entity.BatterRanking;
+import com.backend.baseball.GameInfo.entity.PitcherRecordRanking;
 import com.backend.baseball.GameInfo.repository.BatterRankingRepository;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
@@ -17,13 +18,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class CrawlingBatterRanking {
     private final BatterRankingRepository batterRankingRepository;
-    private final List<BatterRanking> list;
 
     @Value("${webdriver.chrome.path}")
     private String chromeDriverPath;
@@ -42,11 +43,12 @@ public class CrawlingBatterRanking {
 
         WebDriver driver = new ChromeDriver(options); // 옵션 추가된 WebDriver 생성
 
+        List<BatterRanking> list = new ArrayList<>();
         try {
             driver.get(url + year);    //브라우저에서 url로 이동한다.
             Thread.sleep(1000);  //5000 -> 1000
 
-            getDataList(driver, year);
+            getDataList(driver, year, list);
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -58,7 +60,7 @@ public class CrawlingBatterRanking {
         batterRankingRepository.saveAll(list);
         return list;
     }
-    public void getDataList(WebDriver driver, String year){
+    public void getDataList(WebDriver driver, String year, List<BatterRanking> list){
 
         WebElement tableElement = driver.findElement(By.cssSelector("table.tbl_record"));
         String pageSource = tableElement.getAttribute("outerHTML");

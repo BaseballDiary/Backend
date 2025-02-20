@@ -25,7 +25,6 @@ import java.util.List;
 public class CrawlingPitcherRanking {
 
     private final PitcherRankingRepository pitcherRankingRepository;
-    private final List<PitcherRanking> list;
 
     @Value("${webdriver.chrome.path}")
     private String chromeDriverPath;
@@ -44,11 +43,13 @@ public class CrawlingPitcherRanking {
 
         WebDriver driver = new ChromeDriver(options); // 옵션 추가된 WebDriver 생성
 
+        List<PitcherRanking> list = new ArrayList<>();
+
         try {
             driver.get(url + year);    //브라우저에서 url로 이동한다.
             Thread.sleep(1000);  //5000 -> 1000
 
-             getDataList(driver, year);
+             getDataList(driver, year, list);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -59,7 +60,7 @@ public class CrawlingPitcherRanking {
         pitcherRankingRepository.saveAll(list);
         return list;
     }
-    public void getDataList(WebDriver driver, String year) {
+    public void getDataList(WebDriver driver, String year, List<PitcherRanking> list) {
 
         WebElement tableElement = driver.findElement(By.cssSelector("table.tbl_record"));
         String pageSource = tableElement.getAttribute("outerHTML");
