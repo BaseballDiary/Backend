@@ -1,5 +1,6 @@
 package com.backend.baseball.User.controller;
 
+import com.backend.baseball.User.dto.NicknameDupDto;
 import com.backend.baseball.User.helper.AccountHelper;
 import com.backend.baseball.User.repository.UserRepository;
 import com.backend.baseball.User.service.UserService;
@@ -50,11 +51,6 @@ public class UserController {
             return ResponseEntity.status(404).body(Map.of("error", "사용자를 찾을 수 없습니다."));
         }
 
-        // 닉네임 중복 확인
-        if (userRepository.existsByNickname(nickname)) {
-            return ResponseEntity.status(400).body(Map.of("error", "이미 존재하는 닉네임입니다."));
-        }
-
         User user = userOptional.get();
         user.changeNickname(nickname);
         userRepository.save(user);
@@ -62,4 +58,14 @@ public class UserController {
         return ResponseEntity.ok(Map.of("message", "닉네임이 성공적으로 변경되었습니다."));
     }
 
+    @PostMapping("/setNickname/confirm")
+    public ResponseEntity<?> checkNicknameDuplicate(@RequestBody NicknameDupDto nicknameDupDto) {
+        boolean exists = userRepository.existsByNickname(nicknameDupDto.getNickname());
+
+        if (exists) {
+            return ResponseEntity.status(400).body(Map.of("error", "이미 존재하는 닉네임입니다."));
+        } else {
+            return ResponseEntity.ok(Map.of("message", "사용 가능한 닉네임입니다."));
+        }
+    }
 }
