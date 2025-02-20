@@ -1,4 +1,4 @@
-package com.backend.baseball.Home.reposiroty;
+package com.backend.baseball.Home.repository;
 
 import com.backend.baseball.Home.entity.Attendance;
 import com.backend.baseball.User.entity.User;

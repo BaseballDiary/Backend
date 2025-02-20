@@ -1,10 +1,11 @@
+
 package com.backend.baseball.Home.controller;
 
 import com.backend.baseball.Diary.dto.CreateDiary.GameInfoResponseDTO;
 import com.backend.baseball.Diary.repository.DiaryRepository;
 import com.backend.baseball.GameInfo.entity.GameInfo;
 import com.backend.baseball.GameInfo.repository.GameInfoRepository;
-import com.backend.baseball.Home.reposiroty.AttendanceRepository;
+import com.backend.baseball.Home.repository.AttendanceRepository;
 import com.backend.baseball.User.entity.User;
 import com.backend.baseball.User.helper.AccountHelper;
 import com.backend.baseball.User.repository.UserRepository;
