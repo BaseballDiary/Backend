@@ -28,11 +28,17 @@ public class ViewDiaryByYearResponseDTO {
                 .stadium(diary.getGameInfo().getPlace())
                 .result(diary.getGameInfo().getGameStatus()) // ✅ 승리, 패배, 무승부 그대로 반환
                 .myTeam(diary.getGameInfo().getTeam1())
-                .myScore(Integer.parseInt(diary.getGameInfo().getTeam1Score()))  // 문자열을 정수로 변환
+                .myScore(parseScore(diary.getGameInfo().getTeam1Score()))  // ✅ 안전한 변환
                 .opponentTeam(diary.getGameInfo().getTeam2())
-                .opponentScore(Integer.parseInt(diary.getGameInfo().getTeam2Score()))
+                .opponentScore(parseScore(diary.getGameInfo().getTeam2Score()))  // ✅ 안전한 변환
                 .uploadImages(diary.getImgUrls()) // 이미지 리스트 그대로 사용
                 .content(diary.getContents())
                 .build();
     }
+
+    // ✅ 안전한 Integer 변환 메서드
+    private static int parseScore(String score) {
+        return (score != null && !score.isEmpty()) ? Integer.parseInt(score) : 0;
+    }
 }
+

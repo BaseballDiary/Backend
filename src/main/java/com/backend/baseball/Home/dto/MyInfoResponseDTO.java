@@ -23,7 +23,7 @@ public class MyInfoResponseDTO {
                 .gameDate(gameInfo.getGameDate())
                 .homeTeam(gameInfo.getTeam1())
                 .awayTeam(gameInfo.getTeam2())
-                .gameTime(gameInfo.getTime()) 
+                .gameTime(gameInfo.getTime())
                 .stadium(gameInfo.getPlace())
                 .status(gameInfo.getGameStatus())
                 .build();
