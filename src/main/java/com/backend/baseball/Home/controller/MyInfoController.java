@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/home")
+@RequestMapping("/start")
 public class MyInfoController {
     private final AccountHelper accountHelper;
     private final UserRepository userRepository;
