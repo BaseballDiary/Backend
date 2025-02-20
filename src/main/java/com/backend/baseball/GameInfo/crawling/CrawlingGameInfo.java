@@ -38,7 +38,6 @@ import java.util.Locale;
 public class CrawlingGameInfo {
 
     private final GameInfoRepository gameInfoRepository;
-    private final List<GameInfo> list;
 
     @Value("${webdriver.chrome.path}")
     private String chromeDriverPath;
@@ -57,6 +56,7 @@ public class CrawlingGameInfo {
 
         WebDriver driver = new ChromeDriver(options); // 옵션 추가된 WebDriver 생성
 
+        List<GameInfo> list= new ArrayList<>();
         try {
             driver.get(url + date);    //브라우저에서 url로 이동한다.
             Thread.sleep(5000);
@@ -68,7 +68,7 @@ public class CrawlingGameInfo {
                 return null;  //DB에 해당 데이터도 없는데 리다이렉션 되는 경우 => 경기가 없는 날짜 !
 
             } else {
-                getDataList(driver, date);
+                getDataList(driver, date, list);
             }
 
         } catch (Exception e) {
@@ -79,10 +79,9 @@ public class CrawlingGameInfo {
         driver.quit();	//브라우저 닫기
 
         gameInfoRepository.saveAll(list);
-        LocalDate findDate = LocalDate.parse(date);
-        return gameInfoRepository.findByGameDate(findDate);
+        return list;
     }
-    public void getDataList(WebDriver driver, String date){
+    public void getDataList(WebDriver driver, String date, List<GameInfo> list){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         List<WebElement> tableElements = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("div.ScheduleLeagueType_match_list_group__18ML9")));
 
