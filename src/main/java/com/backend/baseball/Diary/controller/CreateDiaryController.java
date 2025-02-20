@@ -64,7 +64,7 @@ public class CreateDiaryController extends CreateDiaryControllerDocs{
 
         return gameInfo
                 .map(info -> {
-                    // ✅ 한글 요일 변환 후 DTO 생성
+                    //한글 요일 변환 후 DTO 생성
                     GameInfoResponseDTO responseDTO = GameInfoResponseDTO.fromEntity(info);
                     responseDTO.setDay(DateUtils.getKoreanDay(gameDate)); // 한글 요일 설정
                     return ResponseEntity.ok(responseDTO);
@@ -101,36 +101,36 @@ public class CreateDiaryController extends CreateDiaryControllerDocs{
             return ResponseEntity.status(400).body("{\"status\": 400, \"message\": \"해당 gameId에 대한 일기가 이미 존재합니다.\"}");
         }
 
-        // 필수값 검증 (null 허용 X)
+        // 필수값 검증
         if (request.getContents() == null || request.getViewType() == null || request.getScore() == null) {
             return ResponseEntity.badRequest().body("{\"status\": 400, \"message\": \"contents, viewType, score는 필수 입력 값입니다.\"}");
         }
 
-        // ✅ 경기 날짜와 요일 가져오기
+        //ViewType 변환 코드 제거 (이미 ViewType이면 변환 불필요)
+        ViewType viewType = request.getViewType();
+
+        //경기 날짜와 요일 가져오기
         LocalDate gameDate = gameInfo.getGameDate();
-        String gameDay = DateUtils.getKoreanDay(gameDate); // 한글 요일 변환
+        String gameDay = DateUtils.getKoreanDay(gameDate);
 
         // 새로운 Diary 생성
         Diary diary = new Diary();
         diary.setGameInfo(gameInfo);
-        diary.setDate(gameDate);  // ✅ 경기 날짜 저장
-        diary.setDay(gameDay);    // ✅ 요일 저장
+        diary.setDate(gameDate);
+        diary.setDay(gameDay);
         diary.setContents(request.getContents());
-        diary.setViewType(request.getViewType());
+        diary.setViewType(viewType); //변환 없이 그대로 저장
         diary.setScore(request.getScore());
-
-        // ✅ 로그인한 사용자의 certificate_id 설정
         diary.setUser(user);
-
-        // 이미지 URL이 없거나 빈 배열이면 NULL 처리
         diary.setImgUrls((request.getImgUrls() == null || request.getImgUrls().isEmpty()) ? null : request.getImgUrls());
-
 
         // Diary 저장
         diaryRepository.save(diary);
 
         return ResponseEntity.ok("{\"status\": 200, \"message\": \"일기를 성공적으로 저장했습니다.\"}");
     }
+
+
 
     // 삭제 기능 추가
     @DeleteMapping("/{diaryId}")
