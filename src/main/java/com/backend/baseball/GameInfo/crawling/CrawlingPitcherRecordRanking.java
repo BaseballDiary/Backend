@@ -1,5 +1,6 @@
 package com.backend.baseball.GameInfo.crawling;
 
+import com.backend.baseball.GameInfo.entity.PitcherRanking;
 import com.backend.baseball.GameInfo.entity.PitcherRecordRanking;
 import com.backend.baseball.GameInfo.repository.PitcherRecordRankingRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,6 @@ public class CrawlingPitcherRecordRanking {
             "div[data-key='pitWhip']" //WHIP
     };
     private final PitcherRecordRankingRepository recordRankingRepository;
-    private final List<PitcherRecordRanking> list;
 
     @Value("${webdriver.chrome.path}")
     private String chromeDriverPath;
@@ -51,12 +51,14 @@ public class CrawlingPitcherRecordRanking {
 
         WebDriver driver = new ChromeDriver(options); // 옵션 추가된 WebDriver 생성
 
+        List<PitcherRecordRanking> list = new ArrayList<>();
+
         try {
             driver.get(url + year);
             Thread.sleep(1000);  //5000 -> 1000
 
             for (String record : pitcherRecords) {
-                getDataList(driver, record, year);
+                getDataList(driver, record, year, list);
             }
 
         } catch (Exception e) {
@@ -69,7 +71,7 @@ public class CrawlingPitcherRecordRanking {
         recordRankingRepository.saveAll(list);
         return list;
     }
-    public void getDataList(WebDriver driver, String cssSelector, String year) {
+    public void getDataList(WebDriver driver, String cssSelector, String year, List<PitcherRecordRanking> list) {
         WebElement tableElement = driver.findElement(By.cssSelector(cssSelector));
 
         String pageSource = tableElement.getAttribute("outerHTML");
