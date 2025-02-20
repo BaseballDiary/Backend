@@ -5,8 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-@SpringBootApplication
-
+@SpringBootApplication(scanBasePackages = "com.backend.baseball")
 public class BaseballApplication {
 
 	public static void main(String[] args) {
