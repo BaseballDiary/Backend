@@ -69,7 +69,7 @@ public class CrawlingPitcherRecordRanking {
             driver.quit();	//브라우저 닫기
         }
         recordRankingRepository.saveAll(list);
-        return list;
+        return recordRankingRepository.findByYear(year);
     }
     public void getDataList(WebDriver driver, String cssSelector, String year, List<PitcherRecordRanking> list) {
         WebElement tableElement = driver.findElement(By.cssSelector(cssSelector));
