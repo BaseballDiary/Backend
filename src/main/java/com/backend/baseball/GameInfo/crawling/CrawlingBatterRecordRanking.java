@@ -1,5 +1,6 @@
 package com.backend.baseball.GameInfo.crawling;
 
+import com.backend.baseball.GameInfo.entity.BatterRanking;
 import com.backend.baseball.GameInfo.entity.BatterRecordRanking;
 import com.backend.baseball.GameInfo.repository.BatterRecordRankingRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -30,7 +32,6 @@ public class CrawlingBatterRecordRanking {
             "div[data-key='batSb']", //도루
             "div[data-key='batOps']", //OPS
     };
-    private final List<BatterRecordRanking> list;
     private final BatterRecordRankingRepository batterRecordRankingRepository;
 
     @Value("${webdriver.chrome.path}")
@@ -50,12 +51,13 @@ public class CrawlingBatterRecordRanking {
 
         WebDriver driver = new ChromeDriver(options); // 옵션 추가된 WebDriver 생성
 
+        List<BatterRecordRanking> list=new ArrayList<>();
         try {
             driver.get(url + year);
             Thread.sleep(1000);  //5000 -> 1000
 
             for (String record : batterRecords) {
-                getDataList(driver, record, year);
+                getDataList(driver, record, year, list);
             }
 
         } catch (Exception e) {
@@ -68,7 +70,7 @@ public class CrawlingBatterRecordRanking {
         batterRecordRankingRepository.saveAll(list);
         return list;
     }
-    public void getDataList(WebDriver driver, String cssSelector, String year) {
+    public void getDataList(WebDriver driver, String cssSelector, String year, List<BatterRecordRanking> list) {
 
 
         WebElement tableElement = driver.findElement(By.cssSelector(cssSelector));
